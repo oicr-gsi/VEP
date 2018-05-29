@@ -214,7 +214,7 @@ public class VEPWorkflow extends OicrWorkflow {
         cmd.addArgument("--no_progress");
         cmd.addArgument("--everything");
         cmd.addArgument("--shift_hgvs "+ Integer.toString(this.hgvsShift));
-        cmd.addArgument("--check_exisiting");
+        cmd.addArgument("--check_existing");
         cmd.addArgument("--check_alleles");
         cmd.addArgument("--total_length");
         cmd.addArgument("--allele_number");
