@@ -121,6 +121,7 @@ public class VEPWorkflow extends OicrWorkflow {
             envVars = envVars + "export PERL5LIB=$VEP_DATA:"+this.perl5lib+"; ";
             envVars = envVars + "export PATH=$VEP_PATH/htslib:$PATH; ";
             envVars = envVars + "export PATH="+this.samtools+":$PATH; ";
+            envVars = envVars + "unset PYTHONPATH ; " + "module load python-gsi/2.7.12 ;";
 
             manualOutput = Boolean.parseBoolean(getProperty("manual_output"));
             queue = getOptionalProperty("queue", "");
