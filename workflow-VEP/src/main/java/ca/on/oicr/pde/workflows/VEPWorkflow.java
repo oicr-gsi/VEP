@@ -50,6 +50,9 @@ public class VEPWorkflow extends OicrWorkflow {
     
     // environment vars
     private String envVars;
+    private String perl5lib;
+    private String perlVersion = "5.10.1";
+    
     
     //params
     private String hgBuild;
@@ -71,9 +74,6 @@ public class VEPWorkflow extends OicrWorkflow {
     private String exacVCF;
     private String gnomadVCF;
     
-    
-
-
     private boolean manualOutput;
     private String queue;
 
@@ -96,9 +96,9 @@ public class VEPWorkflow extends OicrWorkflow {
             normalSamplePrefix = getOptionalProperty("normal_sample_external_identifier", "NA");
 
             //tools
-            java = getProperty("java");
-            vcfscript = getProperty("vcf_script");
             vcf2maf = getProperty("vcf2maf");
+            vep = getProperty("VEP");
+            samtools = getProperty("samtools");
 
             // ref fasta
             refFasta = getProperty("ref_fasta");
@@ -111,18 +111,21 @@ public class VEPWorkflow extends OicrWorkflow {
             vepData = getProperty("VEP_DATA");
             hgvsShift = Integer.parseInt(getOptionalProperty("hgvs_shift_flag", "1"));
             vafFilter = Double.parseDouble(getOptionalProperty("vaf_filter", "0.7"));
+            species = getOptionalProperty("species", "homo_sapiens");
+            hgBuild = getOptionalProperty("hg_version", "GRCh37");
             
             // Environment vars
-            envVars = "export VEP_PATH="+vepPath;
-            envVars = envVars + "export VEP_DATA"+vepData;
-            envVars = envVars + "export PERL5LIB=$VEP_PATH:$PERL5LIB; ";
+            perl5lib=getProperty("perl5lib");
+            envVars = "export VEP_PATH="+this.vepPath+";";
+            envVars = envVars + "export VEP_DATA="+vepData+";";
+            envVars = envVars + "export PERL5LIB=$VEP_DATA:"+this.perl5lib+"; ";
             envVars = envVars + "export PATH=$VEP_PATH/htslib:$PATH; ";
             envVars = envVars + "export PATH="+this.samtools+":$PATH; ";
 
             manualOutput = Boolean.parseBoolean(getProperty("manual_output"));
             queue = getOptionalProperty("queue", "");
 
-            VEPMem = Integer.parseInt(getProperty("picard_mem"));
+            VEPMem = Integer.parseInt(getProperty("vep_mem"));
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -145,14 +148,20 @@ public class VEPWorkflow extends OicrWorkflow {
     @Override
     public Map<String, SqwFile> setupFiles() {
         SqwFile file0 = this.createFile("inVCF");
-        file0.setSourcePath(inputVCF);
-        file0.setType("application/vcf-gz");
-        file0.setIsInput(true);    
+        if (inputVCF.endsWith("gz")){
+            file0.setSourcePath(inputVCF);
+            file0.setType("application/vcf-gz");
+            file0.setIsInput(true);  }
+        else{
+            file0.setSourcePath(inputVCF);
+            file0.setType("application/vcf");
+        }
         return this.getFiles();
     }
 
     @Override
-    public void buildWorkflow() {        
+    public void buildWorkflow() {   
+        
         Job parentJob = null;
         this.outDir = this.outputFilenamePrefix + "_output/";
         String inVCF = getFiles().get("inVCF").getProvisionedPath();
@@ -166,11 +175,16 @@ public class VEPWorkflow extends OicrWorkflow {
         // preprocess VCF 
         Job preprocessVCF = getWorkflow().createBashJob("preprocess_VCF");
         Command cmd = preprocessVCF.getCommand();
-        cmd.addArgument("zcat " + inVCF + " >" + tmpVCF);
-        preprocessVCF.setMaxMemory(Integer.toString(this.VEPMem * 1024));
-        preprocessVCF.setQueue(getOptionalProperty("queue", ""));
-        parentJob = preprocessVCF;
-        
+        if (inVCF.endsWith("gz")){
+            cmd.addArgument("zcat " + inVCF + " >" + tmpVCF);
+           
+        }else {
+            cmd.addArgument("cp "+ inVCF + " " + tmpVCF);
+        }
+         preprocessVCF.setMaxMemory(Integer.toString(this.VEPMem * 1024));
+         preprocessVCF.setQueue(getOptionalProperty("queue", ""));
+         parentJob = preprocessVCF;
+    
         Job annotateGNOMAD = annotateGnomad(inVCF, annoGNOMADvcf);
         annotateGNOMAD.addParent(parentJob);
         parentJob = annotateGNOMAD;
@@ -190,6 +204,7 @@ public class VEPWorkflow extends OicrWorkflow {
     private Job annotateGnomad(String inVCF, String gnomadVCF){
         Job annoGnomad = getWorkflow().createBashJob("annotate_gnomad");
         Command cmd = annoGnomad.getCommand();
+        cmd.addArgument("module load perl/"+perlVersion + ";");
         cmd.addArgument(this.envVars);
         cmd.addArgument("perl "+this.vep);
         cmd.addArgument("--species "+ this.species);
@@ -220,6 +235,7 @@ public class VEPWorkflow extends OicrWorkflow {
     private Job runVcf2Maf(String annoGNOMADvcf, String outputMAF){
         Job runVCF2MAF = getWorkflow().createBashJob("vcf2maf");
         Command cmd = runVCF2MAF.getCommand();
+        cmd.addArgument("module load perl/"+perlVersion+ ";");
         cmd.addArgument(this.envVars);
         cmd.addArgument("perl "+this.vcf2maf);
         cmd.addArgument("--species "+ this.species);

@@ -14,10 +14,23 @@
     <artifactId>workflow-VEP</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
+    
 
     <url>http://maven.apache.org</url>
 
     <properties>
         <workflow-name>VEP</workflow-name>
+        <samtools-version>0.1.19</samtools-version>
     </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>samtools</groupId>
+            <artifactId>samtools</artifactId>
+            <version>${samtools-version}</version>
+            <type>zip</type>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    
 </project>
