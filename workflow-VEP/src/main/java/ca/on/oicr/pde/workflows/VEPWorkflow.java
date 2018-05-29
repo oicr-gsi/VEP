@@ -185,7 +185,7 @@ public class VEPWorkflow extends OicrWorkflow {
          preprocessVCF.setQueue(getOptionalProperty("queue", ""));
          parentJob = preprocessVCF;
     
-        Job annotateGNOMAD = annotateGnomad(inVCF, annoGNOMADvcf);
+        Job annotateGNOMAD = annotateGnomad(tmpVCF, annoGNOMADvcf);
         annotateGNOMAD.addParent(parentJob);
         parentJob = annotateGNOMAD;
         
