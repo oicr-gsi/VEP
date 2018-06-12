@@ -209,8 +209,8 @@ public class VEPWorkflow extends OicrWorkflow {
         cmd.addArgument("--ref-fasta "+this.refFasta);
         cmd.addArgument("--filter-vcf "+this.exacVCF);
         cmd.addArgument("--max-filter-ac 10");
-        cmd.addArgument("--vep-path" + this.VEPpath);
-        cmd.addArgument("--vep-data" + this.VEPdata);
+        cmd.addArgument("--vep-path " + this.VEPpath);
+        cmd.addArgument("--vep-data " + this.VEPdata);
 //        cmd.addArgument("--retain-info " + this.retainInfo);
         cmd.addArgument("--min-hom-vaf "+ Double.toString(this.vafFilter));
         runVCF2MAF.setMaxMemory(Integer.toString(this.VEPMem * 1024));
