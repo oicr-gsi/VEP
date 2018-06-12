@@ -30,28 +30,6 @@ public class VEPWorkflow extends OicrWorkflow {
     private String inputVCF;
     private String outputFilenamePrefix;
     private String normalSamplePrefix;
-     
-
-    //Tools
-    private String samtools;
-    private String java;
-    private String gatk;
-    private String bcftools;
-    private String vcfscript;
-    private String vcf2maf;
-    private String vep;
-    private String pythonpath;
-    
-//    private String bedtools;
-    
-    //VEP
-    private String vepPath;
-    private String vepData;
-    
-    // environment vars
-    private String envVars;
-    private String perl5lib;
-    private String perlVersion = "5.10.1";
     
     
     //params

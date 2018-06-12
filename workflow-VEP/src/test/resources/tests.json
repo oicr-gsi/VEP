@@ -8,7 +8,7 @@
     },
     "tests": [
         {
-            "id": "test_01_picard_with_intervals",
+            "id": "test_01",
             "parameters": {
                 "input_vcf_file": "/.mounts/labs/PDE/data/testdata/genomic/vcf/PCSI0022/somatic.vcf.gz",
                 "external_identifier": "PCSI0022_test"
