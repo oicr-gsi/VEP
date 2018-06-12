@@ -33,6 +33,9 @@ public class VEPWorkflow extends OicrWorkflow {
     
     //vcf2maf
     private String vcf2mafpl;
+    private String perlPath;
+    private String vcf2mafPath;
+    private String perl;
     
     //params
     private String hgBuild;
@@ -77,6 +80,9 @@ public class VEPWorkflow extends OicrWorkflow {
             
             // vcf2maf
             vcf2mafpl = getProperty("VCF2MAF");
+            perlPath = getProperty("PERL_PATH");
+            vcf2mafPath=getProperty("VCF2MAF_PATH");
+            perl=getProperty("TGL_PERL");
 
             // ref fasta
             refFasta = getProperty("ref_fasta");
@@ -170,14 +176,28 @@ public class VEPWorkflow extends OicrWorkflow {
           
     private Job runVcf2Maf(String inVCF, String outputMAF){
         Job runVCF2MAF = getWorkflow().createBashJob("vcf2maf");
+        String PATHFIX = "# perl/5.22.2-tgl\n";
+        PATHFIX =PATHFIX + "export LD_LIBRARY_PATH="+this.perlPath+"/lib:$LD_LIBRARY_PATH;\n";
+        PATHFIX =PATHFIX + "export PERL5LIB="+this.perlPath+"/lib:$PERL5LIB\n";
+        PATHFIX =PATHFIX + "export PATH="+this.perlPath+"/bin:$PATH\n";
+        PATHFIX =PATHFIX + "# vep/92\n";
+        PATHFIX =PATHFIX + "export PATH="+this.VEPpath+":$PATH\n";
+        PATHFIX =PATHFIX + "export PATH="+this.VEPpath+"/htslib:$PATH\n";
+        PATHFIX =PATHFIX + "export PATH="+this.VEPpath+"/samtools/bin:$PATH\n";
+        PATHFIX =PATHFIX + "export PERL5LIB="+this.VEPpath+":$PATH\n";
+        PATHFIX =PATHFIX + "export VEP_PATH="+ this.VEPpath + ";\n";
+        PATHFIX =PATHFIX + "export VEP_DATA="+ this.VEPdata + ";\n";
+        PATHFIX =PATHFIX + "# vcf2maf\n";
+        PATHFIX =PATHFIX + "export PATH="+this.vcf2mafPath+":$PATH";
         Command cmd = runVCF2MAF.getCommand();
 //        cmd.addArgument("echo $MODULEPATH;");
-        cmd.addArgument("module use /.mounts/labs/PDE/Modules/modulefiles;");
-        cmd.addArgument("module load perl/5.22.2-tgl;");
-        cmd.addArgument("module load vep/92;");
-        cmd.addArgument("module load vcf2maf;");
+//        cmd.addArgument("module use /.mounts/labs/PDE/Modules/modulefiles;");
+//        cmd.addArgument("module load perl/5.22.2-tgl;");
+//        cmd.addArgument("module load vep/92;");
+//        cmd.addArgument("module load vcf2maf;");
 //        cmd.addArgument("echo $MODULEPATH;");
-        cmd.addArgument(this.vcf2mafpl);
+        cmd.addArgument(PATHFIX);
+        cmd.addArgument(this.perl + " " + this.vcf2mafpl);
         cmd.addArgument("--species "+ this.species);
         cmd.addArgument("--ncbi-build " + this.hgBuild);
         cmd.addArgument("--input-vcf " + inVCF);
