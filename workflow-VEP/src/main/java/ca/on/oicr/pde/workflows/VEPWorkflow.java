@@ -188,7 +188,7 @@ public class VEPWorkflow extends OicrWorkflow {
         PATHFIX =PATHFIX + "export VEP_PATH="+ this.VEPpath + ";\n";
         PATHFIX =PATHFIX + "export VEP_DATA="+ this.VEPdata + ";\n";
         PATHFIX =PATHFIX + "# vcf2maf\n";
-        PATHFIX =PATHFIX + "export PATH="+this.vcf2mafPath+":$PATH";
+        PATHFIX =PATHFIX + "export PATH="+this.vcf2mafPath+":$PATH;\n";
         Command cmd = runVCF2MAF.getCommand();
 //        cmd.addArgument("echo $MODULEPATH;");
 //        cmd.addArgument("module use /.mounts/labs/PDE/Modules/modulefiles;");
