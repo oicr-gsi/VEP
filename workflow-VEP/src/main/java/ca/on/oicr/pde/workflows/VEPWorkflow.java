@@ -171,8 +171,10 @@ public class VEPWorkflow extends OicrWorkflow {
     private Job runVcf2Maf(String inVCF, String outputMAF){
         Job runVCF2MAF = getWorkflow().createBashJob("vcf2maf");
         Command cmd = runVCF2MAF.getCommand();
+        cmd.addArgument("echo $MODULEPATH;");
         cmd.addArgument("module use /.mounts/labs/PDE/Modules/modulefiles;");
         cmd.addArgument("module load vcf2maf;");
+        cmd.addArgument("echo $MODULEPATH;");
         cmd.addArgument(this.vcf2mafpl);
         cmd.addArgument("--species "+ this.species);
         cmd.addArgument("--ncbi-build " + this.hgBuild);
