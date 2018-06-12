@@ -163,7 +163,7 @@ public class VEPWorkflow extends OicrWorkflow {
         
         // Provision out maf.txt file
         SqwFile outMaf = createOutputFile(mafFile, TXT_METATYPE, this.manualOutput);
-        outMaf.getAnnotations().put("MAF", "VEP83");
+        outMaf.getAnnotations().put("MAF", "VEP");
         vcf2MAF.addFile(outMaf);
         
     }
@@ -171,10 +171,12 @@ public class VEPWorkflow extends OicrWorkflow {
     private Job runVcf2Maf(String inVCF, String outputMAF){
         Job runVCF2MAF = getWorkflow().createBashJob("vcf2maf");
         Command cmd = runVCF2MAF.getCommand();
-        cmd.addArgument("echo $MODULEPATH;");
+//        cmd.addArgument("echo $MODULEPATH;");
         cmd.addArgument("module use /.mounts/labs/PDE/Modules/modulefiles;");
+        cmd.addArgument("module load perl/5.22.2-tgl;");
+        cmd.addArgument("module load vep/92;");
         cmd.addArgument("module load vcf2maf;");
-        cmd.addArgument("echo $MODULEPATH;");
+//        cmd.addArgument("echo $MODULEPATH;");
         cmd.addArgument(this.vcf2mafpl);
         cmd.addArgument("--species "+ this.species);
         cmd.addArgument("--ncbi-build " + this.hgBuild);
