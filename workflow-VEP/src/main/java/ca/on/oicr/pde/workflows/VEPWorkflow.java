@@ -31,6 +31,8 @@ public class VEPWorkflow extends OicrWorkflow {
     private String outputFilenamePrefix;
     private String normalSamplePrefix;
     
+    //vcf2maf
+    private String vcf2mafpl;
     
     //params
     private String hgBuild;
@@ -72,7 +74,9 @@ public class VEPWorkflow extends OicrWorkflow {
             //
             outputFilenamePrefix = getProperty("external_identifier");
             normalSamplePrefix = getOptionalProperty("normal_sample_external_identifier", "NA");
-
+            
+            // vcf2maf
+            vcf2mafpl = getProperty("VCF2MAF");
 
             // ref fasta
             refFasta = getProperty("ref_fasta");
@@ -169,7 +173,7 @@ public class VEPWorkflow extends OicrWorkflow {
         Command cmd = runVCF2MAF.getCommand();
         cmd.addArgument("module use /.mounts/labs/PDE/Modules/modulefiles;");
         cmd.addArgument("module load vcf2maf;");
-        cmd.addArgument("vcf2maf.pl");
+        cmd.addArgument(this.vcf2mafpl);
         cmd.addArgument("--species "+ this.species);
         cmd.addArgument("--ncbi-build " + this.hgBuild);
         cmd.addArgument("--input-vcf " + inVCF);
