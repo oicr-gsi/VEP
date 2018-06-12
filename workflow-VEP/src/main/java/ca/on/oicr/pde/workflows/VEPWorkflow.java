@@ -38,14 +38,14 @@ public class VEPWorkflow extends OicrWorkflow {
 //    private String annotInfo = ",gnomAD,vcf,exact,0,AF_POPMAX,AF_AFR,AF_AMR,AF_ASJ,AF_EAS,AF_FIN,AF_NFE,AF_OTH,AF_SAS";
     private Integer hgvsShift = 1;
     private double vafFilter = 0.7;
+    private String VEPpath;
+    private String VEPdata;
 //    private String retainInfo = "gnomAD_AF_POPMAX,gnomAD_AF_AFR,gnomAD_AF_AMR,gnomAD_AF_ASJ,gnomAD_AF_EAS,gnomAD_AF_FIN,gnomAD_AF_NFE,gnomAD_AF_OTH,gnomAD_AF_SAS";
     
 
 
     //Memory allocation
     private Integer VEPMem;
-
-
 
     //ref Data
     private String refFasta;
@@ -84,6 +84,8 @@ public class VEPWorkflow extends OicrWorkflow {
             vafFilter = Double.parseDouble(getOptionalProperty("vaf_filter", "0.7"));
             species = getOptionalProperty("species", "homo_sapiens");
             hgBuild = getOptionalProperty("hg_version", "GRCh37");
+            VEPpath = getProperty("VEP_PATH");
+            VEPdata = getProperty("VEP_DATA");
             
 
             manualOutput = Boolean.parseBoolean(getProperty("manual_output"));
@@ -179,6 +181,8 @@ public class VEPWorkflow extends OicrWorkflow {
         cmd.addArgument("--ref-fasta "+this.refFasta);
         cmd.addArgument("--filter-vcf "+this.exacVCF);
         cmd.addArgument("--max-filter-ac 10");
+        cmd.addArgument("--vep-path" + this.VEPpath);
+        cmd.addArgument("--vep-data" + this.VEPdata);
 //        cmd.addArgument("--retain-info " + this.retainInfo);
         cmd.addArgument("--min-hom-vaf "+ Double.toString(this.vafFilter));
         runVCF2MAF.setMaxMemory(Integer.toString(this.VEPMem * 1024));
