@@ -139,11 +139,11 @@ public class VEPWorkflow extends OicrWorkflow {
     public void buildWorkflow() {   
         
         Job parentJob = null;
-        this.outDir = this.outputFilenamePrefix + "_output/";
+//        this.outDir = this.outputFilenamePrefix + "_output/";
         String inVCF = getFiles().get("inVCF").getProvisionedPath();
         String tmpVCF = this.tmpDir + this.outputFilenamePrefix + ".temp.vcf";
         
-        String mafFile = this.outDir + this.outputFilenamePrefix + ".maf.txt";
+        String mafFile = this.dataDir + this.outputFilenamePrefix + ".maf.txt";
         if (normalSamplePrefix == null || normalSamplePrefix == "NA"){
             this.normalSamplePrefix = this.outputFilenamePrefix;
         }
