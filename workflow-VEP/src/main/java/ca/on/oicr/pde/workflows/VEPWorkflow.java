@@ -62,7 +62,8 @@ public class VEPWorkflow extends OicrWorkflow {
 
     
 //    // metatypes
-    private String TXT_METATYPE=" application/txt-gz";
+    private String TXT_GZ_METATYPE="application/txt-gz";
+    private String TXT_METATYPE="plain/txt";
 //    private String PDF_METATYPE="application/pdf";
 
     private void init() {
