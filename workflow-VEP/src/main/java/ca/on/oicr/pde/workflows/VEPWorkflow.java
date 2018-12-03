@@ -241,19 +241,20 @@ public class VEPWorkflow extends OicrWorkflow {
         parentJob.addFile(targetVCFtbi);
         
         // annotate frequency
-        String intVCF;
+        String intVCF = subsetVCF.replace("vcf.gz", "vcf");
+        String tglFreqVCF;
         if (this.freqTextFile != null){
-            Job tglFreq = TGLFreqAnnotation(subsetVCF);
-            intVCF = subsetVCF.replace(".vcf",".tglfreq.vcf");
+            Job tglFreq = TGLFreqAnnotation(intVCF);
+            tglFreqVCF = intVCF.replace(".vcf",".tglfreq.vcf");
             this.retainInfo = "TGL_Freq";
             tglFreq.addParent(parentJob);
             parentJob = tglFreq;
         } else {
-            intVCF = subsetVCF;
+            tglFreqVCF = intVCF;
         }
         
         // run vcf to maf
-        Job vcf2MAF = runVcf2Maf(intVCF, mafFile);
+        Job vcf2MAF = runVcf2Maf(tglFreqVCF, mafFile);
         vcf2MAF.addParent(parentJob);
         parentJob = vcf2MAF;
         
@@ -338,7 +339,7 @@ public class VEPWorkflow extends OicrWorkflow {
         cmd.addArgument("module load bcftools; \n");
         cmd.addArgument("bcftools annotate -a " + this.freqTextFile);
         cmd.addArgument("-c CHROM,POS,REF,ALT,TGL_Freq");
-        cmd.addArgument("-h <(echo '##INFO=<ID=TGL_Freq,Number=.,Type=Float,Description=\"Variant Frequency Among TGL Tumours (MuTect2 Artifact Detection)\">'");
+        cmd.addArgument("-h <(echo '##INFO=<ID=TGL_Freq,Number=.,Type=Float,Description=\"Variant Frequency Among TGL Tumours (MuTect2 Artifact Detection)\">')");
         cmd.addArgument(inVCF + " | " + this.bgzip + " -c >" + inVCF.replace(".vcf", ".temp.vcf.gz") + ";\n");
         cmd.addArgument("echo \"Marking novel variants as TGL_Freq=0.0\"\n");
         cmd.addArgument("bcftools annotate -a " + this.freqTextFile);
