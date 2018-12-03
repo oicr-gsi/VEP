@@ -11,9 +11,15 @@
     },
     "tests": [
         {
-            "id": "study test",
+            "id": "study_test_01",
             "parameters": {
                 "--study-name": "TGL07"
+            }
+        },{
+            "id": "study_test_02",
+            "parameters": {
+                "--study-name": "TGL07"
+                "--allow-all-vcfs": "false"
             }
         }
     ]
