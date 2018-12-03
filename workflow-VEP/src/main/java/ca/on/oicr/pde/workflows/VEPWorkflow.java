@@ -82,10 +82,11 @@ public class VEPWorkflow extends OicrWorkflow {
 
     
 //    // metatypes
-    private String TXT_GZ_METATYPE="application/txt-gz";
-    private String TXT_METATYPE="plain/txt";
-    private String VCF_METATYPE="application/vcf";
-    private String VCF_GZ_METATYPE="application/vcf-gz";
+    private final String TXT_GZ_METATYPE = "application/txt-gz";
+    private final String TXT_METATYPE = "plain/txt";
+    private final String VCF_GZ_METATYPE = "pplication/vcf-4-gzip";
+    private final String VCF_METATYPE = "application/vcf";
+    private final String VCF_TBI_METATYPE = "application/tbi";
 
     private void init() {
         try {
@@ -230,9 +231,14 @@ public class VEPWorkflow extends OicrWorkflow {
         parentJob = preprocess;
         
         // provision out subset VCF
-        SqwFile targetVCF = createOutputFile(subsetVCF, VCF_METATYPE, this.manualOutput);
+        SqwFile targetVCF = createOutputFile(subsetVCF, VCF_GZ_METATYPE, this.manualOutput);
         targetVCF.getAnnotations().put("Target_VCF", "VEP");
         parentJob.addFile(targetVCF);
+        
+        // provision out subset VCF TBI
+        SqwFile targetVCFtbi = createOutputFile(subsetVCF, VCF_TBI_METATYPE, this.manualOutput);
+        targetVCFtbi.getAnnotations().put("Target_VCF_tbi", "VEP");
+        parentJob.addFile(targetVCFtbi);
         
         // annotate frequency
         String intVCF;
@@ -366,9 +372,12 @@ public class VEPWorkflow extends OicrWorkflow {
                 + tmpVCF + " -b " 
                 + this.targetBedFile + " > " 
                 + tmpVCF.replace(".vcf", ".TGL.targ.vcf") + ";\n");
+        String interTargVCF = tmpVCF.replace(".vcf", ".TGL.targ.vcf");
+        cmd.addArgument(this.bgzip + " -c " + interTargVCF + " > " + interTargVCF + ".gz" + ";\n");
+        cmd.addArgument(this.tabix + " -p vcf " + interTargVCF + ".gz");
         preProcessVCF.setMaxMemory(Integer.toString(this.VEPMem * 1024));
         preProcessVCF.setQueue(getOptionalProperty("queue", ""));
-        hmap.put(tmpVCF, preProcessVCF);
+        hmap.put(interTargVCF + ".gz", preProcessVCF);
         return hmap;
     }
     

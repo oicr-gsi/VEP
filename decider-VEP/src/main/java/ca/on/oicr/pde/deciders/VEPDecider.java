@@ -68,7 +68,7 @@ public class VEPDecider extends OicrDecider {
     
     // metatype info
     private final static String VCF_METATYPE="application/vcf";
-    private final static String VCF_GZ_METATYPE="application/vcf-gz";
+    private final static String VCF_GZ_METATYPE="pplication/vcf-4-gzip";
     private final static ArrayList<String> METATYPES = new ArrayList<String> (Arrays.asList(VCF_METATYPE, VCF_GZ_METATYPE));
 
     public VEPDecider() {
