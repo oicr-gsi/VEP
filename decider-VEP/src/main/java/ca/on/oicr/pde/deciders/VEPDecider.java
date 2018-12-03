@@ -76,7 +76,7 @@ public class VEPDecider extends OicrDecider {
         parser.accepts("template-types", "Required. Set the template type to limit the workflow run "
                 + "so that it runs on data only of this template type. Default: " + this.templateTypes).withOptionalArg();
         parser.accepts("queue", "Optional: Set the queue (Default: not set)").withRequiredArg();
-        parser.accepts("target-bed", "Optional parameter for VEP workflow: Specify the path to interval bed file. Default: parsed from " + this.rsConfigXMLPath).withOptionalArg();
+        parser.accepts("target-bed", "Optional parameter for VEP workflow: Specify the path to interval bed file. Default: parsed from " + this.rsConfigXMLPath + ". Default is null").withOptionalArg();
         parser.accepts("ref-fasta", "Optional parameter for VEP workflow: Specify the path to reference human genome fasta. Default: " + this.refGenome).withOptionalArg();
         parser.accepts("rsconfig-file", "Optional parameter for VEP workflow: specify location of .xml file which should be used to cinfigure references. Default: " + this.rsConfigXMLPath).withOptionalArg();
         parser.accepts("tgl-freq-file", "Optional parameter for VEP workflow: Specify the path to the file containing frequency information. Default: null").withOptionalArg();
@@ -114,11 +114,7 @@ public class VEPDecider extends OicrDecider {
                 this.templateTypes = options.valueOf("template-types").toString();
             }
         }
-
-        if (this.options.has("target-bed")) {
-            this.targetBed = options.valueOf("target-bed").toString();
-        }
-        
+      
         if (this.options.has("tgl-freq-file")) {
             this.freqDB = options.valueOf("tgl-freq-file").toString();
         }
@@ -162,7 +158,10 @@ public class VEPDecider extends OicrDecider {
             rv.setExitStatus(ReturnValue.FAILURE);
             return rv;
         }
-
+        
+        if (this.options.has("target-bed")) {
+            this.targetBed = options.valueOf("target-bed").toString();
+        }
         return rv;
     }
 
@@ -229,6 +228,8 @@ public class VEPDecider extends OicrDecider {
         Log.debug("CHECK FILE DETAILS:" + fm);
         String currentTtype = returnValue.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_library_source_template_type");
         String currentTissueType = returnValue.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_tissue_type");
+        String resequencingType = returnValue.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_targeted_resequencing");
+        String target_bed = null;
 //        String currentFileName = returnValue.getFiles().toString();
 //        String[] templateTypes = this.templateType.split(",");
 //        boolean checkFileExtn = this.identifyFilePath(currentFileName);
@@ -259,6 +260,20 @@ public class VEPDecider extends OicrDecider {
         if (null != this.tumorType) {
             return false;
         }
+        
+        if (this.targetBed == null){
+            try {
+                target_bed = rs.get(currentTtype, resequencingType, "interval_file").toString();
+                if (target_bed != null) {
+                    this.targetBed = target_bed;
+                    } else {
+                    Log.info("No interval file found for this run; Please re-try with --interval-bed <path to interval file>");
+                    }
+            } catch (Exception NullPointerException) {
+                Log.info("No interval file found for this run; Please re-try with --interval-bed <path to interval file>");
+                }
+        }
+        
         return super.checkFileDetails(returnValue, fm);
     }
 

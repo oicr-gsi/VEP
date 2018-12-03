@@ -347,7 +347,7 @@ public class VEPWorkflow extends OicrWorkflow {
     
     private HashMap<String,Job> preProcessVCF(String inVCF){
         HashMap<String,Job> hmap = new HashMap<String,Job>();
-        int index = inVCF.lastIndexOf("\\");
+        int index = inVCF.lastIndexOf("/");
         String vcfName = inVCF.substring(index + 1);
         String newInVCF = this.tmpDir + vcfName;
         String tmpVCF;
