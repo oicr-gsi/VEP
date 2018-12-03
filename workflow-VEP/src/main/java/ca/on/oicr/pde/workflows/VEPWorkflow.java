@@ -242,7 +242,7 @@ public class VEPWorkflow extends OicrWorkflow {
             this.retainInfo = "TGL_Freq";
             tglFreq.addParent(parentJob);
             parentJob = tglFreq;
-        }else{
+        } else {
             intVCF = subsetVCF;
         }
         
@@ -377,7 +377,7 @@ public class VEPWorkflow extends OicrWorkflow {
         Command cmd = extractSampleNames.getCommand();
         cmd.addArgument("module load vcftools;\n");
         cmd.addArgument("vcf-query -l " + inVCF  + "> " + this.tmpDir + "sample_headers;\n");
-        cmd.addArgument("cat " + this.tmpDir + "sample_headers" + " grep -v \"GATK\" | tr \"\\n\" \",\" > " + this.tmpDir + "sample_names");
+        cmd.addArgument("cat " + this.tmpDir + "sample_headers" + " | grep -v \"GATK\" | tr \"\\n\" \",\" > " + this.tmpDir + "sample_names");
         extractSampleNames.setMaxMemory(Integer.toString(this.VEPMem * 1024));
         extractSampleNames.setQueue(getOptionalProperty("queue", ""));
         return extractSampleNames;
