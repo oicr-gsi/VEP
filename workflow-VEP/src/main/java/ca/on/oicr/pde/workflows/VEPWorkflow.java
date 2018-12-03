@@ -359,7 +359,7 @@ public class VEPWorkflow extends OicrWorkflow {
             cmd.addArgument("zcat " + inVCF + " >" + tmpVCF + ";\n");
            
         }else {
-            tmpVCF = inVCF.replace(".vcf", ".temp.vcf");
+            tmpVCF = newInVCF.replace(".vcf", ".temp.vcf");
             cmd.addArgument("cp "+ inVCF + " " + tmpVCF + ";\n");
         }
         cmd.addArgument("bedtools intersect -header -a " 
