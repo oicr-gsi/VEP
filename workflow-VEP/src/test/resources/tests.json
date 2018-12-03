@@ -10,8 +10,8 @@
         {
             "id": "test_01",
             "parameters": {
-                "input_vcf_file": "/.mounts/labs/PDE/data/testdata/genomic/vcf/PCSI0022/somatic.vcf.gz",
-                "external_identifier": "PCSI0022_test"
+                "input_vcf_file": "/.mounts/labs/PDE/data/testdata/genomic/vcf/VEP_test/IMP-01710-ARC.mutect.strelka.snv.indel.vcf.gz",
+                "external_identifier": "TGL07_0010"
             }
         }
     ]
