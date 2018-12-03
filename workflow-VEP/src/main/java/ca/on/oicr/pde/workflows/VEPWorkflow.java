@@ -257,9 +257,9 @@ public class VEPWorkflow extends OicrWorkflow {
         oncoKBAnnotate.setCommand("Mafannotator.py -i " + mafFile + " " + mafFile.replace(".txt", ".oncoKB.txt"));
         
         // zip maf file
-        String onKBMafFile = mafFile.replace(".txt", ".oncoKB.txt");
+        String oncoKBMafFile = mafFile.replace(".txt", ".oncoKB.txt");
         Job zipMafFile = getWorkflow().createBashJob("zip_maf");
-        zipMafFile.setCommand(bgzip + " -c " + onKBMafFile + " " + mafFile + ".gz");
+        zipMafFile.setCommand(bgzip + " -c " + oncoKBMafFile + " " + mafFile + ".gz");
         zipMafFile.addParent(parentJob);
         parentJob = zipMafFile;
         parentJob.setMaxMemory(Integer.toString(this.VEPMem * 1024));

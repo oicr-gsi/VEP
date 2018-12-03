@@ -1,6 +1,6 @@
 {
     "defaults": {
-        "description": "Sequenza decider test",
+        "description": "VEP decider test",
         "metricsResources": "/expected_output/development/",
         "parameters": {
             "--parent-wf-accessions": "11955993,12766543,10726253 

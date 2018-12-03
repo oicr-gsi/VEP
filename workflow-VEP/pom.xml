@@ -20,17 +20,7 @@
 
     <properties>
         <workflow-name>VEP</workflow-name>
-        <samtools-version>0.1.19</samtools-version>
+        <tabix-version>0.2.6</tabix-version>
     </properties>
-    
-    <dependencies>
-        <dependency>
-            <groupId>samtools</groupId>
-            <artifactId>samtools</artifactId>
-            <version>${samtools-version}</version>
-            <type>zip</type>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
     
 </project>
