@@ -43,6 +43,8 @@ public class VEPDecider extends OicrDecider {
     private String commaSeparatedFilePaths;
     private String commaSeparatedParentAccessions;
     
+    private String allowAllVCFs = "false";
+    
     // VEP
     /***
      * vaf_filter=0.7
@@ -87,6 +89,7 @@ public class VEPDecider extends OicrDecider {
         parser.accepts("buffer-size", "Optional parameter for VEP workflow: Specify the buffer size. Default: " + this.bufferSize).withOptionalArg();
         parser.accepts("max-ac-filter", "Optional parameter for VEP workflow: Specify the max AC filter. Default: " + this.maxACFilter).withOptionalArg();
         parser.accepts("additional-args", "Optional: Include additional arguments and paramenters to run VEP. Default: " + this.additionalArgs).withOptionalArg();
+        parser.accepts("allow-all-vcfs", "Optional: Parameter to annotate all VCFs. Default: set to false; it annotates tumor only VCF from Mutect2 and MutectStrelka snv-indel mergered VCFs by default.").withOptionalArg();
     }
 
     @Override
@@ -162,6 +165,10 @@ public class VEPDecider extends OicrDecider {
         if (this.options.has("target-bed")) {
             this.targetBed = options.valueOf("target-bed").toString();
         }
+        
+        if (this.options.has("allow-all-vcfs")) {
+            this.allowAllVCFs = options.valueOf("allow-all-vcfs").toString();
+        }
         return rv;
     }
 
@@ -183,7 +190,12 @@ public class VEPDecider extends OicrDecider {
         // Check for duplicate file names and exclude them from analysis
 
         for (String p : filePaths) {
-            boolean checkFileExtn = this.identifyFilePath(p);
+            boolean checkFileExtn = true;
+            
+            if (!Boolean.parseBoolean(this.allowAllVCFs)){
+                checkFileExtn = this.identifyFilePath(p);
+            }
+            
             if (!checkFileExtn){
                 continue;
             }
@@ -279,7 +291,10 @@ public class VEPDecider extends OicrDecider {
         // Override the supplied group-by value
         for (ReturnValue currentRV : vals) {
             boolean metatypeOK = false;
-            boolean fileExtensionOK = false;
+            boolean fileExtensionOK = true;
+            if (Boolean.parseBoolean(this.allowAllVCFs)){
+                fileExtensionOK = false;
+            }
 
             for (int f = 0; f < currentRV.getFiles().size(); f++) {
                 String filePath = currentRV.getFiles().get(f).getFilePath();
@@ -287,7 +302,7 @@ public class VEPDecider extends OicrDecider {
                     if (METATYPES.contains(currentRV.getFiles().get(f).getMetaType())) {
                         metatypeOK = true;
                     }  
-                    if (this.identifyFilePath(filePath)){
+                    if (!Boolean.parseBoolean(this.allowAllVCFs) && this.identifyFilePath(filePath)){
                         fileExtensionOK = true;
                     }
                 } catch (Exception e) {

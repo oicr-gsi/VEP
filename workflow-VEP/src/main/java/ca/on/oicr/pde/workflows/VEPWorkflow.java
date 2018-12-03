@@ -333,9 +333,9 @@ public class VEPWorkflow extends OicrWorkflow {
         cmd.addArgument("bcftools annotate -a " + this.freqTextFile);
         cmd.addArgument("-c CHROM,POS,REF,ALT,TGL_Freq");
         cmd.addArgument("-h <(echo '##INFO=<ID=TGL_Freq,Number=.,Type=Float,Description=\"Variant Frequency Among TGL Tumours (MuTect2 Artifact Detection)\">'");
-        cmd.addArgument(inVCF + " | " + this.bgzip + " -c >" + inVCF.replace(".vcf", ".temp.vcf.gz"));
+        cmd.addArgument(inVCF + " | " + this.bgzip + " -c >" + inVCF.replace(".vcf", ".temp.vcf.gz") + ";\n");
         cmd.addArgument("echo \"Marking novel variants as TGL_Freq=0.0\"\n");
-        cmd.addArgument(" bcftools annotate -a " + this.freqTextFile);
+        cmd.addArgument("bcftools annotate -a " + this.freqTextFile);
         cmd.addArgument("-c CHROM,POS,REF,ALT,TGL_Freq");
         cmd.addArgument("-m \"-TGL_Freq=0.0\" ");
         cmd.addArgument(inVCF.replace(".vcf", ".temp.vcf.gz") + " | grep -v \"Sites not listed in OICR_Freq=0.0\" > " + inVCF.replace(".vcf",".tglfreq.vcf"));
