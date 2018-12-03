@@ -23,4 +23,13 @@
         <tabix-version>0.2.6</tabix-version>
     </properties>
     
+    <dependencies>
+        <dependency>
+            <groupId>samtools</groupId>
+            <artifactId>tabix</artifactId>
+            <version>${tabix-version}</version>
+            <type>zip</type>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>
