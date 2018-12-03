@@ -6,8 +6,8 @@
             "--parent-wf-accessions": "11955993,12766543,10726253 
         },
         "iniExclusions": ["parent-accessions", "json_metadata_file", "workflow_run_accession", "workflow-run-accession",
-            "unique_string", "parent_accessions", "parent_accession", "workflow_bundle_dir",
-            "output_prefix"]
+            "unique_string", "parent_accessions", "parent_accession", "input_file", "input_files", "workflow_bundle_dir",
+            "output_prefix", "samstats_script"]
     },
     "tests": [
         {
