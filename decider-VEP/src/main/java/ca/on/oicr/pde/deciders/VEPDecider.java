@@ -89,7 +89,7 @@ public class VEPDecider extends OicrDecider {
         parser.accepts("buffer-size", "Optional parameter for VEP workflow: Specify the buffer size. Default: " + this.bufferSize).withOptionalArg();
         parser.accepts("max-ac-filter", "Optional parameter for VEP workflow: Specify the max AC filter. Default: " + this.maxACFilter).withOptionalArg();
         parser.accepts("additional-args", "Optional: Include additional arguments and paramenters to run VEP. Default: " + this.additionalArgs).withOptionalArg();
-        parser.accepts("allow-all-vcfs", "Optional: Parameter to annotate all VCFs. Default: set to false; it annotates tumor only VCF from Mutect2 and MutectStrelka snv-indel mergered VCFs by default.").withOptionalArg();
+        parser.accepts("annotate-selected", "Optional: Parameter to annotate all VCFs. Default: set to false; it annotates tumor only VCF from Mutect2 and MutectStrelka snv-indel mergered VCFs by default.").withOptionalArg();
     }
 
     @Override
@@ -166,8 +166,8 @@ public class VEPDecider extends OicrDecider {
             this.targetBed = options.valueOf("target-bed").toString();
         }
         
-        if (this.options.has("allow-all-vcfs")) {
-            this.allowAllVCFs = options.valueOf("allow-all-vcfs").toString();
+        if (this.options.has("annotate-selected")) {
+            this.allowAllVCFs = options.valueOf("annotate-selected").toString();
         }
         return rv;
     }

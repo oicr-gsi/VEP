@@ -97,7 +97,7 @@ public class VEPWorkflow extends OicrWorkflow {
             // input samples 
             inputVCF = getProperty("input_vcf_file");
             outputFilenamePrefix = getProperty("external_identifier");
-            normalSamplePrefix = getOptionalProperty("matched_normal_name", "unmatched");
+            normalSamplePrefix = getOptionalProperty("matched_normal_name", "matched");
             
             
             // vcf2maf
@@ -200,28 +200,17 @@ public class VEPWorkflow extends OicrWorkflow {
         Job extractSampleNames = this.extractSampleNames(inVCF);
         parentJob = extractSampleNames;
         String sampleHeaderFile = this.tmpDir + "sample_header";
-        try {
-            String sampleName = this.sampleNames(sampleHeaderFile);
-            if (sampleName.contains(",")){
-                String[] sampleIDs = sampleName.split(",");
-                for (String s : sampleIDs){
-                    if (s.contains("_R")){
-                        this.normalSamplePrefix = s;
-                    } else {
-                        this.outputFilenamePrefix = s;
-                    }
-                }
-            } else {
-                this.outputFilenamePrefix = sampleName;
-                this.normalSamplePrefix = "unmatched";
-                Job preprocessUnmatchedVCF = handleUnmatchedVCF(inVCF);
-                preprocessUnmatchedVCF.addParent(parentJob);
-                parentJob = preprocessUnmatchedVCF;
-                inVCF = this.tmpDir + this.outputFilenamePrefix + ".unmatched.vcf.gz";
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(VEPWorkflow.class.getName()).log(Level.SEVERE, null, ex);
+        
+        // unmatched VCFs are labelled as "tumor_only" VCFs
+        if (inVCF.contains("tumor_only")){
+            this.normalSamplePrefix = "unmatched";
+            Job preprocessUnmatchedVCF = handleUnmatchedVCF(inVCF);
+            preprocessUnmatchedVCF.addParent(parentJob);
+            parentJob = preprocessUnmatchedVCF;
+            inVCF = this.tmpDir + this.outputFilenamePrefix + ".unmatched.vcf.gz";
         }
+         
+        
         
         // subset VCF 
         HashMap<String,Job> getTargetVCF = preProcessVCF(inVCF);
@@ -287,15 +276,20 @@ public class VEPWorkflow extends OicrWorkflow {
         Job runVCF2MAF = getWorkflow().createBashJob("vcf2maf");
         Command cmd = runVCF2MAF.getCommand();
         cmd.addArgument(PATHFIX);
+        // command to parse sample_names file
+        cmd.addArgument("if [[ `cat " + this.tmpDir + "sample_names | tr \",\" \"\\n\" | wc -l` == 2 ]]; then \n"
+                + "for item in `cat " + this.tmpDir + "sample_names" + " | tr \",\" \"\\n\"`; do "
+                + "if [[ $item == \"NORMAL\" || $item == *_R_* ]]; then NORM=$item; else TUMR=$item; fi; done \n"
+                        + "else TUMR=`cat " + this.tmpDir + "sample_names | tr -d \",\"`; NORM=\"unmatched\"; fi"); //
         cmd.addArgument(this.perl + " " + this.vcf2mafpl);
         cmd.addArgument("--species "+ this.species);
         cmd.addArgument("--ncbi-build " + this.hgBuild);
         cmd.addArgument("--input-vcf " + inVCF);
         cmd.addArgument("--output-maf "+ outputMAF);
-        cmd.addArgument("--tumor-id " + this.outputFilenamePrefix);
-        cmd.addArgument("--normal-id " + this.normalSamplePrefix);
-        cmd.addArgument("--vcf-tumor-id " + this.outputFilenamePrefix);
-        cmd.addArgument("--vcf-normal-id " + this.normalSamplePrefix);
+        cmd.addArgument("--tumor-id $TUMR" );
+        cmd.addArgument("--normal-id $NORM" );
+        cmd.addArgument("--vcf-tumor-id $TUMR");
+        cmd.addArgument("--vcf-normal-id $NORM" );
         cmd.addArgument("--ref-fasta "+this.refFasta);
         cmd.addArgument("--filter-vcf "+this.exacVCF);
         cmd.addArgument("--max-filter-ac " + this.acFilter);
@@ -317,7 +311,7 @@ public class VEPWorkflow extends OicrWorkflow {
     // merge VCFs for mutect2 unmatched
     private Job handleUnmatchedVCF(String inVCF){
         String tempTumorVCF = this.tmpDir + this.outputFilenamePrefix + ".vcf";
-        String tempMutect2VCF = this.tmpDir + this.outputFilenamePrefix + "unmatched.vcf";
+        String tempMutect2VCF = this.tmpDir + this.outputFilenamePrefix + ".unmatched.vcf";
         Job mergeMutect2VCF = getWorkflow().createBashJob("preprocess_unmatched");
         Command cmd = mergeMutect2VCF.getCommand();
         cmd.addArgument("sed -i \"s/QSS\\,Number\\=A/QSS\\,Number\\=\\./\" " + inVCF + ";\n");
