@@ -356,16 +356,16 @@ public class VEPWorkflow extends OicrWorkflow {
         cmd.addArgument("module load bedtools; \n");
         if (newInVCF.endsWith("gz")){
             tmpVCF = newInVCF.replace(".vcf.gz", ".temp.vcf");
-            cmd.addArgument("zcat " + inVCF + " >" + tmpVCF);
+            cmd.addArgument("zcat " + inVCF + " >" + tmpVCF + ";\n");
            
         }else {
             tmpVCF = inVCF.replace(".vcf", ".temp.vcf");
-            cmd.addArgument("cp "+ inVCF + " " + tmpVCF);
+            cmd.addArgument("cp "+ inVCF + " " + tmpVCF + ";\n");
         }
         cmd.addArgument("bedtools intersect -header -a " 
                 + tmpVCF + " -b " 
                 + this.targetBedFile + " > " 
-                + tmpVCF.replace(".vcf", ".TGL.targ.vcf"));
+                + tmpVCF.replace(".vcf", ".TGL.targ.vcf") + ";\n");
         preProcessVCF.setMaxMemory(Integer.toString(this.VEPMem * 1024));
         preProcessVCF.setQueue(getOptionalProperty("queue", ""));
         hmap.put(tmpVCF, preProcessVCF);
