@@ -254,7 +254,7 @@ public class VEPWorkflow extends OicrWorkflow {
         // oncokb annotator
         Job oncoKBAnnotate = getWorkflow().createBashJob("oncokb_annotate");
         //cmd.addArgument(PATHFIX);
-        oncoKBAnnotate.setCommand(PATHFIX + this.oncoKBPath + "/" + "Mafannotator.py -i " + mafFile + " " + mafFile.replace(".txt", ".oncoKB.txt"));
+        oncoKBAnnotate.setCommand(PATHFIX + this.oncoKBPath + "/" + "Mafannotator.py -i " + mafFile + " -o " + mafFile.replace(".txt", ".oncoKB.txt"));
         oncoKBAnnotate.addParent(parentJob);
         parentJob = oncoKBAnnotate;
         parentJob.setMaxMemory(Integer.toString(this.VEPMem * 1024));
@@ -332,8 +332,8 @@ public class VEPWorkflow extends OicrWorkflow {
         cmd.addArgument("module load bcftools; \n");
         cmd.addArgument("bcftools annotate -a " + this.freqTextFile);
         cmd.addArgument("-c CHROM,POS,REF,ALT,TGL_Freq");
-        cmd.addArgument("-h <(echo '##INFO=<ID=TGL_Freq,Number=.,Type=Float,Description=\"Variant Frequency Among TGL Tumours (MuTect2 Artifact Detection)\">')");
-        cmd.addArgument(inVCF + " | " + this.bgzip + " >" + inVCF.replace(".vcf", ".temp.vcf.gz"));
+        cmd.addArgument("-h <(echo '##INFO=<ID=TGL_Freq,Number=.,Type=Float,Description=\"Variant Frequency Among TGL Tumours (MuTect2 Artifact Detection)\">'");
+        cmd.addArgument(inVCF + " | " + this.bgzip + " -c >" + inVCF.replace(".vcf", ".temp.vcf.gz"));
         cmd.addArgument("echo \"Marking novel variants as TGL_Freq=0.0\"\n");
         cmd.addArgument(" bcftools annotate -a " + this.freqTextFile);
         cmd.addArgument("-c CHROM,POS,REF,ALT,TGL_Freq");

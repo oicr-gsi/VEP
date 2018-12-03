@@ -230,9 +230,6 @@ public class VEPDecider extends OicrDecider {
         String currentTissueType = returnValue.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_tissue_type");
         String resequencingType = returnValue.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_targeted_resequencing");
         String target_bed = null;
-//        String currentFileName = returnValue.getFiles().toString();
-//        String[] templateTypes = this.templateType.split(",");
-//        boolean checkFileExtn = this.identifyFilePath(currentFileName);
 
         if (null == currentTissueType) {
             return false; // we need only those which have their tissue type set
@@ -252,10 +249,6 @@ public class VEPDecider extends OicrDecider {
             return false;
         }
         
-//        if (!checkFileExtn){
-//            Log.warn("Workflow will fail for this file " + currentFileName);
-//            return false;
-//        }
         // Do not process tumor tissues of type that doesn't match set parameter
         if (null != this.tumorType) {
             return false;
