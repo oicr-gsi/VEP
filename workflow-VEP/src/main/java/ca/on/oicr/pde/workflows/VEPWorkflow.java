@@ -323,10 +323,10 @@ public class VEPWorkflow extends OicrWorkflow {
     }
     
     private Job TGLFreqAnnotation(String inVCF){
-        Job annotateTGLFreq = getWorkflow().createBashJob("vcf2maf");
+        Job annotateTGLFreq = getWorkflow().createBashJob("tgl_freq");
         Command cmd = annotateTGLFreq.getCommand();
         cmd.addArgument(PATHFIX);
-        cmd.addArgument("\\n module load bcftools; \\n");
+        cmd.addArgument("module load bcftools; \n");
         cmd.addArgument("bcftools annotate -a " + this.freqTextFile);
         cmd.addArgument("-c CHROM,POS,REF,ALT,TGL_Freq");
         cmd.addArgument("-h <(echo '##INFO=<ID=TGL_Freq,Number=.,Type=Float,Description=\"Variant Frequency Among TGL Tumours (MuTect2 Artifact Detection)\">')");
@@ -348,9 +348,9 @@ public class VEPWorkflow extends OicrWorkflow {
         String vcfName = inVCF.substring(index + 1);
         String newInVCF = this.tmpDir + vcfName;
         String tmpVCF;
-        Job preProcessVCF = getWorkflow().createBashJob("vcf2maf");
+        Job preProcessVCF = getWorkflow().createBashJob("subset_VCF");
         Command cmd = preProcessVCF.getCommand();
-        cmd.addArgument("\\n module load bedtools; \\n");
+        cmd.addArgument("module load bedtools; \n");
         if (newInVCF.endsWith("gz")){
             tmpVCF = newInVCF.replace(".vcf.gz", ".temp.vcf");
             cmd.addArgument("zcat " + inVCF + " >" + tmpVCF);
