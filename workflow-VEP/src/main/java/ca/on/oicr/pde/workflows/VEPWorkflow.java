@@ -370,17 +370,11 @@ public class VEPWorkflow extends OicrWorkflow {
     }
     
     private Job extractSampleNames(String inVCF){
-        int i = 2;
-        String type = "matched";
-        if (this.normalSamplePrefix == "unmatched"){
-            i = 1;
-            type = "unmatched";
-        }
-        Job extractSampleNames = getWorkflow().createBashJob("get_sample_ids_"+type);
+        Job extractSampleNames = getWorkflow().createBashJob("get_sample_ids");
         Command cmd = extractSampleNames.getCommand();
         cmd.addArgument("module load vcftools;\n");
-        cmd.addArgument("vcf-query -l " + inVCF + "| tail -" + Integer.toString(i) + this.tmpDir + "sample_headers;\n");
-        cmd.addArgument("cat " + this.tmpDir + "sample_headers" + " | tr \"\n\" \",\" > " + this.tmpDir + "sample_names");
+        cmd.addArgument("vcf-query -l " + inVCF  + "> " + this.tmpDir + "sample_headers;\n");
+        cmd.addArgument("cat " + this.tmpDir + "sample_headers" + " grep -v \"GATK\" | tr \"\\n\" \",\" > " + this.tmpDir + "sample_names");
         extractSampleNames.setMaxMemory(Integer.toString(this.VEPMem * 1024));
         extractSampleNames.setQueue(getOptionalProperty("queue", ""));
         return extractSampleNames;
