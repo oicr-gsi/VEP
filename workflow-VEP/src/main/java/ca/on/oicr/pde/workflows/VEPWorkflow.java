@@ -201,17 +201,18 @@ public class VEPWorkflow extends OicrWorkflow {
         
         Job parentJob = null;
         String inVCF = getFiles().get("inVCF").getProvisionedPath();
+        String VCFtbi = getFiles().get("inVCFTBI").getProvisionedPath();
         String mafFile = this.dataDir + this.outputFilenamePrefix + ".maf.txt";
         
         // extract sample names first
         Job extractSampleNames = this.extractSampleNames(inVCF);
         parentJob = extractSampleNames;
-        String sampleHeaderFile = this.tmpDir + "sample_header";
+//        String sampleHeaderFile = this.tmpDir + "sample_header";
         
         // unmatched VCFs are labelled as "tumor_only" VCFs
         if (inVCF.contains("tumor_only")){
             this.normalSamplePrefix = "unmatched";
-            Job preprocessUnmatchedVCF = handleUnmatchedVCF();
+            Job preprocessUnmatchedVCF = handleUnmatchedVCF(inVCF);
             preprocessUnmatchedVCF.addParent(parentJob);
             parentJob = preprocessUnmatchedVCF;
             inVCF = this.tmpDir + this.outputFilenamePrefix + ".unmatched.vcf.gz";
@@ -237,11 +238,11 @@ public class VEPWorkflow extends OicrWorkflow {
         parentJob.addFile(targetVCFtbi);
         
         // annotate frequency
-        String intVCF = subsetVCF.replace("vcf.gz", "vcf");
+        String intVCF = subsetVCF.replace(".vcf.gz", ".vcf");
         String tglFreqVCF;
         if (this.freqTextFile != null){
             Job tglFreq = TGLFreqAnnotation(intVCF);
-            tglFreqVCF = intVCF.replace(".vcf",".tglfreq.vcf");
+            tglFreqVCF = this.tmpDir + this.outputFilenamePrefix + "final.tglfreq.vcf";
             this.retainInfo = "TGL_Freq";
             tglFreq.addParent(parentJob);
             parentJob = tglFreq;
@@ -316,32 +317,37 @@ public class VEPWorkflow extends OicrWorkflow {
     }
     
     // merge VCFs for mutect2 unmatched
-    private Job handleUnmatchedVCF(){
+    private Job handleUnmatchedVCF(String inVCF){
         String tempTumorVCF = this.tmpDir + this.outputFilenamePrefix + ".vcf";
         String tempMutect2VCF = this.tmpDir + this.outputFilenamePrefix + ".unmatched.vcf";
         Job mergeMutect2VCF = getWorkflow().createBashJob("preprocess_unmatched");
-        String inVCF = getFiles().get("inVCF").getProvisionedPath();
-        String inVCFtbi = getFiles().get("inVCFTBI").getProvisionedPath();
+        String inputVCF = this.tmpDir + this.outputFilenamePrefix + "_input" + ".vcf.gz";
+//        String inputTBI = inputVCF + ".tbi";
         Command cmd = mergeMutect2VCF.getCommand();
-        cmd.addArgument("ln -s " + inVCF + ";\n");
-        cmd.addArgument("ln -s " + inVCFtbi + ";\n");
-        cmd.addArgument("sed -i \"s/QSS\\,Number\\=A/QSS\\,Number\\=\\./\" " + inVCF + ";\n");
+        cmd.addArgument("cp " + inVCF + " " + inputVCF + ";\n"); // copy the VCF
+        cmd.addArgument(tabix + " -p vcf " + inputVCF + ";\n"); //tabix index the vcf 
+//        cmd.addArgument("cp " + tabixIndex + " " + inputTBI +";\n");
+        cmd.addArgument("sed -i \"s/QSS\\,Number\\=A/QSS\\,Number\\=\\./\" " + inputVCF + ";\n"); // fix QSS header
         cmd.addArgument("if [[ `cat " + this.tmpDir + "sample_names | tr \",\" \"\\n\" | wc -l` == 2 ]]; then \n"
                 + "for item in `cat " + this.tmpDir + "sample_names" + " | tr \",\" \"\\n\"`; do "
                 + "if [[ $item == \"NORMAL\" || $item == *_R_* ]]; then NORM=$item; else TUMR=$item; fi; done \n"
                         + "else TUMR=`cat " + this.tmpDir + "sample_names | tr -d \",\"`; NORM=\"unmatched\"; fi\n\n");
-        cmd.addArgument("echo -e \"$TUMR\\n$NORM\" > " + this.tmpDir + this.outputFilenamePrefix + "_header \n\n");
-        cmd.addArgument("module load bcftools \n");
-        cmd.addArgument("bcftools  merge " + inVCF + " " + inVCF + " --force-samples >" + tempTumorVCF + ";\n");
-        cmd.addArgument("bcftools reheader -s " + this.tmpDir + this.outputFilenamePrefix + "_header " + tempTumorVCF + ">" + tempMutect2VCF + ";\n");
-        cmd.addArgument(bgzip + " -c " + tempMutect2VCF + " > " + tempMutect2VCF + ".gz" + ";\n");
-        cmd.addArgument(tabix + " -p vcf " + tempMutect2VCF + ".gz");
+        cmd.addArgument("echo -e \"$TUMR\\n$NORM\" > " + this.tmpDir + this.outputFilenamePrefix + "_header \n\n"); // create header file
+        cmd.addArgument("module load bcftools \n"); // load bedtools
+        cmd.addArgument("bcftools  merge " + inputVCF + " " + inputVCF + " --force-samples >" + tempTumorVCF + ";\n"); // merge VCFs
+        cmd.addArgument("bcftools reheader -s " + this.tmpDir + this.outputFilenamePrefix + "_header " + tempTumorVCF + ">" + tempMutect2VCF + ";\n"); //reheader merged VCF
+        cmd.addArgument(bgzip + " -c " + tempMutect2VCF + " > " + tempMutect2VCF + ".gz" + ";\n"); // bgzip
+        cmd.addArgument(tabix + " -p vcf " + tempMutect2VCF + ".gz"); // tabix index
         mergeMutect2VCF.setMaxMemory(Integer.toString(this.VEPMem * 1024));
         mergeMutect2VCF.setQueue(getOptionalProperty("queue", ""));
         return mergeMutect2VCF;
     }
     
     private Job TGLFreqAnnotation(String inVCF){
+        String intermediateVCF = inVCF.replace(".vcf.gz", ".temp.vcf");
+        String freqAnnotVCF = this.tmpDir + this.outputFilenamePrefix + "tmp_tglfreq.vcf";
+//        String intTGLFreqAnnotVCF = this.tmpDir + this.outputFilenamePrefix + "int.tglfreq.vcf";
+        String finalTGLFreqAnnotVCF = this.tmpDir + this.outputFilenamePrefix + "final.tglfreq.vcf";
         Job annotateTGLFreq = getWorkflow().createBashJob("tgl_freq");
         Command cmd = annotateTGLFreq.getCommand();
         cmd.addArgument(PATHFIX);
@@ -349,15 +355,15 @@ public class VEPWorkflow extends OicrWorkflow {
         cmd.addArgument("bcftools annotate -a " + this.freqTextFile);
         cmd.addArgument("-c CHROM,POS,REF,ALT,TGL_Freq");
         cmd.addArgument("-h <(echo '##INFO=<ID=TGL_Freq,Number=.,Type=Float,Description=\"Variant Frequency Among TGL Tumours (MuTect2 Artifact Detection)\">')");
-        cmd.addArgument(inVCF + " > " + this.tmpDir + "tmp.vcf;\n"); 
-        cmd.addArgument(this.bgzip + " -c " + this.tmpDir + "tmp.vcf >" + inVCF.replace(".vcf", ".temp.vcf.gz") + ";\n");
-        cmd.addArgument(this.tabix + " -p vcf " + inVCF.replace(".vcf", ".temp.vcf.gz") + ";\n");
+        cmd.addArgument(inVCF + " > " + intermediateVCF +";\n"); 
+        cmd.addArgument(this.bgzip + " -c " + intermediateVCF  + " > " + intermediateVCF + ".gz" + ";\n");
+        cmd.addArgument(this.tabix + " -p vcf " + intermediateVCF + ".gz" + ";\n");
         cmd.addArgument("echo \"Marking novel variants as TGL_Freq=0.0\"\n");
         cmd.addArgument("bcftools annotate -a " + this.freqTextFile);
         cmd.addArgument("-c CHROM,POS,REF,ALT,TGL_Freq");
         cmd.addArgument("-m \"-TGL_Freq=0.0\" ");
-        cmd.addArgument(inVCF.replace(".vcf", ".temp.vcf.gz") + " > " +  this.tmpDir + "tglFreq.vcf" + ";\n");
-        cmd.addArgument("cat " + this.tmpDir + "tglFreq.vcf" + " | grep -v \"Sites not listed in OICR_Freq=0.0\" > " + inVCF.replace(".vcf",".tglfreq.vcf"));
+        cmd.addArgument(intermediateVCF + ".gz" + " > " +  freqAnnotVCF + ";\n");
+        cmd.addArgument("cat " + freqAnnotVCF + " | grep -v \"Sites not listed in OICR_Freq=0.0\" > " + finalTGLFreqAnnotVCF + ";\n");
         annotateTGLFreq.setMaxMemory(Integer.toString(this.VEPMem * 1024));
         annotateTGLFreq.setQueue(getOptionalProperty("queue", ""));
         return annotateTGLFreq;

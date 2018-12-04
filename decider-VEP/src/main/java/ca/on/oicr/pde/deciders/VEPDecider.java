@@ -32,7 +32,7 @@ public class VEPDecider extends OicrDecider {
     private Map<String, BeSmall> fileSwaToSmall;
 
     private String[] allowedTemplateTypes = {"EX", "WT"};
-    private String templateTypes;
+    private String templateType;
     private String queue = "";
     private String externalName;
     private String normalFileNamePrefix;
@@ -64,14 +64,14 @@ public class VEPDecider extends OicrDecider {
     
     // metatype info
     private final static String VCF_METATYPE="application/vcf";
-    private final static String VCF_GZ_METATYPE="pplication/vcf-4-gzip";
+    private final static String VCF_GZ_METATYPE="application/vcf-4-gzip";
     private final static ArrayList<String> METATYPES = new ArrayList<String> (Arrays.asList(VCF_METATYPE, VCF_GZ_METATYPE));
 
     public VEPDecider() {
         super();
         fileSwaToSmall = new HashMap<String, BeSmall>();
         parser.acceptsAll(Arrays.asList("ini-file"), "Optional: the location of the INI file.").withRequiredArg();
-        parser.accepts("template-types", "Required. Set the template type to limit the workflow run "
+        parser.accepts("template-type", "Required. Set the template type to limit the workflow run "
                 + "so that it runs on data only of this template type. Default: " + String.join(",", this.allowedTemplateTypes)).withOptionalArg();
         parser.accepts("queue", "Optional: Set the queue (Default: not set)").withRequiredArg();
         parser.accepts("target-bed", "Optional parameter for VEP workflow: Specify the path to interval bed file. Default: parsed from " + this.rsConfigXMLPath + ". Default is null").withOptionalArg();
@@ -106,13 +106,9 @@ public class VEPDecider extends OicrDecider {
             this.queue = options.valueOf("queue").toString();
         }
 
-        if (this.options.has("template-types")) {
-            if (!options.hasArgument("template-types")) {
-                Log.error("--template-type requires an argument, EX");
-            } else {
-                this.templateTypes = options.valueOf("template-types").toString();
-                this.allowedTemplateTypes = this.templateTypes.split(",");
-            }
+        if (this.options.has("template-type")) {
+            this.templateType = options.valueOf("template-type").toString();
+            this.allowedTemplateTypes = this.templateType.split(",");
         }
       
         if (this.options.has("tgl-freq-file")) {
@@ -247,18 +243,13 @@ public class VEPDecider extends OicrDecider {
         }
 
         // Filter the data of a different template type if filter is specified
-        String[] templateType = this.templateTypes.split(",");
-        if (!Arrays.asList(templateType).contains(currentTtype)) {
-            Log.warn("Excluding file with SWID = [" + returnValue.getAttribute(Header.FILE_SWA.getTitle())
-                    + "] due to template type/geo_library_source_template_type = [" + currentTtype + "]");
-            return false;
-        }
-        
+//        String[] templateTypes = this.templateType.split(",");
         if (!Arrays.asList(this.allowedTemplateTypes).contains(currentTtype)) {
             Log.warn("Excluding file with SWID = [" + returnValue.getAttribute(Header.FILE_SWA.getTitle())
                     + "] due to template type/geo_library_source_template_type = [" + currentTtype + "]");
             return false;
         }
+        
         
         // Do not process tumor tissues of type that doesn't match set parameter
         if (null != this.tumorType) {
