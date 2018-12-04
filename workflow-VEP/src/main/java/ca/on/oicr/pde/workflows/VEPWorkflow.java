@@ -315,7 +315,7 @@ public class VEPWorkflow extends OicrWorkflow {
         Job mergeMutect2VCF = getWorkflow().createBashJob("preprocess_unmatched");
         Command cmd = mergeMutect2VCF.getCommand();
         cmd.addArgument("sed -i \"s/QSS\\,Number\\=A/QSS\\,Number\\=\\./\" " + inVCF + ";\n");
-        cmd.addArgument("echo -e " + this.outputFilenamePrefix + "\\n" + this.normalSamplePrefix + " > " + this.tmpDir + this.outputFilenamePrefix + "_header");
+        cmd.addArgument("echo -e \"" + this.outputFilenamePrefix + "\\n" + this.normalSamplePrefix + "\" > " + this.tmpDir + this.outputFilenamePrefix + "_header \n");
         cmd.addArgument("module load bcftools \n");
         cmd.addArgument("bcftools  merge " + inVCF + " " + inVCF + "--force-samples >" + tempTumorVCF + ";\n");
         cmd.addArgument("bcftools reheader -s " + this.tmpDir + this.outputFilenamePrefix + "_header " + tempTumorVCF + ">" + tempMutect2VCF + ";\n");
