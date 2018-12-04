@@ -18,7 +18,7 @@
         },{
             "id": "study_test_02",
             "parameters": {
-                "--study-name": "TGL07"
+                "--study-name": "TGL07",
                 "--allow-all-vcfs": "true"
             }
         }
