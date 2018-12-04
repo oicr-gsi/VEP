@@ -273,7 +273,7 @@ public class VEPWorkflow extends OicrWorkflow {
         parentJob.setQueue(getOptionalProperty("queue", ""));
 
         // Provision out maf.txt file
-        SqwFile outMaf = createOutputFile(mafFile + ".gz", TXT_GZ_METATYPE, this.manualOutput);
+        SqwFile outMaf = createOutputFile(oncoKBMafFile + ".gz", TXT_GZ_METATYPE, this.manualOutput);
         outMaf.getAnnotations().put("MAF", "VEP");
         parentJob.addFile(outMaf);
         
