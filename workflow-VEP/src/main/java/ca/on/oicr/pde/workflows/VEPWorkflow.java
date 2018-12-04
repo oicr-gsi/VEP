@@ -356,7 +356,7 @@ public class VEPWorkflow extends OicrWorkflow {
         cmd.addArgument("bcftools annotate -a " + this.freqTextFile);
         cmd.addArgument("-c CHROM,POS,REF,ALT,TGL_Freq");
         cmd.addArgument("-m \"-TGL_Freq=0.0\" ");
-        cmd.addArgument(inVCF.replace(".vcf", ".temp.vcf.gz") + this.tmpDir + "tglFreq.vcf" + ";\n");
+        cmd.addArgument(inVCF.replace(".vcf", ".temp.vcf.gz") + " > " +  this.tmpDir + "tglFreq.vcf" + ";\n");
         cmd.addArgument("cat " + this.tmpDir + "tglFreq.vcf" + " | grep -v \"Sites not listed in OICR_Freq=0.0\" > " + inVCF.replace(".vcf",".tglfreq.vcf"));
         annotateTGLFreq.setMaxMemory(Integer.toString(this.VEPMem * 1024));
         annotateTGLFreq.setQueue(getOptionalProperty("queue", ""));
