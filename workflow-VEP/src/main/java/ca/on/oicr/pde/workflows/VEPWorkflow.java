@@ -211,7 +211,7 @@ public class VEPWorkflow extends OicrWorkflow {
         // unmatched VCFs are labelled as "tumor_only" VCFs
         if (inVCF.contains("tumor_only")){
             this.normalSamplePrefix = "unmatched";
-            Job preprocessUnmatchedVCF = handleUnmatchedVCF(inVCF);
+            Job preprocessUnmatchedVCF = handleUnmatchedVCF();
             preprocessUnmatchedVCF.addParent(parentJob);
             parentJob = preprocessUnmatchedVCF;
             inVCF = this.tmpDir + this.outputFilenamePrefix + ".unmatched.vcf.gz";
@@ -316,11 +316,15 @@ public class VEPWorkflow extends OicrWorkflow {
     }
     
     // merge VCFs for mutect2 unmatched
-    private Job handleUnmatchedVCF(String inVCF){
+    private Job handleUnmatchedVCF(){
         String tempTumorVCF = this.tmpDir + this.outputFilenamePrefix + ".vcf";
         String tempMutect2VCF = this.tmpDir + this.outputFilenamePrefix + ".unmatched.vcf";
         Job mergeMutect2VCF = getWorkflow().createBashJob("preprocess_unmatched");
+        String inVCF = getFiles().get("inVCF").getProvisionedPath();
+        String inVCFtbi = getFiles().get("inVCFTBI").getProvisionedPath();
         Command cmd = mergeMutect2VCF.getCommand();
+        cmd.addArgument("ln -s " + inVCF + ";\n");
+        cmd.addArgument("ln -s " + inVCFtbi + ";\n");
         cmd.addArgument("sed -i \"s/QSS\\,Number\\=A/QSS\\,Number\\=\\./\" " + inVCF + ";\n");
         cmd.addArgument("if [[ `cat " + this.tmpDir + "sample_names | tr \",\" \"\\n\" | wc -l` == 2 ]]; then \n"
                 + "for item in `cat " + this.tmpDir + "sample_names" + " | tr \",\" \"\\n\"`; do "

@@ -11,15 +11,30 @@
     },
     "tests": [
         {
-            "id": "study_test_01",
-            "parameters": {
-                "--study-name": "TGL07"
-            }
-        },{
-            "id": "study_test_02",
+            "id": "study_test_01_EX",
             "parameters": {
                 "--study-name": "TGL07",
-                "--allow-all-vcfs": "true"
+                "--template-types" : "EX"
+            }
+        },
+        {
+            "id": "study_test_02_WT",
+            "parameters": {
+                "--study-name": "TGL07",
+                "--template-types" : WT"
+            }
+        },
+        {
+            "id": "study_test_03_both",
+            "parameters": {
+                "--study-name": "TGL07",
+                "--template-types" : "WT,EX"
+            }
+        },{
+            "id": "study_test_02_EX",
+            "parameters": {
+                "--study-name": "TGL07",
+                "--allow-extensions": ".mutect2.vcf.gz"
             }
         }
     ]
