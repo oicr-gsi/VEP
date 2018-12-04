@@ -30,7 +30,8 @@
                 "--study-name": "TGL07",
                 "--template-type" : "WT,EX"
             }
-        },{
+        },
+        {
             "id": "study_test_02_EX",
             "parameters": {
                 "--study-name": "TGL07",

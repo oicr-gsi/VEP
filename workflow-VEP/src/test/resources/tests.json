@@ -17,7 +17,7 @@
         {
             "id": "Mutect2_test_EX_unmatched",
             "parameters": {
-                "input_vcf_file": "/.mounts/labs/PDE/data/testdata/genomic/vcf/VEP_test/TGL07_0015_Um_M_EX_171012.mutect2.tumor_only.vcf.gz",
+                "input_vcf_file": "/.mounts/labs/PDE/data/testdata/genomic/vcf/VEP_test/IMP-01710-ARC.mutect2.unmatched.vcf.gz",
                 "external_identifier": "TGL07_0015_Um_M_EX_171012"
             }
         },
