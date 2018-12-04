@@ -232,7 +232,7 @@ public class VEPWorkflow extends OicrWorkflow {
         parentJob.addFile(targetVCF);
         
         // provision out subset VCF TBI
-        SqwFile targetVCFtbi = createOutputFile(subsetVCF, VCF_TBI_METATYPE, this.manualOutput);
+        SqwFile targetVCFtbi = createOutputFile(subsetVCF + ".tbi", VCF_TBI_METATYPE, this.manualOutput);
         targetVCFtbi.getAnnotations().put("Target_VCF_tbi", "VEP");
         parentJob.addFile(targetVCFtbi);
         
