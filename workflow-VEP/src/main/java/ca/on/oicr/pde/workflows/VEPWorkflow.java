@@ -266,7 +266,7 @@ public class VEPWorkflow extends OicrWorkflow {
         // zip maf file
         String oncoKBMafFile = mafFile.replace(".txt", ".oncoKB.txt");
         Job zipMafFile = getWorkflow().createBashJob("zip_maf");
-        zipMafFile.setCommand(bgzip + " -c " + oncoKBMafFile + " " + mafFile + ".gz");
+        zipMafFile.setCommand(bgzip + " -c " + oncoKBMafFile + " > " + mafFile + ".gz");
         zipMafFile.addParent(parentJob);
         parentJob = zipMafFile;
         parentJob.setMaxMemory(Integer.toString(this.VEPMem * 1024));
