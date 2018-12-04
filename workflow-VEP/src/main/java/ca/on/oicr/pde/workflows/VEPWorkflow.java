@@ -257,7 +257,7 @@ public class VEPWorkflow extends OicrWorkflow {
         // oncokb annotator
         Job oncoKBAnnotate = getWorkflow().createBashJob("oncokb_annotate");
         //cmd.addArgument(PATHFIX);
-        oncoKBAnnotate.setCommand(PATHFIX + this.oncoKBPath + "/" + "Mafannotator.py -i " + mafFile + " -o " + mafFile.replace(".txt", ".oncoKB.txt"));
+        oncoKBAnnotate.setCommand(PATHFIX + this.oncoKBPath + "/" + "MafAnnotator.py -i " + mafFile + " -o " + mafFile.replace(".txt", ".oncoKB.txt"));
         oncoKBAnnotate.addParent(parentJob);
         parentJob = oncoKBAnnotate;
         parentJob.setMaxMemory(Integer.toString(this.VEPMem * 1024));
