@@ -328,7 +328,7 @@ public class VEPWorkflow extends OicrWorkflow {
                 + "for item in `cat " + this.tmpDir + "sample_names" + " | tr \",\" \"\\n\"`; do "
                 + "if [[ $item == \"NORMAL\" || $item == *_R_* ]]; then NORM=$item; else TUMR=$item; fi; done \n"
                         + "else TUMR=`cat " + this.tmpDir + "sample_names | tr -d \",\"`; NORM=\"unmatched\"; fi\n\n");
-        cmd.addArgument("echo -e $TUMR\\n$NORM > " + this.tmpDir + this.outputFilenamePrefix + "_header \n\n");
+        cmd.addArgument("echo -e \"$TUMR\\n$NORM\" > " + this.tmpDir + this.outputFilenamePrefix + "_header \n\n");
         cmd.addArgument("module load bcftools \n");
         cmd.addArgument("bcftools  merge " + inVCF + " " + inVCF + "--force-samples >" + tempTumorVCF + ";\n");
         cmd.addArgument("bcftools reheader -s " + this.tmpDir + this.outputFilenamePrefix + "_header " + tempTumorVCF + ">" + tempMutect2VCF + ";\n");
