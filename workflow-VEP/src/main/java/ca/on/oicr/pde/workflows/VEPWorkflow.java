@@ -322,17 +322,15 @@ public class VEPWorkflow extends OicrWorkflow {
         Job mergeMutect2VCF = getWorkflow().createBashJob("preprocess_unmatched");
         Command cmd = mergeMutect2VCF.getCommand();
         cmd.addArgument("sed -i \"s/QSS\\,Number\\=A/QSS\\,Number\\=\\./\" " + inVCF + ";\n");
-//        cmd.addArgument("echo -e \"" + this.outputFilenamePrefix + "\\n" + this.normalSamplePrefix + "\" > " + this.tmpDir + this.outputFilenamePrefix + "_header \n");
-// command to parse sample_names file
         cmd.addArgument("if [[ `cat " + this.tmpDir + "sample_names | tr \",\" \"\\n\" | wc -l` == 2 ]]; then \n"
                 + "for item in `cat " + this.tmpDir + "sample_names" + " | tr \",\" \"\\n\"`; do "
                 + "if [[ $item == \"NORMAL\" || $item == *_R_* ]]; then NORM=$item; else TUMR=$item; fi; done \n"
                         + "else TUMR=`cat " + this.tmpDir + "sample_names | tr -d \",\"`; NORM=\"unmatched\"; fi\n\n");
         cmd.addArgument("echo -e \"$TUMR\\n$NORM\" > " + this.tmpDir + this.outputFilenamePrefix + "_header \n\n");
         cmd.addArgument("module load bcftools \n");
-        cmd.addArgument("bcftools  merge " + inVCF + " " + inVCF + "--force-samples >" + tempTumorVCF + ";\n");
+        cmd.addArgument("bcftools  merge " + inVCF + " " + inVCF + " --force-samples >" + tempTumorVCF + ";\n");
         cmd.addArgument("bcftools reheader -s " + this.tmpDir + this.outputFilenamePrefix + "_header " + tempTumorVCF + ">" + tempMutect2VCF + ";\n");
-        cmd.addArgument(bgzip + " < " + tempMutect2VCF + " > " + tempMutect2VCF + ".gz" + ";\n");
+        cmd.addArgument(bgzip + " -c " + tempMutect2VCF + " > " + tempMutect2VCF + ".gz" + ";\n");
         cmd.addArgument(tabix + " -p vcf " + tempMutect2VCF + ".gz");
         mergeMutect2VCF.setMaxMemory(Integer.toString(this.VEPMem * 1024));
         mergeMutect2VCF.setQueue(getOptionalProperty("queue", ""));
@@ -347,12 +345,15 @@ public class VEPWorkflow extends OicrWorkflow {
         cmd.addArgument("bcftools annotate -a " + this.freqTextFile);
         cmd.addArgument("-c CHROM,POS,REF,ALT,TGL_Freq");
         cmd.addArgument("-h <(echo '##INFO=<ID=TGL_Freq,Number=.,Type=Float,Description=\"Variant Frequency Among TGL Tumours (MuTect2 Artifact Detection)\">')");
-        cmd.addArgument(inVCF + " | " + this.bgzip + " -c >" + inVCF.replace(".vcf", ".temp.vcf.gz") + ";\n");
+        cmd.addArgument(inVCF + " > " + this.tmpDir + "tmp.vcf;\n"); 
+        cmd.addArgument(this.bgzip + " -c " + this.tmpDir + "tmp.vcf >" + inVCF.replace(".vcf", ".temp.vcf.gz") + ";\n");
+        cmd.addArgument(this.tabix + " -p vcf " + inVCF.replace(".vcf", ".temp.vcf.gz") + ";\n");
         cmd.addArgument("echo \"Marking novel variants as TGL_Freq=0.0\"\n");
         cmd.addArgument("bcftools annotate -a " + this.freqTextFile);
         cmd.addArgument("-c CHROM,POS,REF,ALT,TGL_Freq");
         cmd.addArgument("-m \"-TGL_Freq=0.0\" ");
-        cmd.addArgument(inVCF.replace(".vcf", ".temp.vcf.gz") + " | grep -v \"Sites not listed in OICR_Freq=0.0\" > " + inVCF.replace(".vcf",".tglfreq.vcf"));
+        cmd.addArgument(inVCF.replace(".vcf", ".temp.vcf.gz") + this.tmpDir + "tglFreq.vcf" + ";\n");
+        cmd.addArgument("cat " + this.tmpDir + "tglFreq.vcf" + " | grep -v \"Sites not listed in OICR_Freq=0.0\" > " + inVCF.replace(".vcf",".tglfreq.vcf"));
         annotateTGLFreq.setMaxMemory(Integer.toString(this.VEPMem * 1024));
         annotateTGLFreq.setQueue(getOptionalProperty("queue", ""));
         return annotateTGLFreq;
