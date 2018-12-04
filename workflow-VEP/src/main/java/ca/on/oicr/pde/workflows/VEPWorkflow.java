@@ -33,6 +33,7 @@ public class VEPWorkflow extends OicrWorkflow {
 
     // Input Data
     private String inputVCF;
+    private String inputVCFindex;
     private String outputFilenamePrefix;
     private String normalSamplePrefix = null;
     
@@ -96,6 +97,7 @@ public class VEPWorkflow extends OicrWorkflow {
 
             // input samples 
             inputVCF = getProperty("input_vcf_file");
+            inputVCFindex = inputVCF + ".tbi";
             outputFilenamePrefix = getProperty("external_identifier");
             normalSamplePrefix = getOptionalProperty("matched_normal_name", "matched");
             
@@ -181,7 +183,12 @@ public class VEPWorkflow extends OicrWorkflow {
         if (inputVCF.endsWith("gz")){
             file0.setSourcePath(inputVCF);
             file0.setType(VCF_GZ_METATYPE);
-            file0.setIsInput(true);  }
+            file0.setIsInput(true);  
+            SqwFile file1 = this.createFile("inVCFTBI");
+            file1.setSourcePath(inputVCFindex);
+            file1.setType(VCF_TBI_METATYPE);
+            file1.setIsInput(true);
+        }
         else{
             file0.setSourcePath(inputVCF);
             file0.setType(VCF_METATYPE);
