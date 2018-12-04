@@ -238,16 +238,16 @@ public class VEPWorkflow extends OicrWorkflow {
         parentJob.addFile(targetVCFtbi);
         
         // annotate frequency
-        String intVCF = subsetVCF.replace(".vcf.gz", ".vcf");
+        String intVCF = subsetVCF;
         String tglFreqVCF;
         if (this.freqTextFile != null){
             Job tglFreq = TGLFreqAnnotation(intVCF);
-            tglFreqVCF = this.tmpDir + this.outputFilenamePrefix + "final.tglfreq.vcf";
+            tglFreqVCF = this.tmpDir + this.outputFilenamePrefix + "_final.tglfreq.vcf";
             this.retainInfo = "TGL_Freq";
             tglFreq.addParent(parentJob);
             parentJob = tglFreq;
         } else {
-            tglFreqVCF = intVCF;
+            tglFreqVCF = inVCF;
         }
         
         // run vcf to maf
@@ -344,10 +344,9 @@ public class VEPWorkflow extends OicrWorkflow {
     }
     
     private Job TGLFreqAnnotation(String inVCF){
-        String intermediateVCF = inVCF.replace(".vcf.gz", ".temp.vcf");
-        String freqAnnotVCF = this.tmpDir + this.outputFilenamePrefix + "tmp_tglfreq.vcf";
-//        String intTGLFreqAnnotVCF = this.tmpDir + this.outputFilenamePrefix + "int.tglfreq.vcf";
-        String finalTGLFreqAnnotVCF = this.tmpDir + this.outputFilenamePrefix + "final.tglfreq.vcf";
+        String intermediateVCF = inVCF.replace(".vcf.gz", "_temp.vcf");
+        String freqAnnotVCF = this.tmpDir + this.outputFilenamePrefix + "_tmp_tglfreq.vcf";
+        String finalTGLFreqAnnotVCF = this.tmpDir + this.outputFilenamePrefix + "_final.tglfreq.vcf";
         Job annotateTGLFreq = getWorkflow().createBashJob("tgl_freq");
         Command cmd = annotateTGLFreq.getCommand();
         cmd.addArgument(PATHFIX);

@@ -56,7 +56,7 @@ public class VEPDecider extends OicrDecider {
     private String maxACFilter = "10";
     private String additionalArgs = null;
 
-    private String targetBed = "/.mounts/labs/PDE/data/reference/targets/S07604715_Regions_sorted.bed";
+    private String targetBed = "/.mounts/labs/PDE/data/reference/targets/ensembl_v6_ccds_exons_onebed_intersectRegions_pad50.bed";
     private final String refGenome = "/.mounts/labs/PDE/data/gatkAnnotationResources/hg19_random.fa";
     private String freqDB = null;
     private String rsConfigXMLPath = "/.mounts/labs/PDE/data/rsconfig.xml";
@@ -185,11 +185,8 @@ public class VEPDecider extends OicrDecider {
 
         for (String p : filePaths) {
             boolean checkFileExtn = false;
-            
-//            if (!Boolean.parseBoolean(this.allowAllVCFs)){
             checkFileExtn = this.identifyFilePath(p);
-//            }
-            
+
             if (!checkFileExtn){
                 continue;
             }
@@ -242,8 +239,6 @@ public class VEPDecider extends OicrDecider {
             return false; // we need only those which have their tissue type set
         }
 
-        // Filter the data of a different template type if filter is specified
-//        String[] templateTypes = this.templateType.split(",");
         if (!Arrays.asList(this.allowedTemplateTypes).contains(currentTtype)) {
             Log.warn("Excluding file with SWID = [" + returnValue.getAttribute(Header.FILE_SWA.getTitle())
                     + "] due to template type/geo_library_source_template_type = [" + currentTtype + "]");
@@ -262,10 +257,10 @@ public class VEPDecider extends OicrDecider {
                 if (target_bed != null) {
                     this.targetBed = target_bed;
                     } else {
-                    Log.info("No interval file found for this run; Please re-try with --interval-bed <path to interval file>");
+                    Log.info("No interval file found for this run; Please re-try with --target-bed <path to interval file>");
                     }
             } catch (Exception NullPointerException) {
-                Log.info("No interval file found for this run; Please re-try with --interval-bed <path to interval file>");
+                Log.info("No interval file found for this run; Please re-try with --target-bed <path to interval file>");
                 }
         }
 //        this.extension = ReturnValue.ge
