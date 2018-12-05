@@ -274,7 +274,7 @@ public class VEPWorkflow extends OicrWorkflow {
         parentJob.setQueue(getOptionalProperty("queue", ""));
 
         // Provision out maf.txt file
-        SqwFile outMaf = createOutputFile(oncoKBMafFile + ".gz", TXT_GZ_METATYPE, this.manualOutput);
+        SqwFile outMaf = createOutputFile(mafFile + ".gz", TXT_GZ_METATYPE, this.manualOutput);
         outMaf.getAnnotations().put("MAF", "VEP");
         parentJob.addFile(outMaf);
         
@@ -287,7 +287,7 @@ public class VEPWorkflow extends OicrWorkflow {
         // command to parse sample_names file
         cmd.addArgument("if [[ `cat " + this.tmpDir + "sample_names | tr \",\" \"\\n\" | wc -l` == 2 ]]; then \n"
                 + "for item in `cat " + this.tmpDir + "sample_names" + " | tr \",\" \"\\n\"`; do "
-                + "if [[ $item == \"NORMAL\" || $item == *_R_* ]]; then NORM=$item; else TUMR=$item; fi; done \n"
+                + "if [[ $item == \"NORMAL\" || $item == *_R_* || $item == *BC* ]]; then NORM=$item; else TUMR=$item; fi; done \n"
                         + "else TUMR=`cat " + this.tmpDir + "sample_names | tr -d \",\"`; NORM=\"unmatched\"; fi\n\n"); //
         cmd.addArgument(this.perl + " " + this.vcf2mafpl);
         cmd.addArgument("--species "+ this.species);
