@@ -322,12 +322,9 @@ public class VEPWorkflow extends OicrWorkflow {
         String tempMutect2VCF = this.tmpDir + this.outputFilenamePrefix + ".unmatched.vcf";
         Job mergeMutect2VCF = getWorkflow().createBashJob("preprocess_unmatched");
         String inputVCF = this.tmpDir + this.outputFilenamePrefix + "_input" + ".vcf.gz";
-//        String inputTBI = inputVCF + ".tbi";
         Command cmd = mergeMutect2VCF.getCommand();
-        cmd.addArgument("cp " + inVCF + " " + inputVCF + ";\n"); // copy the VCF
+        cmd.addArgument("zcat " + inVCF + " | sed \"s/QSS\\,Number\\=A/QSS\\,Number\\=\\./\" | " + this.bgzip + "-c " +  inputVCF + ";\n"); // fix QSS header
         cmd.addArgument(tabix + " -p vcf " + inputVCF + ";\n"); //tabix index the vcf 
-//        cmd.addArgument("cp " + tabixIndex + " " + inputTBI +";\n");
-        cmd.addArgument("sed -i \"s/QSS\\,Number\\=A/QSS\\,Number\\=\\./\" " + inputVCF + ";\n"); // fix QSS header
         cmd.addArgument("if [[ `cat " + this.tmpDir + "sample_names | tr \",\" \"\\n\" | wc -l` == 2 ]]; then \n"
                 + "for item in `cat " + this.tmpDir + "sample_names" + " | tr \",\" \"\\n\"`; do "
                 + "if [[ $item == \"NORMAL\" || $item == *_R_* ]]; then NORM=$item; else TUMR=$item; fi; done \n"
