@@ -56,6 +56,9 @@ public class VEPDecider extends OicrDecider {
     private String maxACFilter = "10";
     private String additionalArgs = null;
     
+    // onco KB
+    private String oncoKBpath = "/.mounts/labs/PDE/Modules/sw/oncokb-annotator";
+    
     // memory
     private String vepMem = "30";
 
@@ -91,6 +94,7 @@ public class VEPDecider extends OicrDecider {
         parser.accepts("additional-args", "Optional: Include additional arguments and paramenters to run VEP. Default: " + this.additionalArgs).withOptionalArg();
         parser.accepts("allow-extensions", "Optional:comma-separated VCF file extensions to annotate. Default " + String.join(",", this.allowedExtensions)).withOptionalArg();
         parser.accepts("vep-mem", "Optional: specify memory for VEP. Default " + this.vepMem).withOptionalArg();
+        parser.accepts("oncokb-path", "Optional: Specify the path to the folder containing the script oncoKBAnnotator.py. Default. " + this.oncoKBpath).withOptionalArg();
     }
 
     @Override
@@ -174,6 +178,9 @@ public class VEPDecider extends OicrDecider {
         }
         if (this.options.has("vep-mem")) {
             this.vepMem = options.valueOf("vep-mem").toString();
+        }
+        if (this.options.has("oncokb-path")) {
+            this.oncoKBpath = options.valueOf("oncokb-path").toString();
         }
         return rv;
     }
@@ -398,6 +405,7 @@ public class VEPDecider extends OicrDecider {
             iniFileMap.put("freq_file", this.freqDB);
         }
         iniFileMap.put("vep_mem", this.vepMem);
+        iniFileMap.put("ONCOKB", this.oncoKBpath);
         return iniFileMap;
     }
     

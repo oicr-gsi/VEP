@@ -87,7 +87,8 @@ public class VEPWorkflow extends OicrWorkflow {
 //    // metatypes
     private final String TXT_GZ_METATYPE = "application/txt-gz";
     private final String TXT_METATYPE = "plain/txt";
-    private final String VCF_GZ_METATYPE = "pplication/vcf-4-gzip";
+    private final String VCF_GZ_METATYPE1 = "application/vcf-4-gzip";
+    private final String VCF_GZ_METATYPE2 = "application/vcf-gz";
     private final String VCF_METATYPE = "application/vcf";
     private final String VCF_TBI_METATYPE = "application/tbi";
 
@@ -183,13 +184,23 @@ public class VEPWorkflow extends OicrWorkflow {
     public Map<String, SqwFile> setupFiles() {
         SqwFile file0 = this.createFile("inVCF");
         if (inputVCF.endsWith("gz")){
-            file0.setSourcePath(inputVCF);
-            file0.setType(VCF_GZ_METATYPE);
-            file0.setIsInput(true);  
-            SqwFile file1 = this.createFile("inVCFTBI");
-            file1.setSourcePath(inputVCFindex);
-            file1.setType(VCF_TBI_METATYPE);
-            file1.setIsInput(true);
+            if (inputVCF.contains("mutect2")){
+                file0.setSourcePath(inputVCF);
+                file0.setType(VCF_GZ_METATYPE2);
+                file0.setIsInput(true);  
+                SqwFile file1 = this.createFile("inVCFTBI");
+                file1.setSourcePath(inputVCFindex);
+                file1.setType(VCF_TBI_METATYPE);
+                file1.setIsInput(true);
+            } else {
+                file0.setSourcePath(inputVCF);
+                file0.setType(VCF_GZ_METATYPE1);
+                file0.setIsInput(true);  
+                SqwFile file1 = this.createFile("inVCFTBI");
+                file1.setSourcePath(inputVCFindex);
+                file1.setType(VCF_TBI_METATYPE);
+                file1.setIsInput(true);
+            }
         }
         else{
             file0.setSourcePath(inputVCF);
@@ -230,7 +241,7 @@ public class VEPWorkflow extends OicrWorkflow {
         parentJob = preprocess;
         
         // provision out subset VCF
-        SqwFile targetVCF = createOutputFile(subsetVCF, VCF_GZ_METATYPE, this.manualOutput);
+        SqwFile targetVCF = createOutputFile(subsetVCF, VCF_GZ_METATYPE1, this.manualOutput);
         targetVCF.getAnnotations().put("Target_VCF", "VEP");
         parentJob.addFile(targetVCF);
         
