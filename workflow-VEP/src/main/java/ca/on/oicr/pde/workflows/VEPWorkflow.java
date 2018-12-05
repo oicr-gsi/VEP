@@ -258,7 +258,9 @@ public class VEPWorkflow extends OicrWorkflow {
         // oncokb annotator
         Job oncoKBAnnotate = getWorkflow().createBashJob("oncokb_annotate");
         //cmd.addArgument(PATHFIX);
-        oncoKBAnnotate.setCommand(PATHFIX + this.oncoKBPath + "/" + "MafAnnotator.py -i " + mafFile + " -o " + mafFile.replace(".txt", ".oncoKB.txt"));
+        oncoKBAnnotate.setCommand(PATHFIX + this.oncoKBPath 
+                + "/" + "MafAnnotator.py -i " 
+                + mafFile + " -o " + mafFile.replace(".txt", ".oncoKB.txt"));
         oncoKBAnnotate.addParent(parentJob);
         parentJob = oncoKBAnnotate;
         parentJob.setMaxMemory(Integer.toString(this.VEPMem * 1024));
@@ -267,14 +269,16 @@ public class VEPWorkflow extends OicrWorkflow {
         // zip maf file
         String oncoKBMafFile = mafFile.replace(".txt", ".oncoKB.txt");
         Job zipMafFile = getWorkflow().createBashJob("zip_maf");
-        zipMafFile.setCommand(bgzip + " -c " + oncoKBMafFile + " > " + mafFile + ".gz");
+        zipMafFile.setCommand(bgzip + " -c " 
+                + oncoKBMafFile + " > " + mafFile + ".gz");
         zipMafFile.addParent(parentJob);
         parentJob = zipMafFile;
         parentJob.setMaxMemory(Integer.toString(this.VEPMem * 1024));
         parentJob.setQueue(getOptionalProperty("queue", ""));
 
         // Provision out maf.txt file
-        SqwFile outMaf = createOutputFile(mafFile + ".gz", TXT_GZ_METATYPE, this.manualOutput);
+        SqwFile outMaf = createOutputFile(mafFile + ".gz", 
+                TXT_GZ_METATYPE, this.manualOutput);
         outMaf.getAnnotations().put("MAF", "VEP");
         parentJob.addFile(outMaf);
         
@@ -285,10 +289,16 @@ public class VEPWorkflow extends OicrWorkflow {
         Command cmd = runVCF2MAF.getCommand();
         cmd.addArgument(PATHFIX);
         // command to parse sample_names file
-        cmd.addArgument("if [[ `cat " + this.tmpDir + "sample_names | tr \",\" \"\\n\" | wc -l` == 2 ]]; then \n"
-                + "for item in `cat " + this.tmpDir + "sample_names" + " | tr \",\" \"\\n\"`; do "
-                + "if [[ $item == \"NORMAL\" || $item == *_R_* || $item == *BC* ]]; then NORM=$item; else TUMR=$item; fi; done \n"
-                        + "else TUMR=`cat " + this.tmpDir + "sample_names | tr -d \",\"`; NORM=\"unmatched\"; fi\n\n"); //
+        cmd.addArgument("if [[ `cat " + this.tmpDir + "sample_names "
+                + "| tr \",\" \"\\n\" | wc -l` == 2 ]]; then \n"
+                + "for item in `cat " + this.tmpDir + "sample_names" 
+                        + " | tr \",\" \"\\n\"`; do "
+                + "if [[ $item == \"NORMAL\" || $item == *_R_* || $item == *BC*  "
+                        + "|| $item == \"unmatched\" ]]; "
+                        + "then NORM=$item; else TUMR=$item; fi; done \n"
+                        + "else "
+                        + "TUMR=`cat " + this.tmpDir + "sample_names "
+                                + "| tr -d \",\"`; NORM=\"unmatched\"; fi\n\n"); //
         cmd.addArgument(this.perl + " " + this.vcf2mafpl);
         cmd.addArgument("--species "+ this.species);
         cmd.addArgument("--ncbi-build " + this.hgBuild);
@@ -319,21 +329,35 @@ public class VEPWorkflow extends OicrWorkflow {
     // merge VCFs for mutect2 unmatched
     private Job handleUnmatchedVCF(String inVCF){
         String tempTumorVCF = this.tmpDir + this.outputFilenamePrefix + ".vcf";
-        String tempMutect2VCF = this.tmpDir + this.outputFilenamePrefix + ".unmatched.vcf";
+        String tempMutect2VCF = this.tmpDir + this.outputFilenamePrefix + 
+                ".unmatched.vcf";
         Job mergeMutect2VCF = getWorkflow().createBashJob("preprocess_unmatched");
-        String inputUnmatchedVCF = this.tmpDir + this.outputFilenamePrefix + "_input" + ".vcf.gz";
+        String inputUnmatchedVCF = this.tmpDir + this.outputFilenamePrefix + 
+                "_input" + ".vcf.gz";
         Command cmd = mergeMutect2VCF.getCommand();
-        cmd.addArgument("zcat " + inVCF + " | sed \"s/QSS\\,Number\\=A/QSS\\,Number\\=\\./\" | " + this.bgzip + " -c > " +  inputUnmatchedVCF + ";\n"); // fix QSS header
+        cmd.addArgument("zcat " + inVCF + 
+                " | sed \"s/QSS\\,Number\\=A/QSS\\,Number\\=\\./\" | " + 
+                this.bgzip + " -c > " +  inputUnmatchedVCF + ";\n"); // fix QSS header
         cmd.addArgument(tabix + " -p vcf " + inputUnmatchedVCF + ";\n"); //tabix index the vcf 
-        cmd.addArgument("if [[ `cat " + this.tmpDir + "sample_names | tr \",\" \"\\n\" | wc -l` == 2 ]]; then \n"
-                + "for item in `cat " + this.tmpDir + "sample_names" + " | tr \",\" \"\\n\"`; do "
-                + "if [[ $item == \"NORMAL\" || $item == *_R_* ]]; then NORM=$item; else TUMR=$item; fi; done \n"
-                        + "else TUMR=`cat " + this.tmpDir + "sample_names | tr -d \",\"`; NORM=\"unmatched\"; fi\n\n");
-        cmd.addArgument("echo -e \"$TUMR\\n$NORM\" > " + this.tmpDir + this.outputFilenamePrefix + "_header \n\n"); // create header file
+        cmd.addArgument("if [[ `cat " + this.tmpDir + "sample_names | "
+                + "tr \",\" \"\\n\" | wc -l` == 2 ]]; then \n"
+                + "for item in `cat " + this.tmpDir + "sample_names" + 
+                        " | tr \",\" \"\\n\"`; do "
+                + "if [[ $item == \"NORMAL\" || $item == *_R_* ]]; "
+                        + "then NORM=$item; else TUMR=$item; fi; done \n"
+                        + "else TUMR=`cat " + this.tmpDir + "sample_names "
+                                + "| tr -d \",\"`; NORM=\"unmatched\"; fi\n\n");
+        cmd.addArgument("echo -e \"$TUMR\\n$NORM\" > " + 
+                this.tmpDir + this.outputFilenamePrefix + "_header \n\n"); // create header file
         cmd.addArgument("module load bcftools \n"); // load bedtools
-        cmd.addArgument("bcftools  merge " + inputUnmatchedVCF + " " + inputUnmatchedVCF + " --force-samples >" + tempTumorVCF + ";\n"); // merge VCFs
-        cmd.addArgument("bcftools reheader -s " + this.tmpDir + this.outputFilenamePrefix + "_header " + tempTumorVCF + ">" + tempMutect2VCF + ";\n"); //reheader merged VCF
-        cmd.addArgument(bgzip + " -c " + tempMutect2VCF + " > " + tempMutect2VCF + ".gz" + ";\n"); // bgzip
+        cmd.addArgument("bcftools  merge " + inputUnmatchedVCF + " " + 
+                inputUnmatchedVCF + " --force-samples >" + 
+                tempTumorVCF + ";\n"); // merge VCFs
+        cmd.addArgument("bcftools reheader -s " + 
+                this.tmpDir + this.outputFilenamePrefix + "_header " + 
+                tempTumorVCF + ">" + tempMutect2VCF + ";\n"); //reheader merged VCF
+        cmd.addArgument(bgzip + " -c " + tempMutect2VCF + " > " + 
+                tempMutect2VCF + ".gz" + ";\n"); // bgzip
         cmd.addArgument(tabix + " -p vcf " + tempMutect2VCF + ".gz"); // tabix index
         mergeMutect2VCF.setMaxMemory(Integer.toString(this.VEPMem * 1024));
         mergeMutect2VCF.setQueue(getOptionalProperty("queue", ""));
@@ -342,24 +366,31 @@ public class VEPWorkflow extends OicrWorkflow {
     
     private Job TGLFreqAnnotation(String inVCF){
         String intermediateVCF = inVCF.replace(".vcf.gz", "_temp.vcf");
-        String freqAnnotVCF = this.tmpDir + this.outputFilenamePrefix + "_tmp_tglfreq.vcf";
-        String finalTGLFreqAnnotVCF = this.tmpDir + this.outputFilenamePrefix + "_final.tglfreq.vcf";
+        String freqAnnotVCF = this.tmpDir + this.outputFilenamePrefix + 
+                "_tmp_tglfreq.vcf";
+        String finalTGLFreqAnnotVCF = this.tmpDir + this.outputFilenamePrefix +
+                "_final.tglfreq.vcf";
         Job annotateTGLFreq = getWorkflow().createBashJob("tgl_freq");
         Command cmd = annotateTGLFreq.getCommand();
         cmd.addArgument(PATHFIX);
         cmd.addArgument("module load bcftools; \n");
         cmd.addArgument("bcftools annotate -a " + this.freqTextFile);
         cmd.addArgument("-c CHROM,POS,REF,ALT,TGL_Freq");
-        cmd.addArgument("-h <(echo '##INFO=<ID=TGL_Freq,Number=.,Type=Float,Description=\"Variant Frequency Among TGL Tumours (MuTect2 Artifact Detection)\">')");
+        cmd.addArgument("-h <(echo '##INFO=<ID=TGL_Freq,Number=.,"
+                + "Type=Float,Description=\"Variant Frequency Among "
+                + "TGL Tumours (MuTect2 Artifact Detection)\">')");
         cmd.addArgument(inVCF + " > " + intermediateVCF +";\n"); 
-        cmd.addArgument(this.bgzip + " -c " + intermediateVCF  + " > " + intermediateVCF + ".gz" + ";\n");
+        cmd.addArgument(this.bgzip + " -c " + intermediateVCF  + " > " + 
+                intermediateVCF + ".gz" + ";\n");
         cmd.addArgument(this.tabix + " -p vcf " + intermediateVCF + ".gz" + ";\n");
         cmd.addArgument("echo \"Marking novel variants as TGL_Freq=0.0\"\n");
         cmd.addArgument("bcftools annotate -a " + this.freqTextFile);
         cmd.addArgument("-c CHROM,POS,REF,ALT,TGL_Freq");
         cmd.addArgument("-m \"-TGL_Freq=0.0\" ");
         cmd.addArgument(intermediateVCF + ".gz" + " > " +  freqAnnotVCF + ";\n");
-        cmd.addArgument("cat " + freqAnnotVCF + " | grep -v \"Sites not listed in OICR_Freq=0.0\" > " + finalTGLFreqAnnotVCF + ";\n");
+        cmd.addArgument("cat " + freqAnnotVCF + 
+                " | grep -v \"Sites not listed in OICR_Freq=0.0\" > " + 
+                finalTGLFreqAnnotVCF + ";\n");
         annotateTGLFreq.setMaxMemory(Integer.toString(this.VEPMem * 1024));
         annotateTGLFreq.setQueue(getOptionalProperty("queue", ""));
         return annotateTGLFreq;
@@ -388,7 +419,8 @@ public class VEPWorkflow extends OicrWorkflow {
                 + this.targetBedFile + " > " 
                 + tmpVCF.replace(".vcf", ".TGL.targ.vcf") + ";\n");
         String interTargVCF = tmpVCF.replace(".vcf", ".TGL.targ.vcf");
-        cmd.addArgument(this.bgzip + " -c " + interTargVCF + " > " + interTargVCF + ".gz" + ";\n");
+        cmd.addArgument(this.bgzip + " -c " + interTargVCF + " > " 
+                + interTargVCF + ".gz" + ";\n");
         cmd.addArgument(this.tabix + " -p vcf " + interTargVCF + ".gz");
         preProcessVCF.setMaxMemory(Integer.toString(this.VEPMem * 1024));
         preProcessVCF.setQueue(getOptionalProperty("queue", ""));
@@ -400,8 +432,11 @@ public class VEPWorkflow extends OicrWorkflow {
         Job extractSampleNames = getWorkflow().createBashJob("get_sample_ids");
         Command cmd = extractSampleNames.getCommand();
         cmd.addArgument("module load vcftools;\n");
-        cmd.addArgument("vcf-query -l " + inVCF  + "> " + this.tmpDir + "sample_headers;\n");
-        cmd.addArgument("cat " + this.tmpDir + "sample_headers" + " | grep -v \"GATK\" | tr \"\\n\" \",\" > " + this.tmpDir + "sample_names");
+        cmd.addArgument("vcf-query -l " + inVCF  + "> " 
+                + this.tmpDir + "sample_headers;\n");
+        cmd.addArgument("cat " + this.tmpDir + "sample_headers" 
+                + " | grep -v \"GATK\" | tr \"\\n\" \",\" > " 
+                + this.tmpDir + "sample_names");
         extractSampleNames.setMaxMemory(Integer.toString(this.VEPMem * 1024));
         extractSampleNames.setQueue(getOptionalProperty("queue", ""));
         return extractSampleNames;
