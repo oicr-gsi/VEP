@@ -119,9 +119,7 @@ public class VEPDecider extends OicrDecider {
             this.templateType = options.valueOf("template-type").toString();
             this.allowedTemplateTypes = this.templateType.split(",");
         } else {
-            Log.error("Please re-run with --template-type <template type>. Supported template type(s) are EX,WT");
-            rv.setExitStatus(ReturnValue.RUNNERERR);
-            return rv;
+            Log.warn("Please re-run with --template-type <template type>. Supported template type(s) are EX,WT");
         }
       
         if (this.options.has("tgl-freq-file")) {
