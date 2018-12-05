@@ -37,6 +37,8 @@ public class VEPWorkflow extends OicrWorkflow {
     private String outputFilenamePrefix;
     private String normalSamplePrefix = null;
     
+    // normal sample name identifiers??
+    
     //vcf2maf
     private String vcf2mafpl;
     private String perlPath;
