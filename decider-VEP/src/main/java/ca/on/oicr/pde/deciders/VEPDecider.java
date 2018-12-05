@@ -55,6 +55,9 @@ public class VEPDecider extends OicrDecider {
     private String bufferSize = "200"; 
     private String maxACFilter = "10";
     private String additionalArgs = null;
+    
+    // memory
+    private String vepMem = "30";
 
     private String targetBed = "/.mounts/labs/PDE/data/reference/targets/ensembl_v6_ccds_exons_onebed_intersectRegions_pad50.bed";
     private final String refGenome = "/.mounts/labs/PDE/data/gatkAnnotationResources/hg19_random.fa";
@@ -86,6 +89,7 @@ public class VEPDecider extends OicrDecider {
         parser.accepts("max-ac-filter", "Optional parameter for VEP workflow: Specify the max AC filter. Default: " + this.maxACFilter).withOptionalArg();
         parser.accepts("additional-args", "Optional: Include additional arguments and paramenters to run VEP. Default: " + this.additionalArgs).withOptionalArg();
         parser.accepts("allow-extensions", "Optional:comma-separated VCF file extensions to annotate. Default " + String.join(",", this.allowedExtensions)).withOptionalArg();
+        parser.accepts("vep-mem", "Optional: specify memory for VEP. Default " + this.vepMem).withOptionalArg();
     }
 
     @Override
@@ -163,6 +167,9 @@ public class VEPDecider extends OicrDecider {
             this.extensions = options.valueOf("allow-extensions").toString();
             this.allowedExtensions = this.extensions.split(",");
         }
+        if (this.options.has("vep-mem")) {
+            this.vepMem = options.valueOf("vep-mem").toString();
+        }
         return rv;
     }
 
@@ -190,7 +197,7 @@ public class VEPDecider extends OicrDecider {
             if (!checkFileExtn){
                 continue;
             }
-
+            
             for (BeSmall bs : fileSwaToSmall.values()) {
                 if (!bs.getPath().equals(p)) {
                     continue;
@@ -244,8 +251,7 @@ public class VEPDecider extends OicrDecider {
                     + "] due to template type/geo_library_source_template_type = [" + currentTtype + "]");
             return false;
         }
-        
-        
+           
         // Do not process tumor tissues of type that doesn't match set parameter
         if (null != this.tumorType) {
             return false;
@@ -257,10 +263,10 @@ public class VEPDecider extends OicrDecider {
                 if (target_bed != null) {
                     this.targetBed = target_bed;
                     } else {
-                    Log.info("No interval file found for this run; Please re-try with --target-bed <path to interval file>");
+                    Log.info("No interval file found for this run; Please re-try with --target-bed <path to target bed file>");
                     }
             } catch (Exception NullPointerException) {
-                Log.info("No interval file found for this run; Please re-try with --target-bed <path to interval file>");
+                Log.info("No interval file found for this run; Please re-try with --target-bed <path to target bed file>");
                 }
         }
 //        this.extension = ReturnValue.ge
@@ -368,8 +374,6 @@ public class VEPDecider extends OicrDecider {
         iniFileMap.put("external_identifier", this.externalName);
         if (this.normalFileNamePrefix != null){
             iniFileMap.put("matched_normal_name", this.normalFileNamePrefix);
-        } else {
-            this.normalFileNamePrefix = "unmatched";
         }
         iniFileMap.put("target_bed", this.targetBed);
         if (!this.queue.isEmpty()) {
@@ -388,6 +392,7 @@ public class VEPDecider extends OicrDecider {
         if (this.freqDB != null){
             iniFileMap.put("freq_file", this.freqDB);
         }
+        iniFileMap.put("vep_mem", this.vepMem);
         return iniFileMap;
     }
     
@@ -428,7 +433,6 @@ public class VEPDecider extends OicrDecider {
         private String groupDescription = null;
         private String rootSampleName = null;
         
-//        private String parentWorkflowName = null;
 
         public String getRootSampleName() {
             return rootSampleName;
@@ -466,7 +470,6 @@ public class VEPDecider extends OicrDecider {
                 gba.append(":").append(trs);
             }
             
-//            parentWorkflowName = rv.getAttribute(Header.WORKFLOW_NAME.getTitle());
 
             groupByAttribute = gba.toString() + ":" + extName + ":" + groupID; // grouping issue sequenza decider; generates correct ini file but lists too many files
             path = rv.getFiles().get(0).getFilePath() + "";

@@ -293,9 +293,9 @@ public class VEPWorkflow extends OicrWorkflow {
                 + "| tr \",\" \"\\n\" | wc -l` == 2 ]]; then \n"
                 + "for item in `cat " + this.tmpDir + "sample_names" 
                         + " | tr \",\" \"\\n\"`; do "
-                + "if [[ $item == \"NORMAL\" || $item == *_R_* || $item == *BC*  "
-                        + "|| $item == \"unmatched\" ]]; "
-                        + "then NORM=$item; else TUMR=$item; fi; done \n"
+                + "if [[ $item == \"NORMAL\" || $item == *_R_* || $item == *BC*"
+                        + "  || $item == \"unmatched\" ]]; then"
+                        + " NORM=$item; else TUMR=$item; fi; done \n"
                         + "else "
                         + "TUMR=`cat " + this.tmpDir + "sample_names "
                                 + "| tr -d \",\"`; NORM=\"unmatched\"; fi\n\n"); //
