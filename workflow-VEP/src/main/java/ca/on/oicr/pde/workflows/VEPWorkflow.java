@@ -321,17 +321,17 @@ public class VEPWorkflow extends OicrWorkflow {
         String tempTumorVCF = this.tmpDir + this.outputFilenamePrefix + ".vcf";
         String tempMutect2VCF = this.tmpDir + this.outputFilenamePrefix + ".unmatched.vcf";
         Job mergeMutect2VCF = getWorkflow().createBashJob("preprocess_unmatched");
-        String inputVCF = this.tmpDir + this.outputFilenamePrefix + "_input" + ".vcf.gz";
+        String inputUnmatchedVCF = this.tmpDir + this.outputFilenamePrefix + "_input" + ".vcf.gz";
         Command cmd = mergeMutect2VCF.getCommand();
-        cmd.addArgument("zcat " + inVCF + " | sed \"s/QSS\\,Number\\=A/QSS\\,Number\\=\\./\" | " + this.bgzip + "-c " +  inputVCF + ";\n"); // fix QSS header
-        cmd.addArgument(tabix + " -p vcf " + inputVCF + ";\n"); //tabix index the vcf 
+        cmd.addArgument("zcat " + inVCF + " | sed \"s/QSS\\,Number\\=A/QSS\\,Number\\=\\./\" | " + this.bgzip + "-c > " +  inputUnmatchedVCF + ";\n"); // fix QSS header
+        cmd.addArgument(tabix + " -p vcf " + inputUnmatchedVCF + ";\n"); //tabix index the vcf 
         cmd.addArgument("if [[ `cat " + this.tmpDir + "sample_names | tr \",\" \"\\n\" | wc -l` == 2 ]]; then \n"
                 + "for item in `cat " + this.tmpDir + "sample_names" + " | tr \",\" \"\\n\"`; do "
                 + "if [[ $item == \"NORMAL\" || $item == *_R_* ]]; then NORM=$item; else TUMR=$item; fi; done \n"
                         + "else TUMR=`cat " + this.tmpDir + "sample_names | tr -d \",\"`; NORM=\"unmatched\"; fi\n\n");
         cmd.addArgument("echo -e \"$TUMR\\n$NORM\" > " + this.tmpDir + this.outputFilenamePrefix + "_header \n\n"); // create header file
         cmd.addArgument("module load bcftools \n"); // load bedtools
-        cmd.addArgument("bcftools  merge " + inputVCF + " " + inputVCF + " --force-samples >" + tempTumorVCF + ";\n"); // merge VCFs
+        cmd.addArgument("bcftools  merge " + inputUnmatchedVCF + " " + inputUnmatchedVCF + " --force-samples >" + tempTumorVCF + ";\n"); // merge VCFs
         cmd.addArgument("bcftools reheader -s " + this.tmpDir + this.outputFilenamePrefix + "_header " + tempTumorVCF + ">" + tempMutect2VCF + ";\n"); //reheader merged VCF
         cmd.addArgument(bgzip + " -c " + tempMutect2VCF + " > " + tempMutect2VCF + ".gz" + ";\n"); // bgzip
         cmd.addArgument(tabix + " -p vcf " + tempMutect2VCF + ".gz"); // tabix index
