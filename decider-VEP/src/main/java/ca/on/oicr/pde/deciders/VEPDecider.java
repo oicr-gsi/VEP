@@ -67,8 +67,9 @@ public class VEPDecider extends OicrDecider {
     
     // metatype info
     private final static String VCF_METATYPE="application/vcf";
-    private final static String VCF_GZ_METATYPE="application/vcf-4-gzip";
-    private final static ArrayList<String> METATYPES = new ArrayList<String> (Arrays.asList(VCF_METATYPE, VCF_GZ_METATYPE));
+    private final static String VCF_GZ_METATYPE1="application/vcf-4-gzip";
+    private final static String VCF_GZ_METATYPE2="application/vcf-gz";
+    private final static ArrayList<String> METATYPES = new ArrayList<String> (Arrays.asList(VCF_METATYPE, VCF_GZ_METATYPE1, VCF_GZ_METATYPE2));
 
     public VEPDecider() {
         super();
@@ -113,6 +114,10 @@ public class VEPDecider extends OicrDecider {
         if (this.options.has("template-type")) {
             this.templateType = options.valueOf("template-type").toString();
             this.allowedTemplateTypes = this.templateType.split(",");
+        } else {
+            Log.error("Please re-run with --template-type <template type>. Supported template type(s) are EX,WT");
+            rv.setExitStatus(ReturnValue.RUNNERERR);
+            return rv;
         }
       
         if (this.options.has("tgl-freq-file")) {
