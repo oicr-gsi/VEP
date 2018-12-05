@@ -323,7 +323,7 @@ public class VEPWorkflow extends OicrWorkflow {
         Job mergeMutect2VCF = getWorkflow().createBashJob("preprocess_unmatched");
         String inputUnmatchedVCF = this.tmpDir + this.outputFilenamePrefix + "_input" + ".vcf.gz";
         Command cmd = mergeMutect2VCF.getCommand();
-        cmd.addArgument("zcat " + inVCF + " | sed \"s/QSS\\,Number\\=A/QSS\\,Number\\=\\./\" | " + this.bgzip + "-c > " +  inputUnmatchedVCF + ";\n"); // fix QSS header
+        cmd.addArgument("zcat " + inVCF + " | sed \"s/QSS\\,Number\\=A/QSS\\,Number\\=\\./\" | " + this.bgzip + " -c > " +  inputUnmatchedVCF + ";\n"); // fix QSS header
         cmd.addArgument(tabix + " -p vcf " + inputUnmatchedVCF + ";\n"); //tabix index the vcf 
         cmd.addArgument("if [[ `cat " + this.tmpDir + "sample_names | tr \",\" \"\\n\" | wc -l` == 2 ]]; then \n"
                 + "for item in `cat " + this.tmpDir + "sample_names" + " | tr \",\" \"\\n\"`; do "
