@@ -1,7 +1,5 @@
 package ca.on.oicr.pde.deciders;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,12 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 import net.sourceforge.seqware.common.hibernate.FindAllTheFiles.Header;
 import net.sourceforge.seqware.common.module.FileMetadata;
 import net.sourceforge.seqware.common.module.ReturnValue;
@@ -35,7 +29,7 @@ public class VEPDecider extends OicrDecider {
     private String templateType;
     private String queue = "";
     private String externalName;
-    private String normalFileNamePrefix;
+
 
     private String tumorType;
     private String tumourFilePath;
@@ -63,7 +57,7 @@ public class VEPDecider extends OicrDecider {
     private String vepMem = "30";
 
     private String targetBed = "/.mounts/labs/PDE/data/reference/targets/ensembl_v6_ccds_exons_onebed_intersectRegions_pad50.bed";
-    private final String refGenome = "/.mounts/labs/PDE/data/gatkAnnotationResources/hg19_random.fa";
+    private final String refGenome = "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa";
     private String freqDB = null;
     private String rsConfigXMLPath = "/.mounts/labs/PDE/data/rsconfig.xml";
     private Rsconfig rs;
@@ -215,9 +209,6 @@ public class VEPDecider extends OicrDecider {
                 String tt = bs.getTissueType();
 //                this.extension = bs.getParentWorkflowName();
                 
-                if (!tt.isEmpty() && tt.equals("R")){
-                    this.normalFileNamePrefix = this.getExternalName(p);
-                }
 
                 if (!tt.isEmpty() && !tt.equals("R")) {
                     haveVCF = true;
@@ -287,16 +278,27 @@ public class VEPDecider extends OicrDecider {
     @Override
     public Map<String, List<ReturnValue>> separateFiles(List<ReturnValue> vals, String groupBy) {
         Log.debug("Number of files from file provenance = " + vals.size());
+        
+//        Log.info(metadata);
 
         // get files from study
         Map<String, ReturnValue> iusDeetsToRV = new HashMap<String, ReturnValue>();
         // Override the supplied group-by value
         for (ReturnValue currentRV : vals) {
+//            Log.info(currentRV.getAttribute(Header.SAMPLE_NAME.getTitle()));
             boolean metatypeOK = false;
             boolean fileExtensionOK = false;
+            boolean templateTypeCheck = true;
 //            if (Boolean.parseBoolean(this.allowAllVCFs)){
 //                fileExtensionOK = false;
 //            }
+            String currentTtype = currentRV.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_library_source_template_type");
+            if (!Arrays.asList(this.allowedTemplateTypes).contains(currentTtype)) {
+//                Log.warn("Excluding file with SWID = [" + currentRV.getAttribute(Header.FILE_SWA.getTitle())
+//                    + "] due to template type/geo_library_source_template_type = [" + currentTtype + "]");
+                templateTypeCheck = false;
+                continue;
+            }
 
             for (int f = 0; f < currentRV.getFiles().size(); f++) {
                 String filePath = currentRV.getFiles().get(f).getFilePath();
@@ -317,6 +319,10 @@ public class VEPDecider extends OicrDecider {
             }
             
             if (!fileExtensionOK) {
+                continue;
+            }
+            
+            if (!templateTypeCheck) {
                 continue;
             }
             
@@ -382,9 +388,6 @@ public class VEPDecider extends OicrDecider {
         Map<String, String> iniFileMap = super.modifyIniFile(this.commaSeparatedFilePaths, this.commaSeparatedParentAccessions);
         iniFileMap.put("input_vcf_file", vcfPath);
         iniFileMap.put("external_identifier", this.externalName);
-        if (this.normalFileNamePrefix != null){
-            iniFileMap.put("matched_normal_name", this.normalFileNamePrefix);
-        }
         iniFileMap.put("target_bed", this.targetBed);
         if (!this.queue.isEmpty()) {
             iniFileMap.put("queue", this.queue);
@@ -395,7 +398,7 @@ public class VEPDecider extends OicrDecider {
         iniFileMap.put("buffer_size", this.bufferSize);
         iniFileMap.put("max_ac_filter", this.maxACFilter);
         iniFileMap.put("species", this.species);
-        iniFileMap.put("hg_build", this.hgBuild);
+        iniFileMap.put("hg_version", this.hgBuild);
         if (this.additionalArgs != null){
             iniFileMap.put("additional_args", this.additionalArgs);
         }
@@ -481,7 +484,6 @@ public class VEPDecider extends OicrDecider {
                 gba.append(":").append(trs);
             }
             
-
             groupByAttribute = gba.toString() + ":" + extName + ":" + groupID; // grouping issue sequenza decider; generates correct ini file but lists too many files
             path = rv.getFiles().get(0).getFilePath() + "";
 
