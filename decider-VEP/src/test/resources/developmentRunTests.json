@@ -21,8 +21,7 @@
             "id": "study_test_02_WT",
             "parameters": {
                 "--study-name": "TGL07",
-                "--template-type": "WT",
-                "--rsconfig-file": "/Users/prath/repo/test/rsconfig.xml"
+                "--template-type": "WT"
             }
         },
         {
