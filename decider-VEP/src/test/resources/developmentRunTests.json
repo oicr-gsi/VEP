@@ -24,7 +24,6 @@
             "parameters": {
                 "--study-name": "TGL07",
                 "--template-type": "WT",
-                "--rsconfig-file": "/Users/prath/repo/test/rsconfig.xml",
                 "--interval-bed": "/.mounts/labs/PDE/data/reference/targets/ensembl_v6_ccds_exons_onebed_intersectRegions_pad50.bed"
             }
         },
@@ -33,7 +32,6 @@
             "parameters": {
                 "--study-name": "TGL07",
                 "--template-type": "WT,EX",
-                "--rsconfig-file": "/Users/prath/repo/test/rsconfig.xml",
                 "--interval-bed": "/.mounts/labs/PDE/data/reference/targets/ensembl_v6_ccds_exons_onebed_intersectRegions_pad50.bed"
             }
         },
@@ -43,7 +41,6 @@
                 "--study-name": "TGL07",
                 "--allow-extensions": "mutect2.vcf.gz",
                 "--template-type": "EX",
-                "--rsconfig-file": "/Users/prath/repo/test/rsconfig.xml",
                 "--interval-bed": "/.mounts/labs/PDE/data/reference/targets/ensembl_v6_ccds_exons_onebed_intersectRegions_pad50.bed"
             }
         }
