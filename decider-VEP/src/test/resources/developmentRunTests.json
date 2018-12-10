@@ -14,21 +14,24 @@
             "id": "study_test_01_EX",
             "parameters": {
                 "--study-name": "TGL07",
-                "--template-type": "EX"
+                "--template-type": "EX",
+                "--rsconfig-file": "/Users/prath/repo/test/rsconfig.xml"
             }
         },
         {
             "id": "study_test_02_WT",
             "parameters": {
                 "--study-name": "TGL07",
-                "--template-type": "WT"
+                "--template-type": "WT",
+                "--rsconfig-file": "/Users/prath/repo/test/rsconfig.xml"
             }
         },
         {
             "id": "study_test_03_both",
             "parameters": {
                 "--study-name": "TGL07",
-                "--template-type": "WT,EX"
+                "--template-type": "WT,EX",
+                "--rsconfig-file": "/Users/prath/repo/test/rsconfig.xml"
             }
         },
         {
@@ -36,7 +39,8 @@
             "parameters": {
                 "--study-name": "TGL07",
                 "--allow-extensions": "mutect2.vcf.gz",
-                "--template-type": "EX"
+                "--template-type": "EX",
+                "--rsconfig-file": "/Users/prath/repo/test/rsconfig.xml"
             }
         }
     ]

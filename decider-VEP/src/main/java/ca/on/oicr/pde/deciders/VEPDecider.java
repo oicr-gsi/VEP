@@ -38,7 +38,7 @@ public class VEPDecider extends OicrDecider {
     private String commaSeparatedParentAccessions;
     
 //    private String allowAllVCFs = "false";
-    private String[] allowedExtensions = new String[] {".muTect.snvs.strelka.snv.indel.vcf.gz", ".tumor_only.vcf.gz"};
+    private String[] allowedExtensions = new String[] {".snv.indel.vcf.gz", ".tumor_only.vcf.gz"};
     private String extensions;
     
     // VEP
@@ -193,8 +193,11 @@ public class VEPDecider extends OicrDecider {
         ArrayList<String> correctParentAccessions = new ArrayList<String> ();
 
         // Check for duplicate file names and exclude them from analysis
+        Log.info(commaSeparatedFilePaths);
 
         for (String p : filePaths) {
+            
+            Log.info(p);
             boolean checkFileExtn = false;
             checkFileExtn = this.identifyFilePath(p);
 
@@ -203,23 +206,32 @@ public class VEPDecider extends OicrDecider {
             }
             
             for (BeSmall bs : fileSwaToSmall.values()) {
+                Log.info(bs.getPath());
+                String tt = bs.getTissueType();
+                
+//                if (tt.isEmpty() || tt.equals("R")){
+//                    continue;
+//                }
+//                Log.info(p);
                 if (!bs.getPath().equals(p)) {
                     continue;
                 }
-                String tt = bs.getTissueType();
-//                this.extension = bs.getParentWorkflowName();
                 
-
-                if (!tt.isEmpty() && !tt.equals("R")) {
-                    haveVCF = true;
-                    correctFilePaths.add(p); 
-                    int idx = Arrays.asList(filePaths).indexOf(p);
-                    correctParentAccessions.add(commaSeparatedParentAccessions.split(",")[idx]);
+                Log.info("Tissue type is ..."  + tt);
+                
+                if (!tt.isEmpty() && !tt.equals("R")){
+                Log.info(p);
+                haveVCF = true;
+                correctFilePaths.add(p); 
+                int idx = Arrays.asList(filePaths).indexOf(p);
+                correctParentAccessions.add(commaSeparatedParentAccessions.split(",")[idx]);
                 }
             }
         }
-        
+        Log.info(correctFilePaths);
         if (correctFilePaths.size() != 1){
+            Log.info(correctFilePaths.size());
+            Log.info(correctFilePaths);
             Log.error("Will not run for multiple VCFs");
         }
         if (haveVCF){
@@ -246,6 +258,10 @@ public class VEPDecider extends OicrDecider {
         if (null == currentTissueType) {
             return false; // we need only those which have their tissue type set
         }
+        
+        if (currentTissueType.equals("R")) {
+            return false;
+        }
 
         if (!Arrays.asList(this.allowedTemplateTypes).contains(currentTtype)) {
             Log.warn("Excluding file with SWID = [" + returnValue.getAttribute(Header.FILE_SWA.getTitle())
@@ -254,9 +270,6 @@ public class VEPDecider extends OicrDecider {
         }
            
         // Do not process tumor tissues of type that doesn't match set parameter
-        if (null != this.tumorType) {
-            return false;
-        }
         
         if (this.targetBed == null){
             try {
@@ -288,17 +301,17 @@ public class VEPDecider extends OicrDecider {
 //            Log.info(currentRV.getAttribute(Header.SAMPLE_NAME.getTitle()));
             boolean metatypeOK = false;
             boolean fileExtensionOK = false;
-            boolean templateTypeCheck = true;
-//            if (Boolean.parseBoolean(this.allowAllVCFs)){
-//                fileExtensionOK = false;
-//            }
+            boolean templateTypeCheck = false;
+            boolean approvedTissueType = false;
             String currentTtype = currentRV.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_library_source_template_type");
-            if (!Arrays.asList(this.allowedTemplateTypes).contains(currentTtype)) {
-//                Log.warn("Excluding file with SWID = [" + currentRV.getAttribute(Header.FILE_SWA.getTitle())
-//                    + "] due to template type/geo_library_source_template_type = [" + currentTtype + "]");
-                templateTypeCheck = false;
-                continue;
+            String currentTissueType = currentRV.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_tissue_type");
+            if (Arrays.asList(this.allowedTemplateTypes).contains(currentTtype)) {
+                templateTypeCheck = true;
             }
+            
+//            if (currentTissueType != "R") {
+//                approvedTissueType = true;
+//            }
 
             for (int f = 0; f < currentRV.getFiles().size(); f++) {
                 String filePath = currentRV.getFiles().get(f).getFilePath();
@@ -314,15 +327,20 @@ public class VEPDecider extends OicrDecider {
                 }
             }
 
+            
+            if (!templateTypeCheck) {
+                continue;
+            }
+            
+//            if (!approvedTissueType) {
+//                continue;
+//            }
+            
             if (!metatypeOK) {
                 continue; // Go to the next value
             }
             
             if (!fileExtensionOK) {
-                continue;
-            }
-            
-            if (!templateTypeCheck) {
                 continue;
             }
             
@@ -446,6 +464,7 @@ public class VEPDecider extends OicrDecider {
         private String groupID = null;
         private String groupDescription = null;
         private String rootSampleName = null;
+        private String workflowName = null;
         
 
         public String getRootSampleName() {
@@ -460,7 +479,8 @@ public class VEPDecider extends OicrDecider {
                 ex.printStackTrace();
             }
             FileAttributes fa = new FileAttributes(rv, rv.getFiles().get(0));
-            iusDetails = fa.getLibrarySample() + fa.getSequencerRun() + fa.getLane() + fa.getBarcode();
+            workflowName = rv.getAttribute(Header.WORKFLOW_NAME.getTitle());
+            iusDetails = fa.getLibrarySample() + fa.getSequencerRun() + fa.getLane() + fa.getBarcode() + workflowName;
             tissueType = fa.getLimsValue(Lims.TISSUE_TYPE);
             extName = rv.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_external_name");
             rootSampleName = rv.getAttribute(Header.ROOT_SAMPLE_NAME.getTitle());
@@ -484,7 +504,7 @@ public class VEPDecider extends OicrDecider {
                 gba.append(":").append(trs);
             }
             
-            groupByAttribute = gba.toString() + ":" + extName + ":" + groupID; // grouping issue sequenza decider; generates correct ini file but lists too many files
+            groupByAttribute = gba.toString() + ":" + extName + ":" + groupID + ":" + workflowName; 
             path = rv.getFiles().get(0).getFilePath() + "";
 
         }
