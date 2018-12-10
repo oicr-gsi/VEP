@@ -15,7 +15,6 @@
             "parameters": {
                 "--study-name": "TGL07",
                 "--template-type": "EX",
-                "--rsconfig-file": "/Users/prath/repo/test/rsconfig.xml",
                 "--interval-bed": "/.mounts/labs/PDE/data/reference/targets/ensembl_v6_ccds_exons_onebed_intersectRegions_pad50.bed"
             }
         },
