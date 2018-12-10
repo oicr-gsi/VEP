@@ -161,9 +161,9 @@ public class VEPWorkflow extends OicrWorkflow {
             PATHFIX = PATHFIX + "# vcf2maf\n";
             PATHFIX = PATHFIX + "export PATH="+this.vcf2mafPath+":$PATH;\n";
             PATHFIX = PATHFIX + "export PATH="+ this.oncoKBPath +":$PATH;\n";
-            PATHFIX = PATHFIX + "export PATH=" + this.vcftools + "$PATH;\n";
-            PATHFIX = PATHFIX + "export PATH=" + this.bedtools + "$PATH;\n";
-            PATHFIX = PATHFIX + "export PATH=" + this.bcftools + "$PATH;\n";
+            PATHFIX = PATHFIX + "export PATH=" + this.vcftools + ":$PATH;\n";
+            PATHFIX = PATHFIX + "export PATH=" + this.bedtools + ":$PATH;\n";
+            PATHFIX = PATHFIX + "export PATH=" + this.bcftools + ":$PATH;\n";
             
 
             manualOutput = Boolean.parseBoolean(getProperty("manual_output"));
@@ -452,6 +452,7 @@ public class VEPWorkflow extends OicrWorkflow {
         Job extractSampleNames = getWorkflow().createBashJob("get_sample_ids");
         Command cmd = extractSampleNames.getCommand();
         cmd.addArgument(PATHFIX);
+        cmd.addArgument("module load vcftools; \n");
         cmd.addArgument(vcftools + "/vcf-query -l " + inVCF  + "> " 
                 + this.tmpDir + "sample_headers;\n");
         cmd.addArgument("cat " + this.tmpDir + "sample_headers" 
