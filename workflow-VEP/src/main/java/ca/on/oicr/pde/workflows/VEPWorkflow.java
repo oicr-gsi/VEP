@@ -49,6 +49,9 @@ public class VEPWorkflow extends OicrWorkflow {
     String bgzip;
     String tabix;
     String tabixVersion;
+    String bedtools;
+    String bcftools;
+    String vcftools;
     
     //params
     private String hgBuild;
@@ -101,26 +104,29 @@ public class VEPWorkflow extends OicrWorkflow {
             // input samples 
             inputVCF = getProperty("input_vcf_file");
             inputVCFindex = inputVCF + ".tbi";
-            outputFilenamePrefix = getProperty("external_identifier");
+            outputFilenamePrefix = getProperty("output_filename_prefix");
             normalSamplePrefix = getOptionalProperty("matched_normal_name", "matched");
             
             
             // vcf2maf
-            vcf2mafpl = getProperty("VCF2MAF");
-            perlPath = getProperty("PERL_PATH");
-            vcf2mafPath=getProperty("VCF2MAF_PATH");
-            perl=getProperty("TGL_PERL");
-            oncoKBPath = getProperty("ONCOKB");
+            vcf2mafpl = getProperty("vcf2maf");
+            perlPath = getProperty("perl_path");
+            vcf2mafPath=getProperty("vcf2maf_path");
+            perl=getProperty("tgl_perl");
+            oncoKBPath = getProperty("oncokb");
             
             // preprocess
             tabixVersion = getProperty("tabix_version");
             bgzip = getWorkflowBaseDir() + "/bin/tabix-" + this.tabixVersion + "/bgzip";
             tabix = getWorkflowBaseDir() + "/bin/tabix-" + this.tabixVersion + "/tabix";
+            bcftools = getProperty("bcftools");
+            bedtools = getProperty("bedtools");
+            vcftools = getProperty("vcftools");
 
             // ref fasta
             refFasta = getProperty("ref_fasta");
             // exac vcf
-            exacVCF = getProperty("ExAC_vcf");
+            exacVCF = getProperty("exac_vcf");
             // target bed file
             targetBedFile = getProperty("target_bed");
             //tglfreq file
@@ -131,8 +137,8 @@ public class VEPWorkflow extends OicrWorkflow {
             vafFilter = Double.parseDouble(getOptionalProperty("vaf_filter", "0.7"));
             species = getOptionalProperty("species", "homo_sapiens");
             hgBuild = getOptionalProperty("hg_version", "GRCh37");
-            VEPpath = getProperty("VEP_PATH");
-            VEPdata = getProperty("VEP_DATA");
+            VEPpath = getProperty("vep_path");
+            VEPdata = getProperty("vep_data");
             bufferSize = Integer.parseInt(getOptionalProperty("buffer_size", "200"));
             acFilter = Integer.parseInt(getOptionalProperty("max_ac_filter", "10"));
             
@@ -362,11 +368,10 @@ public class VEPWorkflow extends OicrWorkflow {
                                 + "| tr -d \",\"`; NORM=\"unmatched\"; fi\n\n");
         cmd.addArgument("echo -e \"$TUMR\\n$NORM\" > " + 
                 this.tmpDir + this.outputFilenamePrefix + "_header \n\n"); // create header file
-        cmd.addArgument("module load bcftools \n"); // load bedtools
-        cmd.addArgument("bcftools  merge " + inputUnmatchedVCF + " " + 
+        cmd.addArgument(bcftools + "  merge " + inputUnmatchedVCF + " " + 
                 inputUnmatchedVCF + " --force-samples >" + 
                 tempTumorVCF + ";\n"); // merge VCFs
-        cmd.addArgument("bcftools reheader -s " + 
+        cmd.addArgument(bcftools + " reheader -s " + 
                 this.tmpDir + this.outputFilenamePrefix + "_header " + 
                 tempTumorVCF + ">" + tempMutect2VCF + ";\n"); //reheader merged VCF
         cmd.addArgument(bgzip + " -c " + tempMutect2VCF + " > " + 
@@ -386,8 +391,7 @@ public class VEPWorkflow extends OicrWorkflow {
         Job annotateTGLFreq = getWorkflow().createBashJob("tgl_freq");
         Command cmd = annotateTGLFreq.getCommand();
         cmd.addArgument(PATHFIX);
-        cmd.addArgument("module load bcftools; \n");
-        cmd.addArgument("bcftools annotate -a " + this.freqTextFile);
+        cmd.addArgument(bcftools + " annotate -a " + this.freqTextFile);
         cmd.addArgument("-c CHROM,POS,REF,ALT,TGL_Freq");
         cmd.addArgument("-h <(echo '##INFO=<ID=TGL_Freq,Number=.,"
                 + "Type=Float,Description=\"Variant Frequency Among "
@@ -397,7 +401,7 @@ public class VEPWorkflow extends OicrWorkflow {
                 intermediateVCF + ".gz" + ";\n");
         cmd.addArgument(this.tabix + " -p vcf " + intermediateVCF + ".gz" + ";\n");
         cmd.addArgument("echo \"Marking novel variants as TGL_Freq=0.0\"\n");
-        cmd.addArgument("bcftools annotate -a " + this.freqTextFile);
+        cmd.addArgument(bcftools + " annotate -a " + this.freqTextFile);
         cmd.addArgument("-c CHROM,POS,REF,ALT,TGL_Freq");
         cmd.addArgument("-m \"-TGL_Freq=0.0\" ");
         cmd.addArgument(intermediateVCF + ".gz" + " > " +  freqAnnotVCF + ";\n");
@@ -418,7 +422,6 @@ public class VEPWorkflow extends OicrWorkflow {
         String tmpVCF;
         Job preProcessVCF = getWorkflow().createBashJob("subset_VCF");
         Command cmd = preProcessVCF.getCommand();
-        cmd.addArgument("module load bedtools; \n");
         if (newInVCF.endsWith("gz")){
             tmpVCF = newInVCF.replace(".vcf.gz", ".temp.vcf");
             cmd.addArgument("zcat " + inVCF + " >" + tmpVCF + ";\n");
@@ -427,7 +430,7 @@ public class VEPWorkflow extends OicrWorkflow {
             tmpVCF = newInVCF.replace(".vcf", ".temp.vcf");
             cmd.addArgument("cp "+ inVCF + " " + tmpVCF + ";\n");
         }
-        cmd.addArgument("bedtools intersect -header -a " 
+        cmd.addArgument(bedtools + " intersect -header -a " 
                 + tmpVCF + " -b " 
                 + this.targetBedFile + " > " 
                 + tmpVCF.replace(".vcf", ".TGL.targ.vcf") + ";\n");
@@ -444,8 +447,7 @@ public class VEPWorkflow extends OicrWorkflow {
     private Job extractSampleNames(String inVCF){
         Job extractSampleNames = getWorkflow().createBashJob("get_sample_ids");
         Command cmd = extractSampleNames.getCommand();
-        cmd.addArgument("module load vcftools;\n");
-        cmd.addArgument("vcf-query -l " + inVCF  + "> " 
+        cmd.addArgument(vcftools + "/vcf-query -l " + inVCF  + "> " 
                 + this.tmpDir + "sample_headers;\n");
         cmd.addArgument("cat " + this.tmpDir + "sample_headers" 
                 + " | grep -v \"GATK\" | tr \"\\n\" \",\" > " 

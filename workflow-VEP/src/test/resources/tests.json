@@ -11,7 +11,7 @@
             "id": "MutectStrelka_test",
             "parameters": {
                 "input_vcf_file": "/.mounts/labs/PDE/data/testdata/genomic/vcf/VEP_test/IMP-01710-ARC.mutect.strelka.snv.indel.vcf.gz",
-                "external_identifier": "TGL07_0010"
+                "output_filename_prefix": "TGL07_0010"
             }
         }
     ]

@@ -28,31 +28,23 @@ public class VEPDecider extends OicrDecider {
     private String[] allowedTemplateTypes = {"EX", "WT"};
     private String templateType;
     private String queue = "";
-    private String externalName;
+    private String outputFileNamePrefix;
 
-
-    private String tumorType;
-    private String tumourFilePath;
-    
-    private String commaSeparatedFilePaths;
-    private String commaSeparatedParentAccessions;
-    
-//    private String allowAllVCFs = "false";
-    private String[] allowedExtensions = new String[] {".snv.indel.vcf.gz", ".tumor_only.vcf.gz"};
+    private String[] allowedExtensions = new String[]{".snv.indel.vcf.gz", ".tumor_only.vcf.gz"};
     private String extensions;
-    
+
     // VEP
     private String exacVCF = "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz";
     private String hgBuild = "GrCh37";
     private String species = "homo_sapiens";
     private String vafFilter = "0.7"; //for homozygous calls
-    private String bufferSize = "200"; 
+    private String bufferSize = "200";
     private String maxACFilter = "10";
     private String additionalArgs = null;
-    
+
     // onco KB
     private String oncoKBpath = "/.mounts/labs/PDE/Modules/sw/oncokb-annotator";
-    
+
     // memory
     private String vepMem = "30";
 
@@ -61,12 +53,12 @@ public class VEPDecider extends OicrDecider {
     private String freqDB = null;
     private String rsConfigXMLPath = "/.mounts/labs/PDE/data/rsconfig.xml";
     private Rsconfig rs;
-    
+
     // metatype info
-    private final static String VCF_METATYPE="application/vcf";
-    private final static String VCF_GZ_METATYPE1="application/vcf-4-gzip";
-    private final static String VCF_GZ_METATYPE2="application/vcf-gz";
-    private final static ArrayList<String> METATYPES = new ArrayList<String> (Arrays.asList(VCF_METATYPE, VCF_GZ_METATYPE1, VCF_GZ_METATYPE2));
+    private final static String VCF_METATYPE = "application/vcf";
+    private final static String VCF_GZ_METATYPE1 = "application/vcf-4-gzip";
+    private final static String VCF_GZ_METATYPE2 = "application/vcf-gz";
+    private final static ArrayList<String> METATYPES = new ArrayList<String>(Arrays.asList(VCF_METATYPE, VCF_GZ_METATYPE1, VCF_GZ_METATYPE2));
 
     public VEPDecider() {
         super();
@@ -80,7 +72,7 @@ public class VEPDecider extends OicrDecider {
         parser.accepts("rsconfig-file", "Optional parameter for VEP workflow: specify location of .xml file which should be used to cinfigure references. Default: " + this.rsConfigXMLPath).withOptionalArg();
         parser.accepts("tgl-freq-file", "Optional parameter for VEP workflow: Specify the path to the file containing frequency information. Default: null").withOptionalArg();
         parser.accepts("exac-vcf", "Optional parameter for VEP workflow: Specify the path to the EXAC VCF. Default: " + this.exacVCF).withOptionalArg();
-        parser.accepts("hg-build", "Optional parameter for VEP workflow: Specify the build of human genome reference. Default: "  + this.hgBuild).withOptionalArg();
+        parser.accepts("hg-build", "Optional parameter for VEP workflow: Specify the build of human genome reference. Default: " + this.hgBuild).withOptionalArg();
         parser.accepts("species", "Optional parameter for VEP workflow: Specify the species name. Default: " + this.species).withOptionalArg();
         parser.accepts("hom-vaf-filter", "Optional parameter for VEP workflow: Specify the minimum vaf for homozygous calls. Default: " + this.vafFilter).withOptionalArg();
         parser.accepts("buffer-size", "Optional parameter for VEP workflow: Specify the buffer size. Default: " + this.bufferSize).withOptionalArg();
@@ -115,43 +107,43 @@ public class VEPDecider extends OicrDecider {
         } else {
             Log.warn("Please re-run with --template-type <template type>. Supported template type(s) are EX,WT");
         }
-      
+
         if (this.options.has("tgl-freq-file")) {
             this.freqDB = options.valueOf("tgl-freq-file").toString();
         }
-        
+
         if (this.options.has("exac-vcf")) {
             this.exacVCF = options.valueOf("exac-vcf").toString();
         }
-        
+
         if (this.options.has("hg-build")) {
             this.hgBuild = options.valueOf("hg-build").toString();
         }
-        
+
         if (this.options.has("species")) {
             this.species = options.valueOf("species").toString();
         }
-        
+
         if (this.options.has("hom-vaf-filter")) {
             this.vafFilter = options.valueOf("hom-vaf-filter").toString();
         }
-        
+
         if (this.options.has("buffer-size")) {
             this.bufferSize = options.valueOf("buffer-size").toString();
         }
-        
+
         if (this.options.has("max-ac-filter")) {
             this.maxACFilter = options.valueOf("max-ac-filter").toString();
         }
-        
-        if (this.options.has("additional-args")){
+
+        if (this.options.has("additional-args")) {
             this.additionalArgs = options.valueOf("additional-args").toString();
         }
-        
+
         if (this.options.has("rsconfig-file")) {
             this.rsConfigXMLPath = options.valueOf("rsconfig-file").toString();
         }
-        
+
         try {
             rs = new Rsconfig(new File(this.rsConfigXMLPath));
         } catch (Exception e) {
@@ -159,11 +151,11 @@ public class VEPDecider extends OicrDecider {
             rv.setExitStatus(ReturnValue.FAILURE);
             return rv;
         }
-        
+
         if (this.options.has("target-bed")) {
             this.targetBed = options.valueOf("target-bed").toString();
         }
-        
+
         if (this.options.has("allow-extensions")) {
             this.extensions = options.valueOf("allow-extensions").toString();
             this.allowedExtensions = this.extensions.split(",");
@@ -188,64 +180,15 @@ public class VEPDecider extends OicrDecider {
     @Override
     protected ReturnValue doFinalCheck(String commaSeparatedFilePaths, String commaSeparatedParentAccessions) {
         String[] filePaths = commaSeparatedFilePaths.split(",");
-        boolean haveVCF = false;
-        ArrayList<String> correctFilePaths = new ArrayList<String> ();
-        ArrayList<String> correctParentAccessions = new ArrayList<String> ();
-
-        // Check for duplicate file names and exclude them from analysis
-        Log.info(commaSeparatedFilePaths);
-
-        for (String p : filePaths) {
-            
-            Log.info(p);
-            boolean checkFileExtn = false;
-            checkFileExtn = this.identifyFilePath(p);
-
-            if (!checkFileExtn){
-                continue;
-            }
-            
-            for (BeSmall bs : fileSwaToSmall.values()) {
-                Log.info(bs.getPath());
-                String tt = bs.getTissueType();
-                
-//                if (tt.isEmpty() || tt.equals("R")){
-//                    continue;
-//                }
-//                Log.info(p);
-                if (!bs.getPath().equals(p)) {
-                    continue;
-                }
-                
-                Log.info("Tissue type is ..."  + tt);
-                
-                if (!tt.isEmpty() && !tt.equals("R")){
-                Log.info(p);
-                haveVCF = true;
-                correctFilePaths.add(p); 
-                int idx = Arrays.asList(filePaths).indexOf(p);
-                correctParentAccessions.add(commaSeparatedParentAccessions.split(",")[idx]);
-                }
-            }
+        Log.info(filePaths);
+        if (filePaths.length != 1) {
+            Log.info(filePaths.length);
+            Log.info(filePaths);
+            Log.error("Workflow runs can be scheduled for exactly 1 VCF");
         }
-        Log.info(correctFilePaths);
-        if (correctFilePaths.size() != 1){
-            Log.info(correctFilePaths.size());
-            Log.info(correctFilePaths);
-            Log.error("Will not run for multiple VCFs");
-        }
-        if (haveVCF){
-            this.tumourFilePath = correctFilePaths.get(0);
-            String finalCommaSeparatedFilePaths = StringUtils.join(correctFilePaths, ",");
-            String finalCommaSeparatedParentAccessions = StringUtils.join(correctParentAccessions, ",");
-            this.commaSeparatedFilePaths = finalCommaSeparatedFilePaths;
-            this.commaSeparatedParentAccessions = finalCommaSeparatedParentAccessions;
-            return super.doFinalCheck(this.commaSeparatedFilePaths, this.commaSeparatedParentAccessions);
-        } 
-        Log.error("Data not available, WON'T RUN");
-        return new ReturnValue(ReturnValue.INVALIDPARAMETERS);
+
+        return super.doFinalCheck(commaSeparatedFilePaths, commaSeparatedParentAccessions);
     }
-
 
     @Override
     protected boolean checkFileDetails(ReturnValue returnValue, FileMetadata fm) {
@@ -258,7 +201,7 @@ public class VEPDecider extends OicrDecider {
         if (null == currentTissueType) {
             return false; // we need only those which have their tissue type set
         }
-        
+
         if (currentTissueType.equals("R")) {
             return false;
         }
@@ -268,32 +211,30 @@ public class VEPDecider extends OicrDecider {
                     + "] due to template type/geo_library_source_template_type = [" + currentTtype + "]");
             return false;
         }
-           
+
         // Do not process tumor tissues of type that doesn't match set parameter
-        
-        if (this.targetBed == null){
+        if (this.targetBed == null) {
             try {
                 target_bed = rs.get(currentTtype, resequencingType, "interval_file").toString();
                 if (target_bed != null) {
                     this.targetBed = target_bed;
-                    } else {
+                } else {
                     Log.info("No interval file found for this run; Please re-try with --target-bed <path to target bed file>");
-                    }
+                }
             } catch (Exception NullPointerException) {
                 Log.info("No interval file found for this run; Please re-try with --target-bed <path to target bed file>");
-                }
+            }
         }
 //        this.extension = ReturnValue.ge
-        
+
         return super.checkFileDetails(returnValue, fm);
     }
 
     @Override
     public Map<String, List<ReturnValue>> separateFiles(List<ReturnValue> vals, String groupBy) {
         Log.debug("Number of files from file provenance = " + vals.size());
-        
-//        Log.info(metadata);
 
+//        Log.info(metadata);
         // get files from study
         Map<String, ReturnValue> iusDeetsToRV = new HashMap<String, ReturnValue>();
         // Override the supplied group-by value
@@ -302,24 +243,20 @@ public class VEPDecider extends OicrDecider {
             boolean metatypeOK = false;
             boolean fileExtensionOK = false;
             boolean templateTypeCheck = false;
-            boolean approvedTissueType = false;
+//            boolean approvedTissueType = false;
             String currentTtype = currentRV.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_library_source_template_type");
-            String currentTissueType = currentRV.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_tissue_type");
+//            String currentTissueType = currentRV.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_tissue_type");
             if (Arrays.asList(this.allowedTemplateTypes).contains(currentTtype)) {
                 templateTypeCheck = true;
             }
-            
-//            if (currentTissueType != "R") {
-//                approvedTissueType = true;
-//            }
 
             for (int f = 0; f < currentRV.getFiles().size(); f++) {
                 String filePath = currentRV.getFiles().get(f).getFilePath();
                 try {
                     if (METATYPES.contains(currentRV.getFiles().get(f).getMetaType())) {
                         metatypeOK = true;
-                    }  
-                    if (this.identifyFilePath(filePath)){
+                    }
+                    if (this.identifyFilePath(filePath)) {
                         fileExtensionOK = true;
                     }
                 } catch (Exception e) {
@@ -327,24 +264,20 @@ public class VEPDecider extends OicrDecider {
                 }
             }
 
-            
             if (!templateTypeCheck) {
                 continue;
             }
-            
+
 //            if (!approvedTissueType) {
 //                continue;
 //            }
-            
             if (!metatypeOK) {
                 continue; // Go to the next value
             }
-            
+
             if (!fileExtensionOK) {
                 continue;
             }
-            
-            
 
             BeSmall currentSmall = new BeSmall(currentRV);
             fileSwaToSmall.put(currentRV.getAttribute(groupBy), currentSmall);
@@ -386,7 +319,6 @@ public class VEPDecider extends OicrDecider {
 
         return map;
     }
-    
 
     @Override
     protected String handleGroupByAttribute(String attribute) {
@@ -400,46 +332,45 @@ public class VEPDecider extends OicrDecider {
 
     @Override
     protected Map<String, String> modifyIniFile(String commaSeparatedFilePaths, String commaSeparatedParentAccessions) {
-        String vcfPath = this.tumourFilePath;
-        this.externalName = getExternalName(vcfPath);
-        
-        Map<String, String> iniFileMap = super.modifyIniFile(this.commaSeparatedFilePaths, this.commaSeparatedParentAccessions);
+        String vcfPath = commaSeparatedFilePaths.split(",")[0];
+        this.outputFileNamePrefix = getExternalName(vcfPath);
+
+        Map<String, String> iniFileMap = super.modifyIniFile(commaSeparatedFilePaths, commaSeparatedParentAccessions);
         iniFileMap.put("input_vcf_file", vcfPath);
-        iniFileMap.put("external_identifier", this.externalName);
+        iniFileMap.put("output_filename_prefix", this.outputFileNamePrefix);
         iniFileMap.put("target_bed", this.targetBed);
         if (!this.queue.isEmpty()) {
             iniFileMap.put("queue", this.queue);
         }
         iniFileMap.put("ref_fasta", this.refGenome);
-        iniFileMap.put("ExAC_vcf", this.exacVCF);
+        iniFileMap.put("exac_vcf", this.exacVCF);
         iniFileMap.put("vaf_filter", this.vafFilter);
         iniFileMap.put("buffer_size", this.bufferSize);
         iniFileMap.put("max_ac_filter", this.maxACFilter);
         iniFileMap.put("species", this.species);
         iniFileMap.put("hg_version", this.hgBuild);
-        if (this.additionalArgs != null){
+        if (this.additionalArgs != null) {
             iniFileMap.put("additional_args", this.additionalArgs);
         }
-        if (this.freqDB != null){
+        if (this.freqDB != null) {
             iniFileMap.put("freq_file", this.freqDB);
         }
         iniFileMap.put("vep_mem", this.vepMem);
-        iniFileMap.put("ONCOKB", this.oncoKBpath);
+        iniFileMap.put("onkokb", this.oncoKBpath);
         return iniFileMap;
     }
-    
-    private boolean identifyFilePath(String filePath){
+
+    private boolean identifyFilePath(String filePath) {
         return Arrays.stream(allowedExtensions).anyMatch(entry -> filePath.endsWith(entry));
     }
-    
-    private String getExternalName(String inVCF){
+
+    private String getExternalName(String inVCF) {
         String baseName = FilenameUtils.getBaseName(inVCF);
         String[] bNames = baseName.split("\\.");
 //        String sampleName = bNames[0].replace("_"+this.templateType+"_", "_");
         String sampleName = bNames[0];
         return sampleName;
     }
-    
 
     public static void main(String args[]) {
         List<String> params = new ArrayList<String>();
@@ -465,7 +396,6 @@ public class VEPDecider extends OicrDecider {
         private String groupDescription = null;
         private String rootSampleName = null;
         private String workflowName = null;
-        
 
         public String getRootSampleName() {
             return rootSampleName;
@@ -503,12 +433,11 @@ public class VEPDecider extends OicrDecider {
             if (null != trs && !trs.isEmpty()) {
                 gba.append(":").append(trs);
             }
-            
-            groupByAttribute = gba.toString() + ":" + extName + ":" + groupID + ":" + workflowName; 
+
+            groupByAttribute = gba.toString() + ":" + extName + ":" + groupID + ":" + workflowName;
             path = rv.getFiles().get(0).getFilePath() + "";
 
         }
-
 
         public Date getDate() {
             return date;
