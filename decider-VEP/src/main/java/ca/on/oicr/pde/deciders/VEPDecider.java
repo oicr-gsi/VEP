@@ -239,13 +239,10 @@ public class VEPDecider extends OicrDecider {
         Map<String, ReturnValue> iusDeetsToRV = new HashMap<String, ReturnValue>();
         // Override the supplied group-by value
         for (ReturnValue currentRV : vals) {
-//            Log.info(currentRV.getAttribute(Header.SAMPLE_NAME.getTitle()));
             boolean metatypeOK = false;
             boolean fileExtensionOK = false;
             boolean templateTypeCheck = false;
-//            boolean approvedTissueType = false;
             String currentTtype = currentRV.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_library_source_template_type");
-//            String currentTissueType = currentRV.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_tissue_type");
             if (Arrays.asList(this.allowedTemplateTypes).contains(currentTtype)) {
                 templateTypeCheck = true;
             }
@@ -268,9 +265,6 @@ public class VEPDecider extends OicrDecider {
                 continue;
             }
 
-//            if (!approvedTissueType) {
-//                continue;
-//            }
             if (!metatypeOK) {
                 continue; // Go to the next value
             }
@@ -367,7 +361,6 @@ public class VEPDecider extends OicrDecider {
     private String getExternalName(String inVCF) {
         String baseName = FilenameUtils.getBaseName(inVCF);
         String[] bNames = baseName.split("\\.");
-//        String sampleName = bNames[0].replace("_"+this.templateType+"_", "_");
         String sampleName = bNames[0];
         return sampleName;
     }
@@ -414,7 +407,6 @@ public class VEPDecider extends OicrDecider {
             tissueType = fa.getLimsValue(Lims.TISSUE_TYPE);
             extName = rv.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_external_name");
             rootSampleName = rv.getAttribute(Header.ROOT_SAMPLE_NAME.getTitle());
-            //fa.getLimsValue(Lims.TUBE_ID);
             if (null == extName || extName.isEmpty()) {
                 extName = rootSampleName;
             }

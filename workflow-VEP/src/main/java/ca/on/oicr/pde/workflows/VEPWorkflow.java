@@ -161,6 +161,9 @@ public class VEPWorkflow extends OicrWorkflow {
             PATHFIX = PATHFIX + "# vcf2maf\n";
             PATHFIX = PATHFIX + "export PATH="+this.vcf2mafPath+":$PATH;\n";
             PATHFIX = PATHFIX + "export PATH="+ this.oncoKBPath +":$PATH;\n";
+            PATHFIX = PATHFIX + "export PATH=" + this.vcftools + "$PATH;\n";
+            PATHFIX = PATHFIX + "export PATH=" + this.bedtools + "$PATH;\n";
+            PATHFIX = PATHFIX + "export PATH=" + this.bcftools + "$PATH;\n";
             
 
             manualOutput = Boolean.parseBoolean(getProperty("manual_output"));
@@ -354,6 +357,7 @@ public class VEPWorkflow extends OicrWorkflow {
         String inputUnmatchedVCF = this.tmpDir + this.outputFilenamePrefix + 
                 "_input" + ".vcf.gz";
         Command cmd = mergeMutect2VCF.getCommand();
+        cmd.addArgument(PATHFIX);
         cmd.addArgument("zcat " + inVCF + 
                 " | sed \"s/QSS\\,Number\\=A/QSS\\,Number\\=\\./\" | " + 
                 this.bgzip + " -c > " +  inputUnmatchedVCF + ";\n"); // fix QSS header
@@ -368,10 +372,10 @@ public class VEPWorkflow extends OicrWorkflow {
                                 + "| tr -d \",\"`; NORM=\"unmatched\"; fi\n\n");
         cmd.addArgument("echo -e \"$TUMR\\n$NORM\" > " + 
                 this.tmpDir + this.outputFilenamePrefix + "_header \n\n"); // create header file
-        cmd.addArgument(bcftools + "  merge " + inputUnmatchedVCF + " " + 
+        cmd.addArgument(bcftools + "/bcftools  merge " + inputUnmatchedVCF + " " + 
                 inputUnmatchedVCF + " --force-samples >" + 
                 tempTumorVCF + ";\n"); // merge VCFs
-        cmd.addArgument(bcftools + " reheader -s " + 
+        cmd.addArgument(bcftools + "/bcftools reheader -s " + 
                 this.tmpDir + this.outputFilenamePrefix + "_header " + 
                 tempTumorVCF + ">" + tempMutect2VCF + ";\n"); //reheader merged VCF
         cmd.addArgument(bgzip + " -c " + tempMutect2VCF + " > " + 
@@ -391,7 +395,7 @@ public class VEPWorkflow extends OicrWorkflow {
         Job annotateTGLFreq = getWorkflow().createBashJob("tgl_freq");
         Command cmd = annotateTGLFreq.getCommand();
         cmd.addArgument(PATHFIX);
-        cmd.addArgument(bcftools + " annotate -a " + this.freqTextFile);
+        cmd.addArgument(bcftools + "/bcftools annotate -a " + this.freqTextFile);
         cmd.addArgument("-c CHROM,POS,REF,ALT,TGL_Freq");
         cmd.addArgument("-h <(echo '##INFO=<ID=TGL_Freq,Number=.,"
                 + "Type=Float,Description=\"Variant Frequency Among "
@@ -401,7 +405,7 @@ public class VEPWorkflow extends OicrWorkflow {
                 intermediateVCF + ".gz" + ";\n");
         cmd.addArgument(this.tabix + " -p vcf " + intermediateVCF + ".gz" + ";\n");
         cmd.addArgument("echo \"Marking novel variants as TGL_Freq=0.0\"\n");
-        cmd.addArgument(bcftools + " annotate -a " + this.freqTextFile);
+        cmd.addArgument(bcftools + "/bcftools annotate -a " + this.freqTextFile);
         cmd.addArgument("-c CHROM,POS,REF,ALT,TGL_Freq");
         cmd.addArgument("-m \"-TGL_Freq=0.0\" ");
         cmd.addArgument(intermediateVCF + ".gz" + " > " +  freqAnnotVCF + ";\n");
@@ -430,7 +434,7 @@ public class VEPWorkflow extends OicrWorkflow {
             tmpVCF = newInVCF.replace(".vcf", ".temp.vcf");
             cmd.addArgument("cp "+ inVCF + " " + tmpVCF + ";\n");
         }
-        cmd.addArgument(bedtools + " intersect -header -a " 
+        cmd.addArgument(bedtools + "/bedtools intersect -header -a " 
                 + tmpVCF + " -b " 
                 + this.targetBedFile + " > " 
                 + tmpVCF.replace(".vcf", ".TGL.targ.vcf") + ";\n");
@@ -447,6 +451,7 @@ public class VEPWorkflow extends OicrWorkflow {
     private Job extractSampleNames(String inVCF){
         Job extractSampleNames = getWorkflow().createBashJob("get_sample_ids");
         Command cmd = extractSampleNames.getCommand();
+        cmd.addArgument(PATHFIX);
         cmd.addArgument(vcftools + "/vcf-query -l " + inVCF  + "> " 
                 + this.tmpDir + "sample_headers;\n");
         cmd.addArgument("cat " + this.tmpDir + "sample_headers" 
