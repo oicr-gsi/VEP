@@ -15,8 +15,8 @@
   "totalOutputFileProvenanceRecords" : 24,
   "workflowRuns" : [ {
     "workflowIni" : {
-      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin//bcftools",
-      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin/bedtools",
+      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin/",
+      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
@@ -88,8 +88,8 @@
     "outputFileProvenanceRecords" : 2
   }, {
     "workflowIni" : {
-      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin//bcftools",
-      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin/bedtools",
+      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin/",
+      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
@@ -161,8 +161,8 @@
     "outputFileProvenanceRecords" : 2
   }, {
     "workflowIni" : {
-      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin//bcftools",
-      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin/bedtools",
+      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin/",
+      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
@@ -234,8 +234,8 @@
     "outputFileProvenanceRecords" : 2
   }, {
     "workflowIni" : {
-      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin//bcftools",
-      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin/bedtools",
+      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin/",
+      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
@@ -307,8 +307,8 @@
     "outputFileProvenanceRecords" : 2
   }, {
     "workflowIni" : {
-      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin//bcftools",
-      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin/bedtools",
+      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin/",
+      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
@@ -380,8 +380,8 @@
     "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin//bcftools",
-      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin/bedtools",
+      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin/",
+      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
@@ -453,8 +453,8 @@
     "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin//bcftools",
-      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin/bedtools",
+      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin/",
+      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
@@ -526,8 +526,8 @@
     "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin//bcftools",
-      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin/bedtools",
+      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin/",
+      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
@@ -599,8 +599,8 @@
     "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin//bcftools",
-      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin/bedtools",
+      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin/",
+      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
@@ -672,8 +672,8 @@
     "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin//bcftools",
-      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin/bedtools",
+      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin/",
+      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
@@ -745,8 +745,8 @@
     "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin//bcftools",
-      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin/bedtools",
+      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin/",
+      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
@@ -818,8 +818,8 @@
     "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin//bcftools",
-      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin/bedtools",
+      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin/",
+      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
@@ -891,8 +891,8 @@
     "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin//bcftools",
-      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin/bedtools",
+      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin/",
+      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
@@ -964,8 +964,8 @@
     "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin//bcftools",
-      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin/bedtools",
+      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin/",
+      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
@@ -1037,8 +1037,8 @@
     "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin//bcftools",
-      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin/bedtools",
+      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin/",
+      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
@@ -1110,8 +1110,8 @@
     "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin//bcftools",
-      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin/bedtools",
+      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin/",
+      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
@@ -1183,8 +1183,8 @@
     "outputFileProvenanceRecords" : 2
   }, {
     "workflowIni" : {
-      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin//bcftools",
-      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin/bedtools",
+      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin/",
+      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
@@ -1256,8 +1256,8 @@
     "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin//bcftools",
-      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin/bedtools",
+      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin/",
+      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
@@ -1329,8 +1329,8 @@
     "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin//bcftools",
-      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin/bedtools",
+      "bcftools" : "/oicr/local/analysis/sw-deb8/bcftools/bin/",
+      "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
