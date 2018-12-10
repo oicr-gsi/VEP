@@ -3,7 +3,8 @@
         "description": "VEP decider test",
         "metricsResources": "/expected_output/development/",
         "parameters": {
-            "--parent-wf-accessions": "11955993,12766543,10726253"
+            "--parent-wf-accessions": "11955993,12766543,10726253",
+            "--rsconfig-file": "/.mounts/labs/PDE/data/rsconfig.xml"
         },
         "iniExclusions": ["parent-accessions", "json_metadata_file", "workflow_run_accession", "workflow-run-accession",
             "unique_string", "parent_accessions", "parent_accession", "input_file", "input_files", "workflow_bundle_dir",
