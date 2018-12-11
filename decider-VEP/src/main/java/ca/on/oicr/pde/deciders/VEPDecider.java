@@ -14,7 +14,6 @@ import net.sourceforge.seqware.common.module.FileMetadata;
 import net.sourceforge.seqware.common.module.ReturnValue;
 import net.sourceforge.seqware.common.util.Log;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -28,14 +27,14 @@ public class VEPDecider extends OicrDecider {
     private String[] allowedTemplateTypes = {"EX", "WT"};
     private String templateType;
     private String queue = "";
-    private String outputFileNamePrefix;
+//    private String outputFileNamePrefix;
 
     private String[] allowedExtensions = new String[]{".snv.indel.vcf.gz", ".tumor_only.vcf.gz"};
     private String extensions;
 
     // VEP
     private String exacVCF = "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz";
-    private String hgBuild = "GrCh37";
+    private String hgBuild = "GRCh37";
     private String species = "homo_sapiens";
     private String vafFilter = "0.7"; //for homozygous calls
     private String bufferSize = "200";
@@ -327,11 +326,11 @@ public class VEPDecider extends OicrDecider {
     @Override
     protected Map<String, String> modifyIniFile(String commaSeparatedFilePaths, String commaSeparatedParentAccessions) {
         String vcfPath = commaSeparatedFilePaths.split(",")[0];
-        this.outputFileNamePrefix = getExternalName(vcfPath);
+        String outputFileNamePrefix = getOutputFileNamePrefix(vcfPath);
 
         Map<String, String> iniFileMap = super.modifyIniFile(commaSeparatedFilePaths, commaSeparatedParentAccessions);
         iniFileMap.put("input_vcf_file", vcfPath);
-        iniFileMap.put("output_filename_prefix", this.outputFileNamePrefix);
+        iniFileMap.put("output_filename_prefix", outputFileNamePrefix);
         iniFileMap.put("target_bed", this.targetBed);
         if (!this.queue.isEmpty()) {
             iniFileMap.put("queue", this.queue);
@@ -350,7 +349,7 @@ public class VEPDecider extends OicrDecider {
             iniFileMap.put("freq_file", this.freqDB);
         }
         iniFileMap.put("vep_mem", this.vepMem);
-        iniFileMap.put("onkokb", this.oncoKBpath);
+        iniFileMap.put("oncokb", this.oncoKBpath);
         return iniFileMap;
     }
 
@@ -358,7 +357,7 @@ public class VEPDecider extends OicrDecider {
         return Arrays.stream(allowedExtensions).anyMatch(entry -> filePath.endsWith(entry));
     }
 
-    private String getExternalName(String inVCF) {
+    private String getOutputFileNamePrefix(String inVCF) {
         String baseName = FilenameUtils.getBaseName(inVCF);
         String[] bNames = baseName.split("\\.");
         String sampleName = bNames[0];
