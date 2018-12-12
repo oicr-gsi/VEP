@@ -50,8 +50,8 @@ public class VEPWorkflow extends OicrWorkflow {
     private double vafFilter = 0.7;
     private Integer bufferSize = 200;
     private Integer acFilter = 10;
-    private String VEPpath;
-    private String VEPdata;
+    private String vepPath;
+    private String vepData;
     private String retainInfo;
     private String oncoKBPath;
 
@@ -59,7 +59,7 @@ public class VEPWorkflow extends OicrWorkflow {
     private String additionalParams;
 
     // path var
-    String PATHFIX;
+    String pathfixExport;
 
     //Memory allocation
     private Integer VEPMem;
@@ -78,7 +78,6 @@ public class VEPWorkflow extends OicrWorkflow {
 
 //    // metatypes
     private final String TXT_GZ_METATYPE = "application/txt-gz";
-    private final String TXT_METATYPE = "plain/txt";
     private final String VCF_GZ_METATYPE1 = "application/vcf-4-gzip";
     private final String VCF_GZ_METATYPE2 = "application/vcf-gz";
     private final String VCF_METATYPE = "application/vcf";
@@ -124,8 +123,8 @@ public class VEPWorkflow extends OicrWorkflow {
             vafFilter = Double.parseDouble(getOptionalProperty("vaf_filter", "0.7"));
             species = getOptionalProperty("species", "homo_sapiens");
             hgBuild = getOptionalProperty("hg_version", "GRCh37");
-            VEPpath = getProperty("vep_path");
-            VEPdata = getProperty("vep_data");
+            vepPath = getProperty("vep_path");
+            vepData = getProperty("vep_data");
             bufferSize = Integer.parseInt(getOptionalProperty("buffer_size", "200"));
             acFilter = Integer.parseInt(getOptionalProperty("max_ac_filter", "10"));
 
@@ -133,23 +132,23 @@ public class VEPWorkflow extends OicrWorkflow {
             additionalParams = getOptionalProperty("additional_arg", null);
 
             //
-            PATHFIX = "# perl/5.22.2-tgl\n";
-            PATHFIX = PATHFIX + "export LD_LIBRARY_PATH=" + this.perlPath + "/lib:$LD_LIBRARY_PATH;\n";
-            PATHFIX = PATHFIX + "export PERL5LIB=" + this.perlPath + "/lib:$PERL5LIB\n";
-            PATHFIX = PATHFIX + "export PATH=" + this.perlPath + "/bin:$PATH\n";
-            PATHFIX = PATHFIX + "# vep/92\n";
-            PATHFIX = PATHFIX + "export PATH=" + this.VEPpath + ":$PATH\n";
-            PATHFIX = PATHFIX + "export PATH=" + this.VEPpath + "/htslib:$PATH\n";
-            PATHFIX = PATHFIX + "export PATH=" + this.VEPpath + "/samtools/bin:$PATH\n";
-            PATHFIX = PATHFIX + "export PERL5LIB=" + this.VEPpath + ":$PATH\n";
-            PATHFIX = PATHFIX + "export VEP_PATH=" + this.VEPpath + ";\n";
-            PATHFIX = PATHFIX + "export VEP_DATA=" + this.VEPdata + ";\n";
-            PATHFIX = PATHFIX + "# vcf2maf\n";
-            PATHFIX = PATHFIX + "export PATH=" + this.vcf2mafPath + ":$PATH;\n";
-            PATHFIX = PATHFIX + "export PATH=" + this.oncoKBPath + ":$PATH;\n";
-            PATHFIX = PATHFIX + "export PATH=" + this.vcftools + ":$PATH;\n";
-            PATHFIX = PATHFIX + "export PATH=" + this.bedtools + ":$PATH;\n";
-            PATHFIX = PATHFIX + "export PATH=" + this.bcftools + ":$PATH;\n";
+            pathfixExport = "# perl/5.22.2-tgl\n";
+            pathfixExport = pathfixExport + "export LD_LIBRARY_PATH=" + this.perlPath + "/lib:$LD_LIBRARY_PATH;\n";
+            pathfixExport = pathfixExport + "export PERL5LIB=" + this.perlPath + "/lib:$PERL5LIB\n";
+            pathfixExport = pathfixExport + "export PATH=" + this.perlPath + "/bin:$PATH\n";
+            pathfixExport = pathfixExport + "# vep/92\n";
+            pathfixExport = pathfixExport + "export PATH=" + this.vepPath + ":$PATH\n";
+            pathfixExport = pathfixExport + "export PATH=" + this.vepPath + "/htslib:$PATH\n";
+            pathfixExport = pathfixExport + "export PATH=" + this.vepPath + "/samtools/bin:$PATH\n";
+            pathfixExport = pathfixExport + "export PERL5LIB=" + this.vepPath + ":$PATH\n";
+            pathfixExport = pathfixExport + "export VEP_PATH=" + this.vepPath + ";\n";
+            pathfixExport = pathfixExport + "export VEP_DATA=" + this.vepData + ";\n";
+            pathfixExport = pathfixExport + "# vcf2maf\n";
+            pathfixExport = pathfixExport + "export PATH=" + this.vcf2mafPath + ":$PATH;\n";
+            pathfixExport = pathfixExport + "export PATH=" + this.oncoKBPath + ":$PATH;\n";
+            pathfixExport = pathfixExport + "export PATH=" + this.vcftools + ":$PATH;\n";
+            pathfixExport = pathfixExport + "export PATH=" + this.bedtools + ":$PATH;\n";
+            pathfixExport = pathfixExport + "export PATH=" + this.bcftools + ":$PATH;\n";
 
             manualOutput = Boolean.parseBoolean(getProperty("manual_output"));
             queue = getOptionalProperty("queue", "");
@@ -182,19 +181,15 @@ public class VEPWorkflow extends OicrWorkflow {
                 file0.setSourcePath(inputVCF);
                 file0.setType(VCF_GZ_METATYPE2);
                 file0.setIsInput(true);
-                SqwFile file1 = this.createFile("inVCFTBI");
-                file1.setSourcePath(inputVCFindex);
-                file1.setType(VCF_TBI_METATYPE);
-                file1.setIsInput(true);
             } else {
                 file0.setSourcePath(inputVCF);
                 file0.setType(VCF_GZ_METATYPE1);
-                file0.setIsInput(true);
-                SqwFile file1 = this.createFile("inVCFTBI");
-                file1.setSourcePath(inputVCFindex);
-                file1.setType(VCF_TBI_METATYPE);
-                file1.setIsInput(true);
+                file0.setIsInput(true);     
             }
+            SqwFile file1 = this.createFile("inVCFTBI");
+            file1.setSourcePath(inputVCFindex);
+            file1.setType(VCF_TBI_METATYPE);
+            file1.setIsInput(true);
         } else {
             file0.setSourcePath(inputVCF);
             file0.setType(VCF_METATYPE);
@@ -259,8 +254,8 @@ public class VEPWorkflow extends OicrWorkflow {
 
         // oncokb annotator
         Job oncoKBAnnotate = getWorkflow().createBashJob("oncokb_annotate");
-        //cmd.addArgument(PATHFIX);
-        oncoKBAnnotate.setCommand(PATHFIX + this.oncoKBPath
+        //cmd.addArgument(pathfixExport);
+        oncoKBAnnotate.setCommand(pathfixExport + this.oncoKBPath
                 + "/" + "MafAnnotator.py -i "
                 + mafFile + " -o " + mafFile.replace(".txt", ".oncoKB.txt"));
         oncoKBAnnotate.addParent(parentJob);
@@ -289,7 +284,7 @@ public class VEPWorkflow extends OicrWorkflow {
     private Job runVcf2Maf(String inVCF, String outputMAF) {
         Job runVCF2MAF = getWorkflow().createBashJob("vcf2maf");
         Command cmd = runVCF2MAF.getCommand();
-        cmd.addArgument(PATHFIX);
+        cmd.addArgument(pathfixExport);
         // command to parse sample_names file
         cmd.addArgument("if [[ `cat " + this.tmpDir + "sample_names "
                 + "| tr \",\" \"\\n\" | wc -l` == 2 ]]; then \n"
@@ -313,8 +308,8 @@ public class VEPWorkflow extends OicrWorkflow {
         cmd.addArgument("--ref-fasta " + this.refFasta);
         cmd.addArgument("--filter-vcf " + this.exacVCF);
         cmd.addArgument("--max-filter-ac " + this.acFilter);
-        cmd.addArgument("--vep-path " + this.VEPpath);
-        cmd.addArgument("--vep-data " + this.VEPdata);
+        cmd.addArgument("--vep-path " + this.vepPath);
+        cmd.addArgument("--vep-data " + this.vepData);
         if (this.freqTextFile != null) {
             cmd.addArgument("--retain-info " + this.retainInfo);
         }
@@ -337,7 +332,7 @@ public class VEPWorkflow extends OicrWorkflow {
         String inputUnmatchedVCF = this.tmpDir + this.outputFilenamePrefix
                 + "_input" + ".vcf.gz";
         Command cmd = mergeMutect2VCF.getCommand();
-        cmd.addArgument(PATHFIX);
+        cmd.addArgument(pathfixExport);
         cmd.addArgument("zcat " + inVCF
                 + " | sed \"s/QSS\\,Number\\=A/QSS\\,Number\\=\\./\" | "
                 + this.bgzip + " -c > " + inputUnmatchedVCF + ";\n"); // fix QSS header
@@ -374,7 +369,7 @@ public class VEPWorkflow extends OicrWorkflow {
                 + "_final.tglfreq.vcf";
         Job annotateTGLFreq = getWorkflow().createBashJob("tgl_freq");
         Command cmd = annotateTGLFreq.getCommand();
-        cmd.addArgument(PATHFIX);
+        cmd.addArgument(pathfixExport);
         cmd.addArgument(bcftools + "/bcftools annotate -a " + this.freqTextFile);
         cmd.addArgument("-c CHROM,POS,REF,ALT,TGL_Freq");
         cmd.addArgument("-h <(echo '##INFO=<ID=TGL_Freq,Number=.,"
@@ -430,7 +425,7 @@ public class VEPWorkflow extends OicrWorkflow {
     private Job extractSampleNames(String inVCF) {
         Job extractSampleNames = getWorkflow().createBashJob("get_sample_ids");
         Command cmd = extractSampleNames.getCommand();
-        cmd.addArgument(PATHFIX);
+        cmd.addArgument(pathfixExport);
         cmd.addArgument("module load vcftools; \n");
         cmd.addArgument(vcftools + "/vcf-query -l " + inVCF + "> "
                 + this.tmpDir + "sample_headers;\n");
