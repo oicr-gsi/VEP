@@ -412,7 +412,7 @@ public class VEPWorkflow extends OicrWorkflow {
                 + tmpVCF + " -b "
                 + this.targetBedFile + " > "
                 + tmpVCF.replace(".vcf", ".TGL.targ.vcf") + ";\n");
-        String interTargVCF = tmpVCF.replace(".vcf", ".TGL.targ.vcf");
+        String interTargVCF = tmpVCF.replace(".temp.vcf", ".TGL.targ.vcf");
         cmd.addArgument(this.bgzip + " -c " + interTargVCF + " > "
                 + interTargVCF + ".gz" + ";\n");
         cmd.addArgument(this.tabix + " -p vcf " + interTargVCF + ".gz");
