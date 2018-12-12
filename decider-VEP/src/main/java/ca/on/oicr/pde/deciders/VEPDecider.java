@@ -50,8 +50,6 @@ public class VEPDecider extends OicrDecider {
     private String targetBed = "/.mounts/labs/PDE/data/reference/targets/ensembl_v6_ccds_exons_onebed_intersectRegions_pad50.bed";
     private final String refGenome = "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa";
     private String freqDB = null;
-    private String rsConfigXMLPath = "/.mounts/labs/PDE/data/rsconfig.xml";
-    private Rsconfig rs;
 
     // metatype info
     private final static String VCF_METATYPE = "application/vcf";
@@ -66,9 +64,8 @@ public class VEPDecider extends OicrDecider {
         parser.accepts("template-type", "Required. Set the template type to limit the workflow run "
                 + "so that it runs on data only of this template type. Default: " + String.join(",", this.allowedTemplateTypes)).withOptionalArg();
         parser.accepts("queue", "Optional: Set the queue (Default: not set)").withRequiredArg();
-        parser.accepts("target-bed", "Optional parameter for VEP workflow: Specify the path to interval bed file. Default: parsed from " + this.rsConfigXMLPath + ". Default is null").withOptionalArg();
+        parser.accepts("target-bed", "Optional parameter for VEP workflow: Specify the path to interval bed file." + "Default is " + this.targetBed).withOptionalArg();
         parser.accepts("ref-fasta", "Optional parameter for VEP workflow: Specify the path to reference human genome fasta. Default: " + this.refGenome).withOptionalArg();
-        parser.accepts("rsconfig-file", "Optional parameter for VEP workflow: specify location of .xml file which should be used to cinfigure references. Default: " + this.rsConfigXMLPath).withOptionalArg();
         parser.accepts("tgl-freq-file", "Optional parameter for VEP workflow: Specify the path to the file containing frequency information. Default: null").withOptionalArg();
         parser.accepts("exac-vcf", "Optional parameter for VEP workflow: Specify the path to the EXAC VCF. Default: " + this.exacVCF).withOptionalArg();
         parser.accepts("hg-build", "Optional parameter for VEP workflow: Specify the build of human genome reference. Default: " + this.hgBuild).withOptionalArg();
@@ -139,18 +136,6 @@ public class VEPDecider extends OicrDecider {
             this.additionalArgs = options.valueOf("additional-args").toString();
         }
 
-        if (this.options.has("rsconfig-file")) {
-            this.rsConfigXMLPath = options.valueOf("rsconfig-file").toString();
-        }
-
-        try {
-            rs = new Rsconfig(new File(this.rsConfigXMLPath));
-        } catch (Exception e) {
-            Log.error("Rsconfg file did not load properly, exception stack trace:\n" + e.getStackTrace());
-            rv.setExitStatus(ReturnValue.FAILURE);
-            return rv;
-        }
-
         if (this.options.has("target-bed")) {
             this.targetBed = options.valueOf("target-bed").toString();
         }
@@ -211,21 +196,6 @@ public class VEPDecider extends OicrDecider {
             return false;
         }
 
-        // Do not process tumor tissues of type that doesn't match set parameter
-        if (this.targetBed == null) {
-            try {
-                target_bed = rs.get(currentTtype, resequencingType, "interval_file").toString();
-                if (target_bed != null) {
-                    this.targetBed = target_bed;
-                } else {
-                    Log.info("No interval file found for this run; Please re-try with --target-bed <path to target bed file>");
-                }
-            } catch (Exception NullPointerException) {
-                Log.info("No interval file found for this run; Please re-try with --target-bed <path to target bed file>");
-            }
-        }
-//        this.extension = ReturnValue.ge
-
         return super.checkFileDetails(returnValue, fm);
     }
 
@@ -233,7 +203,6 @@ public class VEPDecider extends OicrDecider {
     public Map<String, List<ReturnValue>> separateFiles(List<ReturnValue> vals, String groupBy) {
         Log.debug("Number of files from file provenance = " + vals.size());
 
-//        Log.info(metadata);
         // get files from study
         Map<String, ReturnValue> iusDeetsToRV = new HashMap<String, ReturnValue>();
         // Override the supplied group-by value

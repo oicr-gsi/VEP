@@ -62,7 +62,7 @@ public class VEPWorkflow extends OicrWorkflow {
     String pathfixExport;
 
     //Memory allocation
-    private Integer VEPMem;
+    private Integer vepMem;
 
     //ref Data
     private String refFasta;
@@ -153,7 +153,7 @@ public class VEPWorkflow extends OicrWorkflow {
             manualOutput = Boolean.parseBoolean(getProperty("manual_output"));
             queue = getOptionalProperty("queue", "");
 
-            VEPMem = Integer.parseInt(getProperty("vep_mem"));
+            vepMem = Integer.parseInt(getProperty("vep_mem"));
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -260,7 +260,7 @@ public class VEPWorkflow extends OicrWorkflow {
                 + mafFile + " -o " + mafFile.replace(".txt", ".oncoKB.txt"));
         oncoKBAnnotate.addParent(parentJob);
         parentJob = oncoKBAnnotate;
-        parentJob.setMaxMemory(Integer.toString(this.VEPMem * 1024));
+        parentJob.setMaxMemory(Integer.toString(this.vepMem * 1024));
         parentJob.setQueue(getOptionalProperty("queue", ""));
 
         // zip maf file
@@ -270,7 +270,7 @@ public class VEPWorkflow extends OicrWorkflow {
                 + oncoKBMafFile + " > " + mafFile + ".gz");
         zipMafFile.addParent(parentJob);
         parentJob = zipMafFile;
-        parentJob.setMaxMemory(Integer.toString(this.VEPMem * 1024));
+        parentJob.setMaxMemory(Integer.toString(this.vepMem * 1024));
         parentJob.setQueue(getOptionalProperty("queue", ""));
 
         // Provision out maf.txt file
@@ -318,7 +318,7 @@ public class VEPWorkflow extends OicrWorkflow {
         if (this.additionalParams != null) {
             cmd.addArgument(this.additionalParams);
         }
-        runVCF2MAF.setMaxMemory(Integer.toString(this.VEPMem * 1024));
+        runVCF2MAF.setMaxMemory(Integer.toString(this.vepMem * 1024));
         runVCF2MAF.setQueue(getOptionalProperty("queue", ""));
         return runVCF2MAF;
     }
@@ -356,7 +356,7 @@ public class VEPWorkflow extends OicrWorkflow {
         cmd.addArgument(bgzip + " -c " + tempMutect2VCF + " > "
                 + tempMutect2VCF + ".gz" + ";\n"); // bgzip
         cmd.addArgument(tabix + " -p vcf " + tempMutect2VCF + ".gz"); // tabix index
-        mergeMutect2VCF.setMaxMemory(Integer.toString(this.VEPMem * 1024));
+        mergeMutect2VCF.setMaxMemory(Integer.toString(this.vepMem * 1024));
         mergeMutect2VCF.setQueue(getOptionalProperty("queue", ""));
         return mergeMutect2VCF;
     }
@@ -387,7 +387,7 @@ public class VEPWorkflow extends OicrWorkflow {
         cmd.addArgument("cat " + freqAnnotVCF
                 + " | grep -v \"Sites not listed in OICR_Freq=0.0\" > "
                 + finalTGLFreqAnnotVCF + ";\n");
-        annotateTGLFreq.setMaxMemory(Integer.toString(this.VEPMem * 1024));
+        annotateTGLFreq.setMaxMemory(Integer.toString(this.vepMem * 1024));
         annotateTGLFreq.setQueue(getOptionalProperty("queue", ""));
         return annotateTGLFreq;
     }
@@ -411,12 +411,12 @@ public class VEPWorkflow extends OicrWorkflow {
         cmd.addArgument(bedtools + "/bedtools intersect -header -a "
                 + tmpVCF + " -b "
                 + this.targetBedFile + " > "
-                + tmpVCF.replace(".vcf", ".TGL.targ.vcf") + ";\n");
+                + tmpVCF.replace(".temp.vcf", ".TGL.targ.vcf") + ";\n");
         String interTargVCF = tmpVCF.replace(".temp.vcf", ".TGL.targ.vcf");
         cmd.addArgument(this.bgzip + " -c " + interTargVCF + " > "
                 + interTargVCF + ".gz" + ";\n");
         cmd.addArgument(this.tabix + " -p vcf " + interTargVCF + ".gz");
-        preProcessVCF.setMaxMemory(Integer.toString(this.VEPMem * 1024));
+        preProcessVCF.setMaxMemory(Integer.toString(this.vepMem * 1024));
         preProcessVCF.setQueue(getOptionalProperty("queue", ""));
         hmap.put(interTargVCF + ".gz", preProcessVCF);
         return hmap;
@@ -432,7 +432,7 @@ public class VEPWorkflow extends OicrWorkflow {
         cmd.addArgument("cat " + this.tmpDir + "sample_headers"
                 + " | grep -v \"GATK\" | tr \"\\n\" \",\" > "
                 + this.tmpDir + "sample_names");
-        extractSampleNames.setMaxMemory(Integer.toString(this.VEPMem * 1024));
+        extractSampleNames.setMaxMemory(Integer.toString(this.vepMem * 1024));
         extractSampleNames.setQueue(getOptionalProperty("queue", ""));
         return extractSampleNames;
     }
