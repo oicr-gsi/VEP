@@ -1,0 +1,18 @@
+{
+    "defaults": {
+        "description": "VEP workflow test",
+        "metrics_calculate": "calculate.sh",
+        "metrics_compare": "compare.sh",
+        "input_config_dir": "/.mounts/labs/PDE/data/RegressionTests/VEP/workflow/input_config",
+        "output_metrics_dir": "/.mounts/labs/PDE/data/RegressionTests/VEP/workflow/output_expectation"
+    },
+    "tests": [
+        {
+            "id": "MutectStrelka_test",
+            "parameters": {
+                "input_vcf_file": "/.mounts/labs/PDE/data/testdata/genomic/vcf/VEP_test/IMP-01710-ARC.mutect.strelka.snv.indel.vcf.gz",
+                "output_filename_prefix": "TGL07_0010"
+            }
+        }
+    ]
+}
