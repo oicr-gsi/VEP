@@ -29,6 +29,7 @@ public class VEPWorkflow extends OicrWorkflow {
     private String inputVCF;
     private String inputVCFindex;
     private String outputFilenamePrefix;
+    private String extension;
 
     //vcf2maf
     private String vcf2mafpl;
@@ -93,6 +94,7 @@ public class VEPWorkflow extends OicrWorkflow {
             inputVCF = getProperty("input_vcf_file");
             inputVCFindex = inputVCF + ".tbi";
             outputFilenamePrefix = getProperty("output_filename_prefix");
+            extension = getProperty("extension");
 //            normalSamplePrefix = getOptionalProperty("matched_normal_name", "matched");
 
             // vcf2maf
@@ -203,14 +205,14 @@ public class VEPWorkflow extends OicrWorkflow {
         Job parentJob = null;
         String inVCF = getFiles().get("inVCF").getProvisionedPath();
         String VCFtbi = getFiles().get("inVCFTBI").getProvisionedPath();
-        String mafFile = this.dataDir + this.outputFilenamePrefix + ".maf.txt";
+        String mafFile = this.dataDir + this.outputFilenamePrefix + "." + extension +".maf.txt";
 
         // extract sample names first
         Job extractSampleNames = this.extractSampleNames(inVCF);
         parentJob = extractSampleNames;
 
         // unmatched VCFs are labelled as "tumor_only" VCFs
-        if (inVCF.contains("tumor_only")) {
+        if (inVCF.contains("tumor_only") || (inVCF.contains("normal_only"))) {
             Job preprocessUnmatchedVCF = handleUnmatchedVCF(inVCF);
             preprocessUnmatchedVCF.addParent(parentJob);
             parentJob = preprocessUnmatchedVCF;

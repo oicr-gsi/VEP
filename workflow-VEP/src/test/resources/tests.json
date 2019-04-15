@@ -11,7 +11,15 @@
             "id": "MutectStrelka_test",
             "parameters": {
                 "input_vcf_file": "/.mounts/labs/PDE/data/testdata/genomic/vcf/VEP_test/IMP-01710-ARC.mutect.strelka.snv.indel.vcf.gz",
-                "output_filename_prefix": "TGL07_0010"
+                "output_filename_prefix": "TGL07_0010",
+                "extension" : "somatic"
+            }
+        }, {
+            "id": "Mutect2_normal",
+            "parameters": {
+                "input_vcf_file": "/.mounts/labs/PDE/data/testdata/genomic/vcf/VEP_test/TGL07_0001_Pb_R_EX_171106.mutect2.normal_only.vcf.gz",
+                "output_filename_prefix": "TGL07_0001",
+                "extension" : "normal_only"
             }
         }
     ]
