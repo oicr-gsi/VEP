@@ -40,6 +40,13 @@
                 "--allow-extensions": "mutect2.vcf.gz",
                 "--template-type": "EX"
             }
+        },
+        {
+            "id": "study_test_03_EX_all",
+            "parameters": {
+                "--study-name": "TGL17",
+                "--template-type": "EX"
+            }
         }
     ]
 }
