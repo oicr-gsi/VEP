@@ -326,6 +326,7 @@ public class VEPDecider extends OicrDecider {
         }
         iniFileMap.put("vep_mem", this.vepMem);
         iniFileMap.put("oncokb", this.oncoKBpath);
+        iniFileMap.remove("input_files");
         return iniFileMap;
     }
 
