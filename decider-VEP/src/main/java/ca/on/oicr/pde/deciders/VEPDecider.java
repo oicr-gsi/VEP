@@ -270,7 +270,9 @@ public class VEPDecider extends OicrDecider {
 
         //group files according to the designated header (e.g. sample SWID)
         for (ReturnValue r : newValues) {
-            String currVal = fileSwaToSmall.get(r.getAttribute(Header.FILE_SWA.getTitle())).getGroupByAttribute();
+            String currVal = fileSwaToSmall.get(r.getAttribute(Header.FILE_SWA.getTitle())).getGroupByAttribute(); //+ 
+//                    "_" +
+//                   fileSwaToSmall.get(r.getAttribute(Header.WORKFLOW_NAME.getTitle())).getGroupByAttribute() ;
             List<ReturnValue> vs = map.get(currVal);
             if (vs == null) {
                 vs = new ArrayList<ReturnValue>();
@@ -295,7 +297,6 @@ public class VEPDecider extends OicrDecider {
     @Override
     protected Map<String, String> modifyIniFile(String commaSeparatedFilePaths, String commaSeparatedParentAccessions) {
         String vcfPath = commaSeparatedFilePaths.split(",")[0];
-        String outputFileNamePrefix = getOutputFileNamePrefix(vcfPath);
         String sampleExtn = "somatic";
         if (vcfPath.contains("tumor_only")) {
             sampleExtn = "tumor_only";
@@ -303,6 +304,7 @@ public class VEPDecider extends OicrDecider {
         if (vcfPath.contains("normal_only")) {
             sampleExtn = "normal_only";
         }
+        String outputFileNamePrefix = getOutputFileNamePrefix(vcfPath) + sampleExtn;
         Map<String, String> iniFileMap = super.modifyIniFile(commaSeparatedFilePaths, commaSeparatedParentAccessions);
         iniFileMap.put("input_vcf_file", vcfPath);
         iniFileMap.put("output_filename_prefix", outputFileNamePrefix);
@@ -326,7 +328,6 @@ public class VEPDecider extends OicrDecider {
         }
         iniFileMap.put("vep_mem", this.vepMem);
         iniFileMap.put("oncokb", this.oncoKBpath);
-        iniFileMap.remove("input_files");
         return iniFileMap;
     }
 
@@ -402,7 +403,7 @@ public class VEPDecider extends OicrDecider {
                 gba.append(":").append(trs);
             }
 
-            groupByAttribute = gba.toString() + ":" + extName + ":" + groupID + ":" + workflowName;
+            groupByAttribute = gba.toString() + ":" + extName + ":" + groupID + ":" + workflowName + ":" + tissueType;
             path = rv.getFiles().get(0).getFilePath() + "";
 
         }
