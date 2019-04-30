@@ -304,7 +304,7 @@ public class VEPDecider extends OicrDecider {
         if (vcfPath.contains("normal_only")) {
             sampleExtn = "normal_only";
         }
-        String outputFileNamePrefix = getOutputFileNamePrefix(vcfPath) + sampleExtn;
+        String outputFileNamePrefix = getOutputFileNamePrefix(vcfPath) + "." + sampleExtn;
         Map<String, String> iniFileMap = super.modifyIniFile(commaSeparatedFilePaths, commaSeparatedParentAccessions);
         iniFileMap.put("input_vcf_file", vcfPath);
         iniFileMap.put("output_filename_prefix", outputFileNamePrefix);
