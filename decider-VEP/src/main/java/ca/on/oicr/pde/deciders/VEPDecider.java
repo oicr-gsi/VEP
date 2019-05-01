@@ -29,7 +29,7 @@ public class VEPDecider extends OicrDecider {
     private String queue = "";
 //    private String outputFileNamePrefix;
 
-    private String[] allowedExtensions = new String[]{".snv.indel.vcf.gz", ".tumor_only.vcf.gz"};
+    private String[] allowedExtensions = new String[]{".snv.indel.vcf.gz", ".tumor_only.vcf.gz",".normal_only.vcf.gz"};
     private String extensions;
 
     // VEP
@@ -186,9 +186,9 @@ public class VEPDecider extends OicrDecider {
             return false; // we need only those which have their tissue type set
         }
 
-        if (currentTissueType.equals("R")) {
-            return false;
-        }
+//        if (currentTissueType.equals("R")) {
+//            return false;
+//        }
 
         if (!Arrays.asList(this.allowedTemplateTypes).contains(currentTtype)) {
             Log.warn("Excluding file with SWID = [" + returnValue.getAttribute(Header.FILE_SWA.getTitle())
@@ -270,7 +270,9 @@ public class VEPDecider extends OicrDecider {
 
         //group files according to the designated header (e.g. sample SWID)
         for (ReturnValue r : newValues) {
-            String currVal = fileSwaToSmall.get(r.getAttribute(Header.FILE_SWA.getTitle())).getGroupByAttribute();
+            String currVal = fileSwaToSmall.get(r.getAttribute(Header.FILE_SWA.getTitle())).getGroupByAttribute(); //+ 
+//                    "_" +
+//                   fileSwaToSmall.get(r.getAttribute(Header.WORKFLOW_NAME.getTitle())).getGroupByAttribute() ;
             List<ReturnValue> vs = map.get(currVal);
             if (vs == null) {
                 vs = new ArrayList<ReturnValue>();
@@ -295,11 +297,18 @@ public class VEPDecider extends OicrDecider {
     @Override
     protected Map<String, String> modifyIniFile(String commaSeparatedFilePaths, String commaSeparatedParentAccessions) {
         String vcfPath = commaSeparatedFilePaths.split(",")[0];
-        String outputFileNamePrefix = getOutputFileNamePrefix(vcfPath);
-
+        String sampleExtn = "somatic";
+        if (vcfPath.contains("tumor_only")) {
+            sampleExtn = "tumor_only";
+        } 
+        if (vcfPath.contains("normal_only")) {
+            sampleExtn = "normal_only";
+        }
+        String outputFileNamePrefix = getOutputFileNamePrefix(vcfPath) + "." + sampleExtn;
         Map<String, String> iniFileMap = super.modifyIniFile(commaSeparatedFilePaths, commaSeparatedParentAccessions);
         iniFileMap.put("input_vcf_file", vcfPath);
         iniFileMap.put("output_filename_prefix", outputFileNamePrefix);
+        iniFileMap.put("extension", sampleExtn);
         iniFileMap.put("target_bed", this.targetBed);
         if (!this.queue.isEmpty()) {
             iniFileMap.put("queue", this.queue);
@@ -394,7 +403,7 @@ public class VEPDecider extends OicrDecider {
                 gba.append(":").append(trs);
             }
 
-            groupByAttribute = gba.toString() + ":" + extName + ":" + groupID + ":" + workflowName;
+            groupByAttribute = gba.toString() + ":" + extName + ":" + groupID + ":" + workflowName + ":" + tissueType;
             path = rv.getFiles().get(0).getFilePath() + "";
 
         }

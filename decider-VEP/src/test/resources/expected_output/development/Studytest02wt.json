@@ -19,6 +19,7 @@
       "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
+      "extension" : "tumor_only",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
       "hg_version" : "GRCh37",
       "input_vcf_file" : "/.mounts/labs/TGL/production3/seqware-results/Mutect2_1.1/66022418/TGL07_0001_Lu_M_WT_171121.mutect2.tumor_only.vcf.gz",
@@ -27,7 +28,7 @@
       "metadata" : "metadata",
       "oncokb" : "/.mounts/labs/PDE/Modules/sw/oncokb-annotator",
       "output_dir" : "seqware-results",
-      "output_filename_prefix" : "TGL07_0001_Lu_M_WT_171121",
+      "output_filename_prefix" : "TGL07_0001_Lu_M_WT_171121.tumor_only",
       "perl_path" : "/oicr/local/analysis/sw/perl/perl-5.22.2-tgl",
       "ref_fasta" : "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa",
       "species" : "homo_sapiens",
@@ -59,17 +60,20 @@
         "geo_receive_date" : [ [ "2017-09-08" ] ],
         "geo_run_id_and_position" : [ [ "2916_1" ], [ "2917_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Lu" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "M" ] ]
+        "geo_tissue_type" : [ [ "M" ] ],
+        "geo_tube_id" : [ [ "COM-00278-ARC" ] ]
       },
       "sequencerRunName" : [ "171122_NB551051_0036_AHLKN7AFXX", "171122_NB551056_0033_AHKMWKAFXX" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551051" ], [ "NB551056" ] ]
       },
       "laneName" : [ "171122_NB551051_0036_AHLKN7AFXX_lane_1", "171122_NB551056_0033_AHKMWKAFXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "HLKN7AFXX_HKMWKAFXX_POOL" ] ]
+      },
       "iusTag" : [ "CGATGT" ],
       "iusAttributes" : { },
       "workflowName" : [ "Mutect2" ],
@@ -91,6 +95,7 @@
       "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
+      "extension" : "tumor_only",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
       "hg_version" : "GRCh37",
       "input_vcf_file" : "/.mounts/labs/TGL/production3/seqware-results/Mutect2_1.1/88758816/TGL07_0002_Sb_P_WT_171121.mutect2.tumor_only.vcf.gz",
@@ -99,7 +104,7 @@
       "metadata" : "metadata",
       "oncokb" : "/.mounts/labs/PDE/Modules/sw/oncokb-annotator",
       "output_dir" : "seqware-results",
-      "output_filename_prefix" : "TGL07_0002_Sb_P_WT_171121",
+      "output_filename_prefix" : "TGL07_0002_Sb_P_WT_171121.tumor_only",
       "perl_path" : "/oicr/local/analysis/sw/perl/perl-5.22.2-tgl",
       "ref_fasta" : "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa",
       "species" : "homo_sapiens",
@@ -131,17 +136,20 @@
         "geo_receive_date" : [ [ "2017-09-08" ] ],
         "geo_run_id_and_position" : [ [ "2918_1" ], [ "2919_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Sb" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "P" ] ]
+        "geo_tissue_type" : [ [ "P" ] ],
+        "geo_tube_id" : [ [ "COM-00510-ARC" ] ]
       },
       "sequencerRunName" : [ "171123_NB551051_0037_AHL5HNAFXX", "171123_NB551056_0034_AHL5HTAFXX" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551051" ], [ "NB551056" ] ]
       },
       "laneName" : [ "171123_NB551051_0037_AHL5HNAFXX_lane_1", "171123_NB551056_0034_AHL5HTAFXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "HL5HNAFXX_HL5HTAFXX_POOL" ] ]
+      },
       "iusTag" : [ "TGACCA" ],
       "iusAttributes" : { },
       "workflowName" : [ "Mutect2" ],
@@ -163,6 +171,7 @@
       "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
+      "extension" : "tumor_only",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
       "hg_version" : "GRCh37",
       "input_vcf_file" : "/.mounts/labs/TGL/production3/seqware-results/Mutect2_1.1/3819523/TGL07_0003_Ut_P_WT_171121.mutect2.tumor_only.vcf.gz",
@@ -171,7 +180,7 @@
       "metadata" : "metadata",
       "oncokb" : "/.mounts/labs/PDE/Modules/sw/oncokb-annotator",
       "output_dir" : "seqware-results",
-      "output_filename_prefix" : "TGL07_0003_Ut_P_WT_171121",
+      "output_filename_prefix" : "TGL07_0003_Ut_P_WT_171121.tumor_only",
       "perl_path" : "/oicr/local/analysis/sw/perl/perl-5.22.2-tgl",
       "ref_fasta" : "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa",
       "species" : "homo_sapiens",
@@ -203,17 +212,20 @@
         "geo_receive_date" : [ [ "2017-09-08" ] ],
         "geo_run_id_and_position" : [ [ "2918_1" ], [ "2919_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Ut" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "P" ] ]
+        "geo_tissue_type" : [ [ "P" ] ],
+        "geo_tube_id" : [ [ "COM-00518-ARC" ] ]
       },
       "sequencerRunName" : [ "171123_NB551051_0037_AHL5HNAFXX", "171123_NB551056_0034_AHL5HTAFXX" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551051" ], [ "NB551056" ] ]
       },
       "laneName" : [ "171123_NB551051_0037_AHL5HNAFXX_lane_1", "171123_NB551056_0034_AHL5HTAFXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "HL5HNAFXX_HL5HTAFXX_POOL" ] ]
+      },
       "iusTag" : [ "CAGATC" ],
       "iusAttributes" : { },
       "workflowName" : [ "Mutect2" ],
@@ -235,6 +247,7 @@
       "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
+      "extension" : "tumor_only",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
       "hg_version" : "GRCh37",
       "input_vcf_file" : "/.mounts/labs/TGL/production3/seqware-results/Mutect2_1.1/44033445/TGL07_0004_Ov_P_WT_171121.mutect2.tumor_only.vcf.gz",
@@ -243,7 +256,7 @@
       "metadata" : "metadata",
       "oncokb" : "/.mounts/labs/PDE/Modules/sw/oncokb-annotator",
       "output_dir" : "seqware-results",
-      "output_filename_prefix" : "TGL07_0004_Ov_P_WT_171121",
+      "output_filename_prefix" : "TGL07_0004_Ov_P_WT_171121.tumor_only",
       "perl_path" : "/oicr/local/analysis/sw/perl/perl-5.22.2-tgl",
       "ref_fasta" : "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa",
       "species" : "homo_sapiens",
@@ -275,17 +288,20 @@
         "geo_receive_date" : [ [ "2017-09-08" ] ],
         "geo_run_id_and_position" : [ [ "2918_1" ], [ "2919_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Ov" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "P" ] ]
+        "geo_tissue_type" : [ [ "P" ] ],
+        "geo_tube_id" : [ [ "COM-00555-ARC" ] ]
       },
       "sequencerRunName" : [ "171123_NB551051_0037_AHL5HNAFXX", "171123_NB551056_0034_AHL5HTAFXX" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551051" ], [ "NB551056" ] ]
       },
       "laneName" : [ "171123_NB551051_0037_AHL5HNAFXX_lane_1", "171123_NB551056_0034_AHL5HTAFXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "HL5HNAFXX_HL5HTAFXX_POOL" ] ]
+      },
       "iusTag" : [ "CCGTCC" ],
       "iusAttributes" : { },
       "workflowName" : [ "Mutect2" ],
@@ -307,6 +323,7 @@
       "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
+      "extension" : "tumor_only",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
       "hg_version" : "GRCh37",
       "input_vcf_file" : "/.mounts/labs/TGL/production3/seqware-results/Mutect2_1.1/65473819/TGL07_0005_Om_M_WT_171121.mutect2.tumor_only.vcf.gz",
@@ -315,7 +332,7 @@
       "metadata" : "metadata",
       "oncokb" : "/.mounts/labs/PDE/Modules/sw/oncokb-annotator",
       "output_dir" : "seqware-results",
-      "output_filename_prefix" : "TGL07_0005_Om_M_WT_171121",
+      "output_filename_prefix" : "TGL07_0005_Om_M_WT_171121.tumor_only",
       "perl_path" : "/oicr/local/analysis/sw/perl/perl-5.22.2-tgl",
       "ref_fasta" : "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa",
       "species" : "homo_sapiens",
@@ -347,17 +364,20 @@
         "geo_receive_date" : [ [ "2017-09-08" ] ],
         "geo_run_id_and_position" : [ [ "2926_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Om" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "M" ] ]
+        "geo_tissue_type" : [ [ "M" ] ],
+        "geo_tube_id" : [ [ "IMP-00826-ARC" ] ]
       },
       "sequencerRunName" : [ "171129_NB551051_0040_AH53W3BGX5" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551051" ] ]
       },
       "laneName" : [ "171129_NB551051_0040_AH53W3BGX5_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "H53W3BGX5_POOL" ] ]
+      },
       "iusTag" : [ "ATCACG" ],
       "iusAttributes" : { },
       "workflowName" : [ "Mutect2" ],
@@ -379,6 +399,7 @@
       "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
+      "extension" : "tumor_only",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
       "hg_version" : "GRCh37",
       "input_vcf_file" : "/.mounts/labs/TGL/production3/seqware-results/Mutect2_1.1/32267751/TGL07_0006_Lv_M_WT_171121.mutect2.tumor_only.vcf.gz",
@@ -387,7 +408,7 @@
       "metadata" : "metadata",
       "oncokb" : "/.mounts/labs/PDE/Modules/sw/oncokb-annotator",
       "output_dir" : "seqware-results",
-      "output_filename_prefix" : "TGL07_0006_Lv_M_WT_171121",
+      "output_filename_prefix" : "TGL07_0006_Lv_M_WT_171121.tumor_only",
       "perl_path" : "/oicr/local/analysis/sw/perl/perl-5.22.2-tgl",
       "ref_fasta" : "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa",
       "species" : "homo_sapiens",
@@ -419,17 +440,20 @@
         "geo_receive_date" : [ [ "2017-09-08" ] ],
         "geo_run_id_and_position" : [ [ "2926_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Lv" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "M" ] ]
+        "geo_tissue_type" : [ [ "M" ] ],
+        "geo_tube_id" : [ [ "IMP-00867-ARC" ] ]
       },
       "sequencerRunName" : [ "171129_NB551051_0040_AH53W3BGX5" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551051" ] ]
       },
       "laneName" : [ "171129_NB551051_0040_AH53W3BGX5_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "H53W3BGX5_POOL" ] ]
+      },
       "iusTag" : [ "ACTTGA" ],
       "iusAttributes" : { },
       "workflowName" : [ "Mutect2" ],
@@ -451,6 +475,7 @@
       "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
+      "extension" : "tumor_only",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
       "hg_version" : "GRCh37",
       "input_vcf_file" : "/.mounts/labs/TGL/production3/seqware-results/Mutect2_1.1/24997285/TGL07_0007_Bn_M_WT_171121.mutect2.tumor_only.vcf.gz",
@@ -459,7 +484,7 @@
       "metadata" : "metadata",
       "oncokb" : "/.mounts/labs/PDE/Modules/sw/oncokb-annotator",
       "output_dir" : "seqware-results",
-      "output_filename_prefix" : "TGL07_0007_Bn_M_WT_171121",
+      "output_filename_prefix" : "TGL07_0007_Bn_M_WT_171121.tumor_only",
       "perl_path" : "/oicr/local/analysis/sw/perl/perl-5.22.2-tgl",
       "ref_fasta" : "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa",
       "species" : "homo_sapiens",
@@ -491,17 +516,20 @@
         "geo_receive_date" : [ [ "2017-09-08" ] ],
         "geo_run_id_and_position" : [ [ "2926_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Bn" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "M" ] ]
+        "geo_tissue_type" : [ [ "M" ] ],
+        "geo_tube_id" : [ [ "IMP-00943-ARC" ] ]
       },
       "sequencerRunName" : [ "171129_NB551051_0040_AH53W3BGX5" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551051" ] ]
       },
       "laneName" : [ "171129_NB551051_0040_AH53W3BGX5_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "H53W3BGX5_POOL" ] ]
+      },
       "iusTag" : [ "TAGCTT" ],
       "iusAttributes" : { },
       "workflowName" : [ "Mutect2" ],
@@ -523,6 +551,7 @@
       "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
+      "extension" : "tumor_only",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
       "hg_version" : "GRCh37",
       "input_vcf_file" : "/.mounts/labs/TGL/production3/seqware-results/Mutect2_1.1/87339776/TGL07_0008_Sk_P_WT_171121.mutect2.tumor_only.vcf.gz",
@@ -531,7 +560,7 @@
       "metadata" : "metadata",
       "oncokb" : "/.mounts/labs/PDE/Modules/sw/oncokb-annotator",
       "output_dir" : "seqware-results",
-      "output_filename_prefix" : "TGL07_0008_Sk_P_WT_171121",
+      "output_filename_prefix" : "TGL07_0008_Sk_P_WT_171121.tumor_only",
       "perl_path" : "/oicr/local/analysis/sw/perl/perl-5.22.2-tgl",
       "ref_fasta" : "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa",
       "species" : "homo_sapiens",
@@ -563,17 +592,20 @@
         "geo_receive_date" : [ [ "2017-09-08" ] ],
         "geo_run_id_and_position" : [ [ "2926_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Sk" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "P" ] ]
+        "geo_tissue_type" : [ [ "P" ] ],
+        "geo_tube_id" : [ [ "IMP-00961-ARC" ] ]
       },
       "sequencerRunName" : [ "171129_NB551051_0040_AH53W3BGX5" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551051" ] ]
       },
       "laneName" : [ "171129_NB551051_0040_AH53W3BGX5_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "H53W3BGX5_POOL" ] ]
+      },
       "iusTag" : [ "GGCTAC" ],
       "iusAttributes" : { },
       "workflowName" : [ "Mutect2" ],
@@ -595,6 +627,7 @@
       "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
+      "extension" : "tumor_only",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
       "hg_version" : "GRCh37",
       "input_vcf_file" : "/.mounts/labs/TGL/production3/seqware-results/Mutect2_1.1/58204704/TGL07_0009_Bl_P_WT_171121.mutect2.tumor_only.vcf.gz",
@@ -603,7 +636,7 @@
       "metadata" : "metadata",
       "oncokb" : "/.mounts/labs/PDE/Modules/sw/oncokb-annotator",
       "output_dir" : "seqware-results",
-      "output_filename_prefix" : "TGL07_0009_Bl_P_WT_171121",
+      "output_filename_prefix" : "TGL07_0009_Bl_P_WT_171121.tumor_only",
       "perl_path" : "/oicr/local/analysis/sw/perl/perl-5.22.2-tgl",
       "ref_fasta" : "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa",
       "species" : "homo_sapiens",
@@ -635,17 +668,20 @@
         "geo_receive_date" : [ [ "2017-09-08" ] ],
         "geo_run_id_and_position" : [ [ "2927_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Bl" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "P" ] ]
+        "geo_tissue_type" : [ [ "P" ] ],
+        "geo_tube_id" : [ [ "IMP-01178-ARC" ] ]
       },
       "sequencerRunName" : [ "171129_NB551056_0037_AH557VBGX5" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551056" ] ]
       },
       "laneName" : [ "171129_NB551056_0037_AH557VBGX5_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "H557VBGX5_POOL" ] ]
+      },
       "iusTag" : [ "TTAGGC" ],
       "iusAttributes" : { },
       "workflowName" : [ "Mutect2" ],
@@ -667,6 +703,7 @@
       "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
+      "extension" : "tumor_only",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
       "hg_version" : "GRCh37",
       "input_vcf_file" : "/.mounts/labs/TGL/production3/seqware-results/Mutect2_1.1/71370333/TGL07_0010_Sb_M_WT_171122.mutect2.tumor_only.vcf.gz",
@@ -675,7 +712,7 @@
       "metadata" : "metadata",
       "oncokb" : "/.mounts/labs/PDE/Modules/sw/oncokb-annotator",
       "output_dir" : "seqware-results",
-      "output_filename_prefix" : "TGL07_0010_Sb_M_WT_171122",
+      "output_filename_prefix" : "TGL07_0010_Sb_M_WT_171122.tumor_only",
       "perl_path" : "/oicr/local/analysis/sw/perl/perl-5.22.2-tgl",
       "ref_fasta" : "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa",
       "species" : "homo_sapiens",
@@ -707,17 +744,20 @@
         "geo_receive_date" : [ [ "2017-09-08" ] ],
         "geo_run_id_and_position" : [ [ "3055_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Sb" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "M" ] ]
+        "geo_tissue_type" : [ [ "M" ] ],
+        "geo_tube_id" : [ [ "IMP-01710-ARC" ] ]
       },
       "sequencerRunName" : [ "180319_NB551056_0049_AHLKVJBGX5" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551056" ] ]
       },
       "laneName" : [ "180319_NB551056_0049_AHLKVJBGX5_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "HLKVJBGX5_POOL" ] ]
+      },
       "iusTag" : [ "TGACCA" ],
       "iusAttributes" : { },
       "workflowName" : [ "Mutect2" ],
@@ -739,6 +779,7 @@
       "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
+      "extension" : "tumor_only",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
       "hg_version" : "GRCh37",
       "input_vcf_file" : "/.mounts/labs/TGL/production3/seqware-results/Mutect2_1.1/97776256/TGL07_0011_Co_M_WT_171122.mutect2.tumor_only.vcf.gz",
@@ -747,7 +788,7 @@
       "metadata" : "metadata",
       "oncokb" : "/.mounts/labs/PDE/Modules/sw/oncokb-annotator",
       "output_dir" : "seqware-results",
-      "output_filename_prefix" : "TGL07_0011_Co_M_WT_171122",
+      "output_filename_prefix" : "TGL07_0011_Co_M_WT_171122.tumor_only",
       "perl_path" : "/oicr/local/analysis/sw/perl/perl-5.22.2-tgl",
       "ref_fasta" : "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa",
       "species" : "homo_sapiens",
@@ -779,17 +820,20 @@
         "geo_receive_date" : [ [ "2017-09-08" ] ],
         "geo_run_id_and_position" : [ [ "3055_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Co" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "M" ] ]
+        "geo_tissue_type" : [ [ "M" ] ],
+        "geo_tube_id" : [ [ "IMP-01743-ARC" ] ]
       },
       "sequencerRunName" : [ "180319_NB551056_0049_AHLKVJBGX5" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551056" ] ]
       },
       "laneName" : [ "180319_NB551056_0049_AHLKVJBGX5_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "HLKVJBGX5_POOL" ] ]
+      },
       "iusTag" : [ "CAGATC" ],
       "iusAttributes" : { },
       "workflowName" : [ "Mutect2" ],
@@ -811,6 +855,7 @@
       "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
+      "extension" : "tumor_only",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
       "hg_version" : "GRCh37",
       "input_vcf_file" : "/.mounts/labs/TGL/production3/seqware-results/Mutect2_1.1/16158921/TGL07_0012_Ln_M_WT_171121.mutect2.tumor_only.vcf.gz",
@@ -819,7 +864,7 @@
       "metadata" : "metadata",
       "oncokb" : "/.mounts/labs/PDE/Modules/sw/oncokb-annotator",
       "output_dir" : "seqware-results",
-      "output_filename_prefix" : "TGL07_0012_Ln_M_WT_171121",
+      "output_filename_prefix" : "TGL07_0012_Ln_M_WT_171121.tumor_only",
       "perl_path" : "/oicr/local/analysis/sw/perl/perl-5.22.2-tgl",
       "ref_fasta" : "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa",
       "species" : "homo_sapiens",
@@ -851,17 +896,20 @@
         "geo_receive_date" : [ [ "2017-09-08" ] ],
         "geo_run_id_and_position" : [ [ "2927_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Ln" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "M" ] ]
+        "geo_tissue_type" : [ [ "M" ] ],
+        "geo_tube_id" : [ [ "IMP-01296-ARC" ] ]
       },
       "sequencerRunName" : [ "171129_NB551056_0037_AH557VBGX5" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551056" ] ]
       },
       "laneName" : [ "171129_NB551056_0037_AH557VBGX5_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "H557VBGX5_POOL" ] ]
+      },
       "iusTag" : [ "GATCAG" ],
       "iusAttributes" : { },
       "workflowName" : [ "Mutect2" ],
@@ -883,6 +931,7 @@
       "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
+      "extension" : "tumor_only",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
       "hg_version" : "GRCh37",
       "input_vcf_file" : "/.mounts/labs/TGL/production3/seqware-results/Mutect2_1.1/13280296/TGL07_0014_Ce_P_WT_171121.mutect2.tumor_only.vcf.gz",
@@ -891,7 +940,7 @@
       "metadata" : "metadata",
       "oncokb" : "/.mounts/labs/PDE/Modules/sw/oncokb-annotator",
       "output_dir" : "seqware-results",
-      "output_filename_prefix" : "TGL07_0014_Ce_P_WT_171121",
+      "output_filename_prefix" : "TGL07_0014_Ce_P_WT_171121.tumor_only",
       "perl_path" : "/oicr/local/analysis/sw/perl/perl-5.22.2-tgl",
       "ref_fasta" : "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa",
       "species" : "homo_sapiens",
@@ -923,17 +972,20 @@
         "geo_receive_date" : [ [ "2017-09-08" ] ],
         "geo_run_id_and_position" : [ [ "2927_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Ce" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "P" ] ]
+        "geo_tissue_type" : [ [ "P" ] ],
+        "geo_tube_id" : [ [ "IMP-01458-ARC" ] ]
       },
       "sequencerRunName" : [ "171129_NB551056_0037_AH557VBGX5" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551056" ] ]
       },
       "laneName" : [ "171129_NB551056_0037_AH557VBGX5_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "H557VBGX5_POOL" ] ]
+      },
       "iusTag" : [ "CGTACG" ],
       "iusAttributes" : { },
       "workflowName" : [ "Mutect2" ],
@@ -955,6 +1007,7 @@
       "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
+      "extension" : "tumor_only",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
       "hg_version" : "GRCh37",
       "input_vcf_file" : "/.mounts/labs/TGL/production3/seqware-results/Mutect2_1.1/61653681/TGL07_0015_Um_M_WT_171121.mutect2.tumor_only.vcf.gz",
@@ -963,7 +1016,7 @@
       "metadata" : "metadata",
       "oncokb" : "/.mounts/labs/PDE/Modules/sw/oncokb-annotator",
       "output_dir" : "seqware-results",
-      "output_filename_prefix" : "TGL07_0015_Um_M_WT_171121",
+      "output_filename_prefix" : "TGL07_0015_Um_M_WT_171121.tumor_only",
       "perl_path" : "/oicr/local/analysis/sw/perl/perl-5.22.2-tgl",
       "ref_fasta" : "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa",
       "species" : "homo_sapiens",
@@ -995,17 +1048,20 @@
         "geo_receive_date" : [ [ "2017-09-08" ] ],
         "geo_run_id_and_position" : [ [ "2927_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Um" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "M" ] ]
+        "geo_tissue_type" : [ [ "M" ] ],
+        "geo_tube_id" : [ [ "IMP-01602-ARC" ] ]
       },
       "sequencerRunName" : [ "171129_NB551056_0037_AH557VBGX5" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551056" ] ]
       },
       "laneName" : [ "171129_NB551056_0037_AH557VBGX5_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "H557VBGX5_POOL" ] ]
+      },
       "iusTag" : [ "ATTCCT" ],
       "iusAttributes" : { },
       "workflowName" : [ "Mutect2" ],
@@ -1027,6 +1083,7 @@
       "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
+      "extension" : "tumor_only",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
       "hg_version" : "GRCh37",
       "input_vcf_file" : "/.mounts/labs/TGL/production3/seqware-results/Mutect2_1.1/52418262/TGL07_0016_Om_M_WT_171122.mutect2.tumor_only.vcf.gz",
@@ -1035,7 +1092,7 @@
       "metadata" : "metadata",
       "oncokb" : "/.mounts/labs/PDE/Modules/sw/oncokb-annotator",
       "output_dir" : "seqware-results",
-      "output_filename_prefix" : "TGL07_0016_Om_M_WT_171122",
+      "output_filename_prefix" : "TGL07_0016_Om_M_WT_171122.tumor_only",
       "perl_path" : "/oicr/local/analysis/sw/perl/perl-5.22.2-tgl",
       "ref_fasta" : "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa",
       "species" : "homo_sapiens",
@@ -1067,17 +1124,20 @@
         "geo_receive_date" : [ [ "2017-09-08" ] ],
         "geo_run_id_and_position" : [ [ "3055_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Om" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "M" ] ]
+        "geo_tissue_type" : [ [ "M" ] ],
+        "geo_tube_id" : [ [ "IMP-01650-ARC" ] ]
       },
       "sequencerRunName" : [ "180319_NB551056_0049_AHLKVJBGX5" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551056" ] ]
       },
       "laneName" : [ "180319_NB551056_0049_AHLKVJBGX5_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "HLKVJBGX5_POOL" ] ]
+      },
       "iusTag" : [ "CGATGT" ],
       "iusAttributes" : { },
       "workflowName" : [ "Mutect2" ],
@@ -1099,6 +1159,7 @@
       "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
+      "extension" : "tumor_only",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
       "hg_version" : "GRCh37",
       "input_vcf_file" : "/.mounts/labs/TGL/production3/seqware-results/Mutect2_1.1/82032644/TGL07_0017_Co_P_WT_171121.mutect2.tumor_only.vcf.gz",
@@ -1107,7 +1168,7 @@
       "metadata" : "metadata",
       "oncokb" : "/.mounts/labs/PDE/Modules/sw/oncokb-annotator",
       "output_dir" : "seqware-results",
-      "output_filename_prefix" : "TGL07_0017_Co_P_WT_171121",
+      "output_filename_prefix" : "TGL07_0017_Co_P_WT_171121.tumor_only",
       "perl_path" : "/oicr/local/analysis/sw/perl/perl-5.22.2-tgl",
       "ref_fasta" : "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa",
       "species" : "homo_sapiens",
@@ -1139,17 +1200,20 @@
         "geo_receive_date" : [ [ "2017-09-08" ] ],
         "geo_run_id_and_position" : [ [ "2918_1" ], [ "2919_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Co" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "P" ] ]
+        "geo_tissue_type" : [ [ "P" ] ],
+        "geo_tube_id" : [ [ "COM-00603-ARC" ] ]
       },
       "sequencerRunName" : [ "171123_NB551051_0037_AHL5HNAFXX", "171123_NB551056_0034_AHL5HTAFXX" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551051" ], [ "NB551056" ] ]
       },
       "laneName" : [ "171123_NB551051_0037_AHL5HNAFXX_lane_1", "171123_NB551056_0034_AHL5HTAFXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "HL5HNAFXX_HL5HTAFXX_POOL" ] ]
+      },
       "iusTag" : [ "ACAGTG" ],
       "iusAttributes" : { },
       "workflowName" : [ "Mutect2" ],
@@ -1171,6 +1235,7 @@
       "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
+      "extension" : "tumor_only",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
       "hg_version" : "GRCh37",
       "input_vcf_file" : "/.mounts/labs/TGL/production3/seqware-results/Mutect2_1.1/45788684/TGL07_0018_Lv_M_WT_171121.mutect2.tumor_only.vcf.gz",
@@ -1179,7 +1244,7 @@
       "metadata" : "metadata",
       "oncokb" : "/.mounts/labs/PDE/Modules/sw/oncokb-annotator",
       "output_dir" : "seqware-results",
-      "output_filename_prefix" : "TGL07_0018_Lv_M_WT_171121",
+      "output_filename_prefix" : "TGL07_0018_Lv_M_WT_171121.tumor_only",
       "perl_path" : "/oicr/local/analysis/sw/perl/perl-5.22.2-tgl",
       "ref_fasta" : "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa",
       "species" : "homo_sapiens",
@@ -1211,17 +1276,20 @@
         "geo_receive_date" : [ [ "2017-09-08" ] ],
         "geo_run_id_and_position" : [ [ "2955_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Lv" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "M" ] ]
+        "geo_tissue_type" : [ [ "M" ] ],
+        "geo_tube_id" : [ [ "COM-00604-ARC" ] ]
       },
       "sequencerRunName" : [ "180109_NB551056_0039_AH5JC2BGX5" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551056" ] ]
       },
       "laneName" : [ "180109_NB551056_0039_AH5JC2BGX5_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "H5JC2BGX5_POOL" ] ]
+      },
       "iusTag" : [ "GCCAAT" ],
       "iusAttributes" : { },
       "workflowName" : [ "Mutect2" ],
@@ -1243,6 +1311,7 @@
       "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
+      "extension" : "tumor_only",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
       "hg_version" : "GRCh37",
       "input_vcf_file" : "/.mounts/labs/TGL/production3/seqware-results/Mutect2_1.1/48511957/TGL07_0019_Ut_P_WT_171121.mutect2.tumor_only.vcf.gz",
@@ -1251,7 +1320,7 @@
       "metadata" : "metadata",
       "oncokb" : "/.mounts/labs/PDE/Modules/sw/oncokb-annotator",
       "output_dir" : "seqware-results",
-      "output_filename_prefix" : "TGL07_0019_Ut_P_WT_171121",
+      "output_filename_prefix" : "TGL07_0019_Ut_P_WT_171121.tumor_only",
       "perl_path" : "/oicr/local/analysis/sw/perl/perl-5.22.2-tgl",
       "ref_fasta" : "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa",
       "species" : "homo_sapiens",
@@ -1283,17 +1352,20 @@
         "geo_receive_date" : [ [ "2017-09-08" ] ],
         "geo_run_id_and_position" : [ [ "2927_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Ut" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "P" ] ]
+        "geo_tissue_type" : [ [ "P" ] ],
+        "geo_tube_id" : [ [ "IMP-00683-ARC" ] ]
       },
       "sequencerRunName" : [ "171129_NB551056_0037_AH557VBGX5" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551056" ] ]
       },
       "laneName" : [ "171129_NB551056_0037_AH557VBGX5_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "H557VBGX5_POOL" ] ]
+      },
       "iusTag" : [ "CTTGTA" ],
       "iusAttributes" : { },
       "workflowName" : [ "Mutect2" ],
@@ -1315,6 +1387,7 @@
       "bedtools" : "/oicr/local/analysis/sw/bedtools/2.24.0/bedtools2/bin",
       "buffer_size" : "200",
       "exac_vcf" : "/oicr/local/analysis/sw/vep/vep92/.cache/Plugins/ExAC.r0.3.sites.minus_somatic.vcf.gz",
+      "extension" : "tumor_only",
       "freq_file" : "/.mounts/labs/PDE/data/TGL/20180725.annot.txt.gz",
       "hg_version" : "GRCh37",
       "input_vcf_file" : "/.mounts/labs/TGL/production3/seqware-results/Mutect2_1.1/13358860/TGL07_0020_Ag_M_WT_171121.mutect2.tumor_only.vcf.gz",
@@ -1323,7 +1396,7 @@
       "metadata" : "metadata",
       "oncokb" : "/.mounts/labs/PDE/Modules/sw/oncokb-annotator",
       "output_dir" : "seqware-results",
-      "output_filename_prefix" : "TGL07_0020_Ag_M_WT_171121",
+      "output_filename_prefix" : "TGL07_0020_Ag_M_WT_171121.tumor_only",
       "perl_path" : "/oicr/local/analysis/sw/perl/perl-5.22.2-tgl",
       "ref_fasta" : "/oicr/data/genomes/homo_sapiens_mc/UCSC/hg19/Genomic/references/fasta/hg19.fa",
       "species" : "homo_sapiens",
@@ -1355,17 +1428,20 @@
         "geo_receive_date" : [ [ "2017-09-08" ] ],
         "geo_run_id_and_position" : [ [ "2926_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Ag" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "M" ] ]
+        "geo_tissue_type" : [ [ "M" ] ],
+        "geo_tube_id" : [ [ "IMP-00726-ARC" ] ]
       },
       "sequencerRunName" : [ "171129_NB551051_0040_AH53W3BGX5" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551051" ] ]
       },
       "laneName" : [ "171129_NB551051_0040_AH53W3BGX5_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "H53W3BGX5_POOL" ] ]
+      },
       "iusTag" : [ "GTGAAA" ],
       "iusAttributes" : { },
       "workflowName" : [ "Mutect2" ],

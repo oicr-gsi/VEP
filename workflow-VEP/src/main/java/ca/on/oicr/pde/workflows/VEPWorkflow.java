@@ -29,6 +29,7 @@ public class VEPWorkflow extends OicrWorkflow {
     private String inputVCF;
     private String inputVCFindex;
     private String outputFilenamePrefix;
+    private String extension;
 
     //vcf2maf
     private String vcf2mafpl;
@@ -93,6 +94,7 @@ public class VEPWorkflow extends OicrWorkflow {
             inputVCF = getProperty("input_vcf_file");
             inputVCFindex = inputVCF + ".tbi";
             outputFilenamePrefix = getProperty("output_filename_prefix");
+            extension = getProperty("extension");
 //            normalSamplePrefix = getOptionalProperty("matched_normal_name", "matched");
 
             // vcf2maf
@@ -203,14 +205,14 @@ public class VEPWorkflow extends OicrWorkflow {
         Job parentJob = null;
         String inVCF = getFiles().get("inVCF").getProvisionedPath();
         String VCFtbi = getFiles().get("inVCFTBI").getProvisionedPath();
-        String mafFile = this.dataDir + this.outputFilenamePrefix + ".maf.txt";
+        String mafFile = this.dataDir + this.outputFilenamePrefix + "." + extension +".maf.txt";
 
         // extract sample names first
         Job extractSampleNames = this.extractSampleNames(inVCF);
         parentJob = extractSampleNames;
 
         // unmatched VCFs are labelled as "tumor_only" VCFs
-        if (inVCF.contains("tumor_only")) {
+        if (inVCF.contains("tumor_only") || (inVCF.contains("normal_only"))) {
             Job preprocessUnmatchedVCF = handleUnmatchedVCF(inVCF);
             preprocessUnmatchedVCF.addParent(parentJob);
             parentJob = preprocessUnmatchedVCF;
@@ -251,23 +253,24 @@ public class VEPWorkflow extends OicrWorkflow {
         Job vcf2MAF = runVcf2Maf(tglFreqVCF, mafFile);
         vcf2MAF.addParent(parentJob);
         parentJob = vcf2MAF;
-
-        // oncokb annotator
-        Job oncoKBAnnotate = getWorkflow().createBashJob("oncokb_annotate");
-        //cmd.addArgument(pathfixExport);
-        oncoKBAnnotate.setCommand(pathfixExport + this.oncoKBPath
-                + "/" + "MafAnnotator.py -i "
-                + mafFile + " -o " + mafFile.replace(".txt", ".oncoKB.txt"));
-        oncoKBAnnotate.addParent(parentJob);
-        parentJob = oncoKBAnnotate;
-        parentJob.setMaxMemory(Integer.toString(this.vepMem * 1024));
-        parentJob.setQueue(getOptionalProperty("queue", ""));
+        
+//      DISABLING ONCOKB annotation
+//        // oncokb annotator
+//        Job oncoKBAnnotate = getWorkflow().createBashJob("oncokb_annotate");
+//        //cmd.addArgument(pathfixExport);
+//        oncoKBAnnotate.setCommand(pathfixExport + this.oncoKBPath
+//                + "/" + "MafAnnotator.py -i "
+//                + mafFile + " -o " + mafFile.replace(".txt", ".oncoKB.txt"));
+//        oncoKBAnnotate.addParent(parentJob);
+//        parentJob = oncoKBAnnotate;
+//        parentJob.setMaxMemory(Integer.toString(this.vepMem * 1024));
+//        parentJob.setQueue(getOptionalProperty("queue", ""));
 
         // zip maf file
-        String oncoKBMafFile = mafFile.replace(".txt", ".oncoKB.txt");
+//        String oncoKBMafFile = mafFile.replace(".txt", ".oncoKB.txt");
         Job zipMafFile = getWorkflow().createBashJob("zip_maf");
         zipMafFile.setCommand(bgzip + " -c "
-                + oncoKBMafFile + " > " + mafFile + ".gz");
+                + mafFile + " > " + mafFile + ".gz");
         zipMafFile.addParent(parentJob);
         parentJob = zipMafFile;
         parentJob.setMaxMemory(Integer.toString(this.vepMem * 1024));
